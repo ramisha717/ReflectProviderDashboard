@@ -37,4 +37,17 @@ public class InMemoryPatientRepository : IPatientRepository
     return Task.FromResult(results);
   }
 
+  public Task<Patient?> GetByIdAsync(
+    Guid patientId,
+    CancellationToken cancellationToken)
+  {
+    cancellationToken.ThrowIfCancellationRequested();
+
+    Patient? result = _patients
+      .Where(patient => !patient.IsDeleted)
+      .FirstOrDefault(patient => patient.Id == patientId);
+
+    return Task.FromResult(result);
+  }
+
 }
