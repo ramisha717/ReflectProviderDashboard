@@ -37,4 +37,11 @@ public class PatientsController : Controller
 
     return Json(viewModel);
   }
+    // GET: /Provider/Patients/IndexPage
+    // Returns the Razor view; the view will fetch JSON data from the existing Index (JSON) endpoint.
+    public IActionResult IndexPage()
+    {
+        // No model needed – the client script will load data via AJAX.
+        return View("Index");
+    }
 }

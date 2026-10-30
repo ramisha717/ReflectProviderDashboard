@@ -26,6 +26,9 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+app.MapGet("/", () => Results.Redirect("/Provider/Patients/IndexPage"));
+app.MapGet("/Patients", () => Results.Redirect("/Provider/Patients/IndexPage"));
+
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
