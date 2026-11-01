@@ -3,7 +3,7 @@
     ViewData["Title"] = "Patients";
     ViewData["Subtitle"] = "Find and review patient engagement records · Synthetic records only.";
 
-    var dataUrl = Url.Action("IndexPage", "Patients", new { area = "Provider" });
+    var dataUrl = Url.Action("Index", "Patients", new { area = "Provider", format = "json" });
     var profileUrl = Url.Action("Profile", "Patients", new { area = "Provider" });
 }
 
@@ -350,7 +350,7 @@
         });
 
         function loadData() {
-            fetch(dataUrl)
+            fetch(dataUrl, { headers: { 'Accept': 'application/json' } })
                 .then(function(resp) { if (!resp.ok) throw new Error('HTTP ' + resp.status); return resp.json(); })
                 .then(function(vm) {
                     allRows = vm.rows || [];
