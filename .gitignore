@@ -480,3 +480,12 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+cookies.txt
+
+test-report.csv
+test-report.pdf
+
+# Local runtime files
+Reflect.Web/.aspnet/
+Reflect.Web/.local/
+Library/

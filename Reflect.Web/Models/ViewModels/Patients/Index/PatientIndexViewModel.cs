@@ -10,6 +10,8 @@ public class PatientIndexViewModel
   public async Task PrepareData(
     IPatientRepository patientRepository,
     IPatientSessionRepository patientSessionRepository,
+    IPatientAccessRepository patientAccessRepository,
+    Guid clinicianId,
     CancellationToken cancellationToken
   )
   {
@@ -18,6 +20,16 @@ public class PatientIndexViewModel
     var rows = new List<PatientRowViewModel>();
 
     foreach (var patient in patients){
+
+      bool canAccess = await patientAccessRepository.CanAccessPatientAsync(
+        clinicianId,
+        patient.Id,
+        cancellationToken);
+
+      if (!canAccess)
+      {
+          continue;
+      }
 
       var sessions = await patientSessionRepository.GetSessionsByPatientAsync(patient.Id, cancellationToken);
       var row = PatientRowViewModel.FromEntity(patient, sessions);

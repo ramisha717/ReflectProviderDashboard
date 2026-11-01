@@ -61,4 +61,29 @@ public class InMemoryPatientRepository : IPatientRepository
     return Task.FromResult(result);
   }
 
+
+  public Task SetReviewStatusAsync(
+    Guid patientId,
+    string status,
+    CancellationToken cancellationToken)
+  {
+    cancellationToken.ThrowIfCancellationRequested();
+
+    lock (_patients)
+    {
+      Patient? patient = _patients.FirstOrDefault(
+        p => p.Id == patientId && !p.IsDeleted);
+
+      if (patient is null)
+      {
+        throw new KeyNotFoundException("Patient not found.");
+      }
+
+      patient.ReviewStatus = status;
+    }
+
+    return Task.CompletedTask;
+  }
+
+
 }

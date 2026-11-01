@@ -1,0 +1,233 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Progress";
+    ViewData["Subtitle"] = "Review patient engagement trends. Evaluate activity and clinical data on a per-session or aggregate basis.";
+
+    var progressApiUrl = Url.Action("Index", "Progress", new { area = "Provider" });
+    var platformApiUrl = Url.Action("PlatformComparison", "Progress", new { area = "Provider" });
+}
+
+<!-- Breadcrumb -->
+<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+    <span>Progress</span> <span class="mx-1">/</span> <span style="color:var(--text-dark);font-weight:600;">Engagement trends</span>
+</div>
+
+<!-- Toolbar -->
+<div class="filter-toolbar mb-4">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="filter-pills">
+            <button class="pill-btn" id="btn-days-7" type="button">7 days</button>
+            <button class="pill-btn" id="btn-days-14" type="button">14 days</button>
+            <button class="pill-btn active" id="btn-days-30" type="button">30 days</button>
+        </div>
+        <div style="padding:6px 14px;border:1px solid var(--border-light);border-radius:20px;background:var(--bg-white);font-size:12px;color:var(--text-body);display:flex;align-items:center;gap:6px;">
+            <i class="bi bi-calendar3" style="color:var(--text-muted);"></i>
+            <span>09/17/2026 – 10/18/2026</span>
+        </div>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:7px 14px;" type="button">
+            <i class="bi bi-download me-1"></i> Export summary
+        </button>
+        <button class="btn btn-primary-navy btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:7px 14px;" type="button">
+            <i class="bi bi-speedometer2 me-1"></i> Key metrics
+        </button>
+    </div>
+</div>
+
+<!-- Main Row: Trends Chart + XR vs Mobile Side Card -->
+<div class="row g-4 mb-4">
+    <!-- Chart Column (65%) -->
+    <div class="col-12 col-lg-8">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Engagement trends over time</h3>
+                <span style="font-size:12px;color:var(--text-muted);">Daily recorded activity</span>
+            </div>
+            <div class="dash-card-body" style="height:280px;position:relative;">
+                <canvas id="engagement-line-chart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <div class="chart-legend-item">
+                    <span class="legend-dot coral" style="border-radius:50%;"></span> Session Duration (minutes)
+                </div>
+                <div class="chart-legend-item">
+                    <span class="legend-dot navy" style="border-radius:50%;"></span> Trend Target (20 min)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Side Column: XR vs Mobile usage (35%) -->
+    <div class="col-12 col-lg-4">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">XR vs Mobile usage</h3>
+                <span class="badge bg-light text-dark border">30-day ratio</span>
+            </div>
+            <div class="dash-card-body">
+                <!-- Modality Split Progress -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between small fw-bold mb-1">
+                        <span style="color:var(--primary-navy);">Reflect XR (72%)</span>
+                        <span style="color:var(--accent-coral);">Reflect Mobile (28%)</span>
+                    </div>
+                    <div class="progress" style="height:10px;border-radius:5px;">
+                        <div class="progress-bar" style="width:72%;background:var(--primary-navy);"></div>
+                        <div class="progress-bar" style="width:28%;background:var(--accent-coral);"></div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-3 mb-3" style="background:var(--bg-table-header);border:1px solid var(--border-subtle);">
+                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;">Most Used Module</div>
+                    <div class="h5 fw-bold mb-1 mt-1" style="color:var(--text-dark);">Cognitive Calm</div>
+                    <div class="small" style="color:var(--text-muted);">Recorded total: 14h 22m across all sessions</div>
+                </div>
+
+                <div class="p-3 rounded-3" style="background:var(--bg-table-header);border:1px solid var(--border-subtle);">
+                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;">Completed Sessions</div>
+                    <div class="h5 fw-bold mb-1 mt-1" style="color:var(--text-dark);">14 completed <span class="text-muted fw-normal" style="font-size:13px;">(2 uncompleted)</span></div>
+                    <div class="small" style="color:var(--status-active);"><i class="bi bi-check-circle-fill me-1"></i> 87.5% protocol adherence</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Row: Key Trends Summary + Therapeutic Response Data -->
+<div class="row g-4">
+    <!-- Key Trends -->
+    <div class="col-12 col-md-6">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Key trends and summary</h3>
+                <span class="badge" style="background:#EBF5FF;color:#1E40AF;font-weight:700;font-size:10px;">RECURRING CADENCE</span>
+            </div>
+            <div class="dash-card-body">
+                <p style="font-size:13.5px;line-height:1.6;color:var(--text-body);margin-bottom:12px;">
+                    Patient completed <strong>14 sessions</strong> during this reporting period. Average session duration was <strong>19 minutes</strong>, demonstrating stronger schedule adherence than the previous 30-day baseline.
+                </p>
+                <div class="d-flex align-items-center gap-3 mb-3 p-2 rounded-2" style="background:#F0FDF4;border:1px solid #DCFCE7;">
+                    <i class="bi bi-arrow-up-right-circle-fill" style="color:var(--status-active);font-size:18px;"></i>
+                    <span style="font-size:12.5px;color:#166534;font-weight:600;">+15% duration stability vs preceding 30 days</span>
+                </div>
+                <div style="font-size:11px;color:var(--text-muted);border-top:1px solid var(--border-light);padding-top:10px;">
+                    <i class="bi bi-info-circle me-1"></i> This is an automated clinical summary of synthetic session telemetry, not formal therapeutic advice.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Therapeutic Response Data -->
+    <div class="col-12 col-md-6">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Therapeutic response data</h3>
+                <span style="font-size:11px;color:var(--text-muted);">PROMIS-29 & PHQ-9</span>
+            </div>
+            <div class="dash-card-body">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span class="badge bg-light text-dark border px-2 py-1" style="font-weight:600;">Mood Stability: Normal</span>
+                    <span class="badge bg-light text-dark border px-2 py-1" style="font-weight:600;">Anxiety Trend: Decreasing</span>
+                </div>
+                <p style="font-size:13px;line-height:1.6;color:var(--text-body);margin-bottom:16px;">
+                    No acute clinical flags or negative trend signals detected across self-reported check-ins or biometric recovery modules during this period.
+                </p>
+                <div class="p-3 rounded-2" style="background:var(--bg-table-header);border:1px solid var(--border-light);font-size:12px;color:var(--text-muted);">
+                    <i class="bi bi-check2-circle text-success me-1"></i> All recent assessments synced from Reflect Companion App.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var progressApi = '@Html.Raw(progressApiUrl)';
+        var canvas = document.getElementById('engagement-line-chart');
+
+        // Sample initial trend data matching Figma screenshot
+        var labels = ['09/18', '09/22', '09/26', '09/30', '10/04', '10/08', '10/12', '10/16'];
+        var durationData = [16, 21, 18, 24, 22, 19, 25, 23];
+        var targetData = [20, 20, 20, 20, 20, 20, 20, 20];
+
+        var chart = new Chart(canvas.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Session Duration (min)',
+                        data: durationData,
+                        borderColor: '#E87B7B',
+                        backgroundColor: 'rgba(232, 123, 123, 0.08)',
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#E87B7B',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        tension: 0.35,
+                        fill: true
+                    },
+                    {
+                        label: 'Target (20 min)',
+                        data: targetData,
+                        borderColor: '#1F305E',
+                        borderWidth: 1.5,
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#8B90A0', font: { size: 11, family: "'IBM Plex Sans', sans-serif" } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 30,
+                        grid: { color: '#F0F1F5' },
+                        ticks: { color: '#8B90A0', font: { size: 11, family: "'IBM Plex Sans', sans-serif" } }
+                    }
+                }
+            }
+        });
+
+        // Pill switches
+        function setFilter(days) {
+            ['btn-days-7', 'btn-days-14', 'btn-days-30'].forEach(function(id) {
+                document.getElementById(id).classList.remove('active');
+            });
+            document.getElementById('btn-days-' + days).classList.add('active');
+
+            // Fetch dynamic data if endpoint responds
+            fetch(progressApi + '?days=' + (days === 7 || days === 14 ? 30 : days), {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(function(r) { if (r.ok) return r.json(); })
+            .then(function(data) {
+                if (data && data.weeklyActivity && data.weeklyActivity.length) {
+                    chart.data.labels = data.weeklyActivity.map(function(w) { return new Date(w.weekStart).toLocaleDateString('en-US', {month:'short', day:'numeric'}); });
+                    chart.data.datasets[0].data = data.weeklyActivity.map(function(w) { return w.totalMinutes; });
+                    chart.update();
+                }
+            })
+            .catch(function() {});
+        }
+
+        document.getElementById('btn-days-7').addEventListener('click', function() { setFilter(7); });
+        document.getElementById('btn-days-14').addEventListener('click', function() { setFilter(14); });
+        document.getElementById('btn-days-30').addEventListener('click', function() { setFilter(30); });
+    });
+</script>
+}

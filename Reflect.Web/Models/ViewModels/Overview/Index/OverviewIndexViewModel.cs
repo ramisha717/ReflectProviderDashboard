@@ -20,6 +20,8 @@ public class OverviewIndexViewModel
   public async Task PrepareData(
     IPatientRepository patientsRepo,
     IPatientSessionRepository sessionsRepo,
+    IPatientAccessRepository patientAccessRepo,
+    Guid clinicianId,
     int? inactivityThresholdDays,
     int? frequencyDeclineThresholdPercent,
     CancellationToken cancellationToken)
@@ -42,11 +44,32 @@ public class OverviewIndexViewModel
     FrequencyDeclineThresholdPercent = frequencyDeclineThresholdPercent;
 
 
-    IReadOnlyList<Patient> patients =
-      await patientsRepo.GetAllAsync(cancellationToken);
+   var allPatients = await patientsRepo.GetAllAsync(cancellationToken);
 
-    IReadOnlyList<PatientSession> sessions =
-      await sessionsRepo.GetAllAsync(cancellationToken);
+var authorizedPatients = new List<Patient>();
+
+foreach (var patient in allPatients)
+{
+    if (await patientAccessRepo.CanAccessPatientAsync(
+        clinicianId,
+        patient.Id,
+        cancellationToken))
+    {
+        authorizedPatients.Add(patient);
+    }
+}
+
+    IReadOnlyList<Patient> patients = authorizedPatients;
+
+    var authorizedPatientIds = authorizedPatients
+        .Select(patient => patient.Id)
+        .ToHashSet();
+
+    var allSessions = await sessionsRepo.GetAllAsync(cancellationToken);
+
+    IReadOnlyList<PatientSession> sessions = allSessions
+        .Where(session => authorizedPatientIds.Contains(session.PatientId))
+        .ToList();
 
     TimeZoneInfo easternTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
 

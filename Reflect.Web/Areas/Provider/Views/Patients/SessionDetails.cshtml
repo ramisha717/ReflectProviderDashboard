@@ -1,0 +1,157 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Session Details";
+    ViewData["Subtitle"] = "Patient 501: Individual session detail record";
+    var sessionId = ViewBag.SessionId ?? "S-008117";
+}
+
+<!-- Breadcrumb -->
+<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+    <a asp-area="Provider" asp-controller="Patients" asp-action="IndexPage" class="text-decoration-none" style="color:var(--text-muted);">Patients</a>
+    <span class="mx-1">/</span>
+    <span style="color:var(--text-muted);">Patient 501</span>
+    <span class="mx-1">/</span>
+    <span style="color:var(--text-dark);font-weight:600;">Session @sessionId</span>
+</div>
+
+@await Html.PartialAsync("_PatientSubNav", "session-details")
+
+<!-- Header Action Row -->
+<div class="content-header">
+    <div>
+        <h2 class="content-title">Session Details</h2>
+        <p class="content-subtitle">Patient 501: Telemetry log, module progression, and biometric events for @sessionId.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;">
+            <i class="bi bi-clock-history me-1"></i> Since Last Visit
+        </a>
+        <button class="btn btn-primary-navy btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;" type="button">
+            <i class="bi bi-download me-1"></i> Export Telemetry JSON
+        </button>
+    </div>
+</div>
+
+<!-- 4 KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-hash me-1"></i> Session ID</div>
+        <div class="kpi-value" style="font-size:22px;">@sessionId</div>
+        <div class="kpi-sub">Immersive XR session</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-calendar3 me-1"></i> Session Date</div>
+        <div class="kpi-value" style="font-size:22px;">10/18/2026</div>
+        <div class="kpi-sub">14:02 – 14:26 EST</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-headset me-1"></i> Platform</div>
+        <div class="kpi-value" style="font-size:22px;color:var(--primary-navy);">Reflect XR</div>
+        <div class="kpi-sub">VR Headset hardware</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-stopwatch me-1"></i> Duration</div>
+        <div class="kpi-value" style="font-size:22px;color:var(--status-active);">24 min</div>
+        <div class="kpi-sub">100% protocol completed</div>
+    </div>
+</div>
+
+<!-- Two Columns: Session Summary (Left) + Timeline (Right) -->
+<div class="row g-4 mb-4">
+    <!-- Left: Session Summary -->
+    <div class="col-12 col-md-6">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Session summary</h3>
+                <span class="badge bg-success" style="font-size:11px;">Validated</span>
+            </div>
+            <div class="dash-card-body p-4">
+                <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span class="text-muted">Patient Code:</span>
+                    <strong style="color:var(--text-dark);">Patient 501 (RX-0001)</strong>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span class="text-muted">Active Module:</span>
+                    <strong style="color:var(--text-dark);">Cognitive Calm (Ver 2.4)</strong>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span class="text-muted">Completion Status:</span>
+                    <span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i> Completed (100%)</span>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span class="text-muted">Clinical Objective:</span>
+                    <span style="color:var(--text-dark);">Guided Mindfulness & Regulation</span>
+                </div>
+                <div class="d-flex justify-content-between py-2 border-bottom" style="font-size:13px;">
+                    <span class="text-muted">Biometric Feedback:</span>
+                    <span class="badge bg-light text-dark border">Recorded · Normal HRV</span>
+                </div>
+                <div class="d-flex justify-content-between py-2" style="font-size:13px;">
+                    <span class="text-muted">Adverse Events / Flags:</span>
+                    <span class="text-success fw-bold">None</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Recorded activity / events timeline -->
+    <div class="col-12 col-md-6">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Recorded activity / events</h3>
+                <span class="small text-muted">Chronological telemetry</span>
+            </div>
+            <div class="dash-card-body p-4">
+                <div class="timeline" style="border-left:2px solid var(--border-light);padding-left:20px;position:relative;">
+                    <div class="mb-3 position-relative">
+                        <div style="position:absolute;left:-26px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--primary-navy);"></div>
+                        <div class="fw-bold" style="font-size:13px;color:var(--text-dark);">14:02 EST — Session started</div>
+                        <div class="text-muted small">Headset detected and wireless telemetry stream initiated.</div>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <div style="position:absolute;left:-26px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--primary-navy);"></div>
+                        <div class="fw-bold" style="font-size:13px;color:var(--text-dark);">14:05 EST — Headset optical calibration</div>
+                        <div class="text-muted small">IPD calibrated to 64mm. Tracking quality verified (60 FPS).</div>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <div style="position:absolute;left:-26px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--accent-coral);"></div>
+                        <div class="fw-bold" style="font-size:13px;color:var(--text-dark);">14:08 EST — Cognitive Calm module loaded</div>
+                        <div class="text-muted small">Immersive nature environment environment and auditory guidance.</div>
+                    </div>
+                    <div class="mb-3 position-relative">
+                        <div style="position:absolute;left:-26px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--primary-navy);"></div>
+                        <div class="fw-bold" style="font-size:13px;color:var(--text-dark);">14:24 EST — Wind-down & recovery phase</div>
+                        <div class="text-muted small">Biometric normalization feedback displayed to patient.</div>
+                    </div>
+                    <div class="position-relative">
+                        <div style="position:absolute;left:-26px;top:2px;width:10px;height:10px;border-radius:50%;background:var(--status-active);"></div>
+                        <div class="fw-bold" style="font-size:13px;color:var(--status-active);">14:26 EST — Session completed successfully</div>
+                        <div class="text-muted small">Encrypted payload uploaded and verified by provider backend.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Section: Clinical Interpretation and Notes -->
+<div class="dash-card">
+    <div class="dash-card-header">
+        <h3 class="dash-card-title">Clinical interpretation and notes</h3>
+        <span class="badge bg-light text-dark border">Supervising Provider: Dr. Sarah Mitchell</span>
+    </div>
+    <div class="dash-card-body p-4">
+        <div class="p-3 rounded-2 mb-3" style="background:#F0FDF4;border:1px solid #DCFCE7;font-size:13px;line-height:1.6;color:#166534;">
+            <i class="bi bi-shield-check me-2"></i>
+            Telemetry exhibits ideal steady engagement without interruptions or erratic controller behavior. Autonomic parameters indicate relaxation effect consistent with treatment objectives.
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <a asp-area="Provider" asp-controller="Patients" asp-action="ClinicalNotes" class="btn btn-primary-navy btn-sm" style="border-radius:var(--btn-radius);font-weight:600;">
+                <i class="bi bi-journal-plus me-1"></i> Add supplementary note
+            </a>
+            <button class="btn btn-outline-danger btn-sm" type="button" style="border-radius:var(--btn-radius);font-weight:600;">
+                <i class="bi bi-flag me-1"></i> Flag for clinical review
+            </button>
+        </div>
+    </div>
+</div>

@@ -8,7 +8,7 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        return View();
+        return RedirectToAction("IndexPage", "Overview", new { area = "Provider" });
     }
 
     public IActionResult Privacy()

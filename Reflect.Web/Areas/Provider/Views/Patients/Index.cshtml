@@ -1,0 +1,493 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Patients";
+    ViewData["Subtitle"] = "Find and review patient engagement records · Synthetic records only.";
+
+    var dataUrl = Url.Action("IndexPage", "Patients", new { area = "Provider" });
+    var profileUrl = Url.Action("Profile", "Patients", new { area = "Provider" });
+}
+
+<!-- Filter & Search Toolbar -->
+<div class="filter-toolbar">
+    <div class="table-search-box">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text" id="patient-search-input" class="table-search-input" placeholder="Search by patient ID" />
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+        <div class="filter-pills">
+            <button class="pill-btn active" id="filter-all" type="button">All profiles</button>
+            <button class="pill-btn" id="filter-review" type="button">Needs review</button>
+            <button class="pill-btn" id="filter-active" type="button">Active</button>
+        </div>
+        <button class="btn-add-demo" id="btn-open-add-modal" type="button">
+            <i class="bi bi-plus-lg"></i> Add demo profile
+        </button>
+    </div>
+</div>
+
+<!-- Patients Table Card Container -->
+<div class="table-card">
+    <div id="patients-loading" class="loading-state">
+        <div class="spinner-border text-primary spinner-border-sm me-2" role="status"></div>
+        <span>Loading patient records…</span>
+    </div>
+    <div id="patients-error" class="alert alert-danger m-3 d-none" role="alert"></div>
+    <div id="patients-empty" class="alert alert-warning m-3 d-none" role="alert">No matching patient records found.</div>
+
+    <div class="table-responsive">
+        <table id="patients-table" class="patients-table d-none">
+            <thead>
+                <tr>
+                    <th class="sortable" data-sort="patient">PATIENT <span class="sort-icon bi bi-arrow-down-up"></span></th>
+                    <th class="sortable" data-sort="date">LAST ACTIVE <span class="sort-icon bi bi-arrow-down-up"></span></th>
+                    <th class="sortable" data-sort="sessions">SESSIONS <span class="sort-icon bi bi-arrow-down-up"></span></th>
+                    <th>PLATFORM</th>
+                    <th>TREND</th>
+                    <th class="sortable" data-sort="status">STATUS <span class="sort-icon bi bi-arrow-down-up"></span></th>
+                    <th>PROFILE</th>
+                </tr>
+            </thead>
+            <tbody id="patients-tbody"></tbody>
+        </table>
+    </div>
+
+    <!-- Table Footer Count -->
+    <div class="table-footer d-flex justify-content-between align-items-center">
+        <span>Showing <span id="displayed-count">0</span> of <span id="total-count">0</span> synthetic patient records</span>
+        <span style="color:var(--text-light);font-size:11px;"><i class="bi bi-info-circle me-1"></i> Click headers to sort</span>
+    </div>
+</div>
+
+<!-- Add Demo Profile Modal -->
+<div class="modal fade" id="addPatientModal" tabindex="-1" aria-labelledby="addPatientModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius:var(--card-radius);">
+            <div class="modal-header" style="background:var(--bg-table-header);border-bottom:1px solid var(--border-light);">
+                <h5 class="modal-title fw-bold" id="addPatientModalLabel" style="font-size:15px;color:var(--text-dark);">
+                    <i class="bi bi-person-plus me-2" style="color:var(--primary-navy);"></i>Add Demo Patient Profile
+                </h5>
+                <button type="button" class="btn-close" id="btn-close-modal-x" aria-label="Close"></button>
+            </div>
+            <form id="add-patient-form">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">PATIENT CODE / NAME</label>
+                        <input type="text" id="new-patient-code" class="form-control" placeholder="e.g. Patient 501" value="Patient 501" required style="border-radius:var(--btn-radius);" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">PRIMARY PLATFORM</label>
+                        <select id="new-patient-platform" class="form-select" style="border-radius:var(--btn-radius);">
+                            <option value="Reflect XR" selected>Reflect XR</option>
+                            <option value="Reflect Mobile">Reflect Mobile</option>
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">SESSION COUNT</label>
+                            <input type="number" id="new-patient-sessions" class="form-control" value="14" min="0" max="100" style="border-radius:var(--btn-radius);" />
+                        </div>
+                        <div class="col">
+                            <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">REVIEW STATUS</label>
+                            <select id="new-patient-status" class="form-select" style="border-radius:var(--btn-radius);">
+                                <option value="Needs Review">Needs Review</option>
+                                <option value="Reviewed" selected>Reviewed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">TREND</label>
+                        <select id="new-patient-trend" class="form-select" style="border-radius:var(--btn-radius);">
+                            <option value="Stable" selected>Stable</option>
+                            <option value="Increased">Increased</option>
+                            <option value="Decreased">Decreased</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer" style="background:var(--bg-table-header);border-top:1px solid var(--border-light);">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-cancel-modal" style="border-radius:var(--btn-radius);">Cancel</button>
+                    <button type="submit" class="btn btn-sm px-3 btn-primary-navy" style="border-radius:var(--btn-radius);">
+                        <i class="bi bi-check-lg me-1"></i> Save Demo Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Slide-over Patient Profile Drawer -->
+<div class="patient-profile-drawer" id="profileOffcanvas" aria-labelledby="profileOffcanvasLabel">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-start" style="background:var(--bg-table-header);">
+        <div>
+            <a href="#" class="text-decoration-none small d-inline-flex align-items-center mb-1" id="drawer-back-btn" style="color:var(--text-muted);">
+                <i class="bi bi-arrow-left me-1"></i> Back to patients
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <h4 class="fw-bold mb-0" id="profile-drawer-patient-name" style="color:var(--text-dark);font-size:18px;">Patient Profile</h4>
+                <span id="profile-drawer-status-badge" class="badge"></span>
+            </div>
+            <div class="small mt-1" id="profile-drawer-sub" style="color:var(--text-muted);">Longitudinal view across Reflect XR and Reflect Mobile</div>
+        </div>
+        <button type="button" class="btn-close" id="drawer-close-x" aria-label="Close"></button>
+        <div class="d-flex align-items-center gap-2 mt-2">
+            <a id="drawer-nav-slv" asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="btn btn-sm btn-outline-secondary py-1 px-2" style="font-size:11.5px;border-radius:4px;">
+                <i class="bi bi-clock-history me-1"></i> Since Last Visit
+            </a>
+            <a id="drawer-nav-notes" asp-area="Provider" asp-controller="Patients" asp-action="ClinicalNotes" class="btn btn-sm btn-outline-secondary py-1 px-2" style="font-size:11.5px;border-radius:4px;">
+                <i class="bi bi-journal-text me-1"></i> Clinical Notes
+            </a>
+            <a id="drawer-nav-session" asp-area="Provider" asp-controller="Patients" asp-action="SessionDetails" class="btn btn-sm btn-outline-secondary py-1 px-2" style="font-size:11.5px;border-radius:4px;">
+                <i class="bi bi-eye me-1"></i> Latest Session
+            </a>
+        </div>
+    </div>
+    <div class="p-4" style="overflow-y: auto; flex: 1;" id="profile-drawer-body">
+        <div id="profile-drawer-loading" class="text-center py-5">
+            <div class="spinner-border" role="status" style="color:var(--primary-navy);"></div>
+            <p class="small mt-2" style="color:var(--text-muted);">Loading patient profile data…</p>
+        </div>
+
+        <div id="profile-drawer-content" class="d-none">
+            <!-- Stat Cards Row -->
+            <div class="kpi-grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px;">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Sessions</div>
+                    <div class="kpi-value" id="drawer-total-sessions" style="font-size:24px;">0</div>
+                    <div class="kpi-sub" id="drawer-platform-split">Reflect XR + Mobile</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Duration</div>
+                    <div class="kpi-value" id="drawer-duration" style="font-size:24px;">0 min</div>
+                    <div class="kpi-sub" id="drawer-engagement-desc">Recorded patient activity</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Last Active</div>
+                    <div class="kpi-value" id="drawer-last-active" style="font-size:18px;">-</div>
+                    <div class="kpi-sub" id="drawer-last-module">-</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Most-Used Platform</div>
+                    <div class="kpi-value" id="drawer-top-platform" style="font-size:18px;">-</div>
+                    <div class="kpi-sub" id="drawer-platform-sessions">Primary modality</div>
+                </div>
+            </div>
+
+            <!-- Platform Mix -->
+            <div class="dash-card" style="margin-bottom:16px;">
+                <div class="dash-card-header" style="padding:14px 20px;">
+                    <h3 class="dash-card-title" style="font-size:12px;">Platform Mix</h3>
+                    <span class="small" id="drawer-platform-mix-label" style="color:var(--text-muted);font-size:11px;">Modality split</span>
+                </div>
+                <div class="dash-card-body" style="padding:14px 20px;">
+                    <div class="progress" style="height: 10px;border-radius:5px;">
+                        <div id="drawer-progress-xr" class="progress-bar" role="progressbar" style="width: 50%;background:var(--primary-navy);"></div>
+                        <div id="drawer-progress-mobile" class="progress-bar" role="progressbar" style="width: 50%;background:var(--accent-coral);"></div>
+                    </div>
+                    <div class="d-flex justify-content-between small mt-2" style="color:var(--text-muted);">
+                        <span><i class="bi bi-circle-fill me-1" style="font-size:8px;color:var(--primary-navy);"></i> Reflect XR: <strong id="drawer-xr-count">0</strong></span>
+                        <span><i class="bi bi-circle-fill me-1" style="font-size:8px;color:var(--accent-coral);"></i> Mobile: <strong id="drawer-mobile-count">0</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session History Table -->
+            <div class="dash-card">
+                <div class="dash-card-header" style="padding:12px 20px;">
+                    <h3 class="dash-card-title" style="font-size:12px;">Session History</h3>
+                </div>
+                <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                    <table class="attention-table" style="font-size:13px;">
+                        <thead>
+                            <tr>
+                                <th style="padding:8px 20px;">DATE</th>
+                                <th style="padding:8px 20px;">PLATFORM</th>
+                                <th style="padding:8px 20px;">MODULE</th>
+                                <th style="padding:8px 20px;">DURATION</th>
+                                <th style="padding:8px 20px;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drawer-sessions-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var dataUrl = '@Html.Raw(dataUrl)';
+        var profileBaseUrl = '@Html.Raw(profileUrl)';
+
+        var loading = document.getElementById('patients-loading');
+        var errorDiv = document.getElementById('patients-error');
+        var emptyDiv = document.getElementById('patients-empty');
+        var table = document.getElementById('patients-table');
+        var tbody = document.getElementById('patients-tbody');
+        var displayedCount = document.getElementById('displayed-count');
+        var totalCount = document.getElementById('total-count');
+        var searchInput = document.getElementById('patient-search-input');
+        var filterAll = document.getElementById('filter-all');
+        var filterReview = document.getElementById('filter-review');
+        var filterActive = document.getElementById('filter-active');
+
+        var addModalEl = document.getElementById('addPatientModal');
+        var btnOpenModal = document.getElementById('btn-open-add-modal');
+        var btnCloseModalX = document.getElementById('btn-close-modal-x');
+        var btnCancelModal = document.getElementById('btn-cancel-modal');
+        var addForm = document.getElementById('add-patient-form');
+
+        var drawerEl = document.getElementById('profileOffcanvas');
+        var drawerCloseX = document.getElementById('drawer-close-x');
+        var drawerBackBtn = document.getElementById('drawer-back-btn');
+
+        var allRows = [];
+        var currentFilter = 'all';
+        var currentQuery = '';
+        var sortColumn = 'date';
+        var sortAsc = false;
+
+        function getDisplayName(r, idx) {
+            if (r.patientCode) {
+                var cleaned = r.patientCode.replace(/^RX-0*/, '').replace(/^RX-/, '');
+                return cleaned ? 'Patient ' + cleaned.substring(0, 4) : 'Patient ' + r.patientCode;
+            }
+            return 'Patient ' + (idx + 101);
+        }
+
+        function renderRows(rows) {
+            tbody.innerHTML = '';
+            displayedCount.textContent = rows.length;
+
+            if (rows.length === 0) {
+                emptyDiv.classList.remove('d-none');
+            } else {
+                emptyDiv.classList.add('d-none');
+            }
+
+            rows.forEach(function(r, idx) {
+                var tr = document.createElement('tr');
+                var lastActive = r.lastActive ? new Date(r.lastActive).toLocaleDateString() : '-';
+                var patientName = getDisplayName(r, idx);
+                var trendDisplay = r.trend || '-';
+                var isNeedsReview = r.reviewStatus && r.reviewStatus.toLowerCase().indexOf('needs') >= 0;
+                var statusDisplay = isNeedsReview ? 'Needs review' : (r.reviewStatus || 'Reviewed');
+                var platformDisplay = r.platform || 'Reflect XR';
+                var pUrl = profileBaseUrl + '?patientId=' + r.patientId;
+                var slvUrl = '/Provider/Patients/SinceLastVisit?patientId=' + encodeURIComponent(r.patientId);
+
+                tr.innerHTML =
+                    '<td class="col-patient"><a href="' + slvUrl + '" class="fw-bold text-decoration-none" style="color:var(--primary-navy);" title="Open Since Last Visit">' + patientName + '</a></td>' +
+                    '<td class="col-date">' + lastActive + '</td>' +
+                    '<td class="col-sessions">' + (r.numOfSessions || 0) + '</td>' +
+                    '<td class="col-platform">' + platformDisplay + '</td>' +
+                    '<td class="col-trend">' + trendDisplay + '</td>' +
+                    '<td class="col-status ' + (isNeedsReview ? 'text-amber fw-bold' : '') + '">' + statusDisplay + '</td>' +
+                    '<td class="col-profile"><a href="' + pUrl + '" class="profile-link btn-open-profile" data-patient-id="' + r.patientId + '" data-patient-name="' + patientName + '">Open &rarr;</a></td>';
+                tbody.appendChild(tr);
+            });
+
+            tbody.querySelectorAll('.btn-open-profile').forEach(function(link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    openProfileDrawer(this.getAttribute('data-patient-id'), this.getAttribute('data-patient-name'));
+                });
+            });
+        }
+
+        function applyFilterAndSearch() {
+            var filtered = allRows.slice();
+            var query = currentQuery.trim().toLowerCase();
+
+            if (query) {
+                filtered = filtered.filter(function(r, idx) {
+                    var name = getDisplayName(r, idx).toLowerCase();
+                    var code = (r.patientCode || '').toLowerCase();
+                    var id = (r.patientId || '').toString().toLowerCase();
+                    var platform = (r.platform || '').toLowerCase();
+                    return name.indexOf(query) >= 0 || code.indexOf(query) >= 0 || id.indexOf(query) >= 0 || platform.indexOf(query) >= 0;
+                });
+            }
+
+            if (currentFilter === 'review') {
+                filtered = filtered.filter(function(r) { return r.reviewStatus && r.reviewStatus.toLowerCase().indexOf('needs') >= 0; });
+            } else if (currentFilter === 'active') {
+                filtered = filtered.filter(function(r) { return r.numOfSessions && r.numOfSessions > 0; });
+            }
+
+            filtered.sort(function(a, b) {
+                var valA, valB;
+                if (sortColumn === 'patient') {
+                    valA = (a.patientCode || '').toLowerCase();
+                    valB = (b.patientCode || '').toLowerCase();
+                } else if (sortColumn === 'sessions') {
+                    valA = a.numOfSessions || 0;
+                    valB = b.numOfSessions || 0;
+                } else if (sortColumn === 'status') {
+                    valA = (a.reviewStatus || '').toLowerCase();
+                    valB = (b.reviewStatus || '').toLowerCase();
+                } else {
+                    valA = a.lastActive ? new Date(a.lastActive).getTime() : 0;
+                    valB = b.lastActive ? new Date(b.lastActive).getTime() : 0;
+                }
+                if (valA < valB) return sortAsc ? -1 : 1;
+                if (valA > valB) return sortAsc ? 1 : -1;
+                return 0;
+            });
+
+            renderRows(filtered);
+        }
+
+        document.querySelectorAll('.patients-table th.sortable').forEach(function(th) {
+            th.addEventListener('click', function () {
+                var col = this.getAttribute('data-sort');
+                if (sortColumn === col) { sortAsc = !sortAsc; } else { sortColumn = col; sortAsc = true; }
+                document.querySelectorAll('.sort-icon').forEach(function(icon) { icon.className = 'sort-icon bi bi-arrow-down-up'; });
+                var curIcon = this.querySelector('.sort-icon');
+                if (curIcon) { curIcon.className = sortAsc ? 'sort-icon bi bi-sort-up' : 'sort-icon bi bi-sort-down'; }
+                applyFilterAndSearch();
+            });
+        });
+
+        function loadData() {
+            fetch(dataUrl)
+                .then(function(resp) { if (!resp.ok) throw new Error('HTTP ' + resp.status); return resp.json(); })
+                .then(function(vm) {
+                    allRows = vm.rows || [];
+                    totalCount.textContent = allRows.length;
+                    loading.classList.add('d-none');
+                    table.classList.remove('d-none');
+                    applyFilterAndSearch();
+                })
+                .catch(function(e) {
+                    loading.classList.add('d-none');
+                    errorDiv.textContent = 'Failed to load patients: ' + e.message;
+                    errorDiv.classList.remove('d-none');
+                });
+        }
+
+        searchInput.addEventListener('input', function(e) { currentQuery = e.target.value; applyFilterAndSearch(); });
+        document.addEventListener('provider:search', function(e) { currentQuery = e.detail.query; searchInput.value = currentQuery; applyFilterAndSearch(); });
+
+        function setActivePill(activeBtn, filterType) {
+            [filterAll, filterReview, filterActive].forEach(function(b) { b.classList.remove('active'); });
+            activeBtn.classList.add('active');
+            currentFilter = filterType;
+            applyFilterAndSearch();
+        }
+
+        filterAll.addEventListener('click', function() { setActivePill(filterAll, 'all'); });
+        filterReview.addEventListener('click', function() { setActivePill(filterReview, 'review'); });
+        filterActive.addEventListener('click', function() { setActivePill(filterActive, 'active'); });
+
+        // Modal Controls
+        function showModal() {
+            if (window.bootstrap && bootstrap.Modal) { bootstrap.Modal.getOrCreateInstance(addModalEl).show(); }
+            else { addModalEl.classList.add('show'); addModalEl.style.display = 'block'; document.body.classList.add('modal-open'); }
+        }
+        function hideModal() {
+            if (window.bootstrap && bootstrap.Modal) { var inst = bootstrap.Modal.getInstance(addModalEl); if (inst) inst.hide(); }
+            addModalEl.classList.remove('show'); addModalEl.style.display = 'none'; document.body.classList.remove('modal-open');
+        }
+
+        if (btnOpenModal) btnOpenModal.addEventListener('click', showModal);
+        if (btnCloseModalX) btnCloseModalX.addEventListener('click', hideModal);
+        if (btnCancelModal) btnCancelModal.addEventListener('click', hideModal);
+
+        if (addForm) {
+            addForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var newRow = {
+                    patientId: 'demo-' + Date.now(),
+                    patientCode: document.getElementById('new-patient-code').value.trim(),
+                    lastActive: new Date().toISOString(),
+                    numOfSessions: parseInt(document.getElementById('new-patient-sessions').value, 10) || 0,
+                    platform: document.getElementById('new-patient-platform').value,
+                    trend: document.getElementById('new-patient-trend').value,
+                    reviewStatus: document.getElementById('new-patient-status').value
+                };
+                allRows.unshift(newRow);
+                totalCount.textContent = allRows.length;
+                applyFilterAndSearch();
+                hideModal();
+                addForm.reset();
+            });
+        }
+
+        // Drawer Controls
+        function closeProfileDrawer() { drawerEl.classList.remove('show'); }
+        if (drawerCloseX) drawerCloseX.addEventListener('click', closeProfileDrawer);
+        if (drawerBackBtn) drawerBackBtn.addEventListener('click', function(e) { e.preventDefault(); closeProfileDrawer(); });
+
+        function openProfileDrawer(patientId, patientName) {
+            drawerEl.classList.add('show');
+            var titleEl = document.getElementById('profile-drawer-patient-name');
+            var statusBadge = document.getElementById('profile-drawer-status-badge');
+            var loadingEl = document.getElementById('profile-drawer-loading');
+            var contentEl = document.getElementById('profile-drawer-content');
+
+            // Wire drawer sub-nav links to current patient
+            var navSlv = document.getElementById('drawer-nav-slv');
+            var navNotes = document.getElementById('drawer-nav-notes');
+            var navSession = document.getElementById('drawer-nav-session');
+            if (navSlv) navSlv.href = '/Provider/Patients/SinceLastVisit?patientId=' + encodeURIComponent(patientId);
+            if (navNotes) navNotes.href = '/Provider/Patients/ClinicalNotes?patientId=' + encodeURIComponent(patientId);
+            if (navSession) navSession.href = '/Provider/Patients/SessionDetails?patientId=' + encodeURIComponent(patientId);
+
+            titleEl.textContent = patientName || 'Patient Details';
+            loadingEl.classList.remove('d-none');
+            contentEl.classList.add('d-none');
+
+            fetch(profileBaseUrl + '?patientId=' + patientId)
+                .then(function(resp) { if (!resp.ok) throw new Error('HTTP ' + resp.status); return resp.json(); })
+                .then(function(data) {
+                    var isReview = data.reviewStatus && data.reviewStatus.toLowerCase().indexOf('needs') >= 0;
+                    statusBadge.textContent = isReview ? 'NEEDS REVIEW' : 'REVIEWED';
+                    statusBadge.className = isReview ? 'badge bg-warning text-dark' : 'badge bg-success';
+
+                    document.getElementById('drawer-total-sessions').textContent = data.numOfSessions || 0;
+                    document.getElementById('drawer-duration').textContent = (data.totalDurationMinutes || 0) + ' min';
+                    document.getElementById('drawer-last-active').textContent = data.lastActive ? new Date(data.lastActive).toLocaleDateString() : '-';
+                    document.getElementById('drawer-last-module').textContent = data.mostUsedModule || 'Reflect Session';
+                    document.getElementById('drawer-top-platform').textContent = data.mostUsedPlatform || 'Reflect XR';
+
+                    var xrCount = data.reflectXRSessionCount || 0;
+                    var mobileCount = data.reflectMobileSessionCount || 0;
+                    var total = xrCount + mobileCount || 1;
+                    document.getElementById('drawer-xr-count').textContent = xrCount;
+                    document.getElementById('drawer-mobile-count').textContent = mobileCount;
+                    document.getElementById('drawer-progress-xr').style.width = ((xrCount / total) * 100) + '%';
+                    document.getElementById('drawer-progress-mobile').style.width = ((mobileCount / total) * 100) + '%';
+
+                    var sessionsTbody = document.getElementById('drawer-sessions-tbody');
+                    sessionsTbody.innerHTML = '';
+                    var sessions = data.sessions || [];
+                    if (sessions.length === 0) {
+                        sessionsTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No recorded sessions.</td></tr>';
+                    } else {
+                        sessions.forEach(function(s) {
+                            var sTr = document.createElement('tr');
+                            var sDate = s.startedAt ? new Date(s.startedAt).toLocaleDateString() : '-';
+                            var sId = s.sessionId || 'S-008117';
+                            sTr.innerHTML =
+                                '<td style="padding:10px 20px;"><a href="/Provider/Patients/SessionDetails?sessionId=' + sId + '&patientId=' + encodeURIComponent(patientId) + '" class="fw-semibold text-decoration-none" style="color:var(--primary-navy);">' + sDate + ' <i class="bi bi-box-arrow-up-right" style="font-size:10px;"></i></a></td>' +
+                                '<td style="padding:10px 20px;"><span class="badge bg-light text-dark border" style="border-radius:4px;">' + (s.platform || '-') + '</span></td>' +
+                                '<td style="padding:10px 20px;">' + (s.moduleName || '-') + '</td>' +
+                                '<td style="padding:10px 20px;">' + (s.durationMinutes ? s.durationMinutes + ' min' : '-') + '</td>' +
+                                '<td style="padding:10px 20px;"><span style="color:var(--status-active);font-weight:600;font-size:12px;">' + (s.recordingStatus || 'Succeeded') + '</span></td>';
+                            sessionsTbody.appendChild(sTr);
+                        });
+                    }
+
+                    loadingEl.classList.add('d-none');
+                    contentEl.classList.remove('d-none');
+                })
+                .catch(function(err) {
+                    loadingEl.innerHTML = '<div class="alert alert-danger m-3">Could not load details: ' + err.message + '</div>';
+                });
+        }
+
+        loadData();
+    });
+</script>
+}

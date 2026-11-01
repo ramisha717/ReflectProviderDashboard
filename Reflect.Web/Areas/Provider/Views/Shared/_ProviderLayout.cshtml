@@ -1,0 +1,120 @@
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Reflect Provider Dashboard</title>
+    <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans Condensed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:ital,wght@0,600;0,700;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+    <!-- Bootstrap CSS & Icons -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <!-- Provider Theme CSS -->
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <div class="provider-root">
+        <!-- Sidebar Navigation -->
+        <nav class="provider-sidebar" id="providerSidebar">
+            <div class="sidebar-brand-wrapper">
+                <a href="@Url.Action("IndexPage", "Overview", new { area = "Provider" })" class="sidebar-brand">
+                    <img src="~/images/logos/reflect-horizontal-logo-white-rgb.svg" alt="Reflect XR" class="brand-full-logo" />
+                    <img src="~/images/logos/reflect-logo-mark-white-rgb.svg" alt="Reflect XR" class="brand-mark-logo" />
+                </a>
+                <div class="brand-badge">PROVIDER DASHBOARD</div>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Overview" ? "active" : "")" href="/Provider/Overview/IndexPage">
+                        <i class="bi bi-grid-1x2 nav-icon"></i>
+                        <span>Overview</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Patients" ? "active" : "")" href="/Provider/Patients/IndexPage">
+                        <i class="bi bi-people nav-icon"></i>
+                        <span>Patients</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Progress" ? "active" : "")" href="/Provider/Progress/IndexPage">
+                        <i class="bi bi-bar-chart nav-icon"></i>
+                        <span>Progress</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MonitoringDocumentation" ? "active" : "")" href="/Provider/MonitoringDocumentation/IndexPage">
+                        <i class="bi bi-clipboard2-pulse nav-icon"></i>
+                        <span>Monitoring</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Reports" ? "active" : "")" href="/Provider/Reports/IndexPage">
+                        <i class="bi bi-file-earmark-text nav-icon"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-settings">
+                    <a href="/Provider/Settings/IndexPage" class="settings-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "active" : "")" title="Settings">
+                        <i class="bi bi-gear me-2"></i><span>Settings</span>
+                    </a>
+                </div>
+                <div class="sidebar-user">
+                    <div class="user-avatar">SM</div>
+                    <div class="user-details">
+                        <span class="user-name">Dr. Sarah Mitchell</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Layout -->
+        <div class="provider-main">
+            <!-- Global Top Bar -->
+            <header class="provider-header">
+                <div style="display:flex;align-items:center;">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Toggle menu">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <div class="header-title-group">
+                        <h1 class="page-title">@ViewData["Title"]</h1>
+                        @if (ViewData["Subtitle"] != null) {
+                            <span class="header-subtitle">@ViewData["Subtitle"]</span>
+                        }
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <div class="header-search-box">
+                        <i class="bi bi-search search-icon"></i>
+                        <input type="text" class="header-search-input" placeholder="Search…" />
+                    </div>
+                    <span class="demo-badge">DEMO DATA</span>
+                </div>
+            </header>
+
+            <!-- Main Page View Content -->
+            <main class="provider-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/provider.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

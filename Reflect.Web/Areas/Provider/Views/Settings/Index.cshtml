@@ -1,0 +1,196 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Settings";
+    ViewData["Subtitle"] = "Privacy controls, audit logs, and clinical telemetry integrations";
+}
+
+<!-- Breadcrumb -->
+<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+    <span>Settings</span> <span class="mx-1">/</span> <span style="color:var(--text-dark);font-weight:600;">Privacy & Access</span>
+</div>
+
+<!-- Header -->
+<div class="content-header">
+    <div>
+        <h2 class="content-title">Settings & Privacy</h2>
+        <p class="content-subtitle">Manage clinical access controls, patient privacy policies, and system integrations.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-primary-navy btn-sm" type="button" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;">
+            <i class="bi bi-check2-circle me-1"></i> Save Changes
+        </button>
+    </div>
+</div>
+
+<!-- Settings Navigation Tabs -->
+<ul class="nav nav-pills mb-4 gap-2" id="settingsTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="pill-btn active" id="tab-privacy" data-bs-toggle="pill" data-bs-target="#content-privacy" type="button" role="tab">
+            <i class="bi bi-shield-lock me-1"></i> Privacy & Access
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="pill-btn" id="tab-integrations" data-bs-toggle="pill" data-bs-target="#content-integrations" type="button" role="tab">
+            <i class="bi bi-diagram-3 me-1"></i> EHR Integrations
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="pill-btn" id="tab-audit" data-bs-toggle="pill" data-bs-target="#content-audit" type="button" role="tab">
+            <i class="bi bi-card-checklist me-1"></i> Audit Trail
+        </button>
+    </li>
+</ul>
+
+<!-- Tab Content -->
+<div class="tab-content" id="settingsTabContent">
+    <!-- Tab 1: Privacy & Access -->
+    <div class="tab-pane fade show active" id="content-privacy" role="tabpanel">
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-md-6">
+                <div class="dash-card h-100 mb-0">
+                    <div class="dash-card-header">
+                        <h3 class="dash-card-title">HIPAA & Data Privacy Controls</h3>
+                        <span class="badge bg-success" style="font-size:11px;">Active Compliance</span>
+                    </div>
+                    <div class="dash-card-body p-4">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="sw-synth" checked />
+                            <label class="form-check-label fw-bold small text-dark" for="sw-synth">
+                                Synthetic Telemetry Safeguards
+                            </label>
+                            <div class="text-muted small" style="font-size:11.5px;">Enforce strict separation between simulated biometric signals and protected health records.</div>
+                        </div>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="sw-enc" checked />
+                            <label class="form-check-label fw-bold small text-dark" for="sw-enc">
+                                End-to-End Headset Encryption
+                            </label>
+                            <div class="text-muted small" style="font-size:11.5px;">AES-256 in-transit and at-rest telemetry encryption for all paired Reflect XR headsets.</div>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="sw-anon" checked />
+                            <label class="form-check-label fw-bold small text-dark" for="sw-anon">
+                                Anonymized Session Telemetry
+                            </label>
+                            <div class="text-muted small" style="font-size:11.5px;">Mask direct patient identifiers on export payloads unless explicitly approved by provider.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="dash-card h-100 mb-0">
+                    <div class="dash-card-header">
+                        <h3 class="dash-card-title">Authorized Clinical Roles</h3>
+                    </div>
+                    <div class="dash-card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="font-size:13px;">
+                            <div>
+                                <strong>Lead Clinician</strong>
+                                <div class="text-muted small">Full review, note signing, attestation, export</div>
+                            </div>
+                            <span class="badge bg-light text-primary border">Dr. Sarah Mitchell</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom" style="font-size:13px;">
+                            <div>
+                                <strong>Clinical Coordinator</strong>
+                                <div class="text-muted small">Patient onboarding, hardware tracking</div>
+                            </div>
+                            <span class="badge bg-light text-dark border">Assigned</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2" style="font-size:13px;">
+                            <div>
+                                <strong>Audit & Compliance</strong>
+                                <div class="text-muted small">Read-only verification of billing records</div>
+                            </div>
+                            <span class="badge bg-light text-dark border">System Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 2: EHR Integrations -->
+    <div class="tab-pane fade" id="content-integrations" role="tabpanel">
+        <div class="dash-card mb-4">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Connected Healthcare Platforms</h3>
+            </div>
+            <div class="dash-card-body p-4">
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 border rounded-3 text-center" style="background:#FAFAFC;">
+                            <div class="h5 fw-bold mb-1" style="color:var(--primary-navy);">Epic FHIR / SMART</div>
+                            <span class="badge bg-success mb-2">Connected</span>
+                            <div class="small text-muted mb-3">Syncs clinical progress notes directly to patient chart.</div>
+                            <button class="btn btn-outline-secondary btn-sm w-100" type="button">Configure Mapping</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 border rounded-3 text-center" style="background:#FAFAFC;">
+                            <div class="h5 fw-bold mb-1" style="color:var(--primary-navy);">Cerner Millennium</div>
+                            <span class="badge bg-light text-dark border mb-2">Available</span>
+                            <div class="small text-muted mb-3">HL7 v2 / FHIR REST telemetry ingestion conduit.</div>
+                            <button class="btn btn-outline-primary btn-sm w-100" type="button">Enable Connection</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="p-3 border rounded-3 text-center" style="background:#FAFAFC;">
+                            <div class="h5 fw-bold mb-1" style="color:var(--primary-navy);">Reflect XR Cloud Gateway</div>
+                            <span class="badge bg-success mb-2">Synchronized</span>
+                            <div class="small text-muted mb-3">Headset telemetry stream operating at 60 FPS.</div>
+                            <button class="btn btn-outline-secondary btn-sm w-100" type="button">Test Telemetry Feed</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab 3: Audit Trail -->
+    <div class="tab-pane fade" id="content-audit" role="tabpanel">
+        <div class="table-card">
+            <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="background:var(--bg-table-header);">
+                <h3 class="dash-card-title" style="font-size:13px;margin:0;">Recent Provider Activity Audit Log</h3>
+                <span class="badge bg-light text-dark border">Past 7 days</span>
+            </div>
+            <div class="table-responsive">
+                <table class="patients-table">
+                    <thead>
+                        <tr>
+                            <th>TIMESTAMP</th>
+                            <th>USER</th>
+                            <th>ACTION</th>
+                            <th>PATIENT / ENTITY</th>
+                            <th>IP ADDRESS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10/18/2026 14:35 EST</td>
+                            <td>Dr. Sarah Mitchell</td>
+                            <td><span class="badge bg-light text-primary border">Report Generated</span></td>
+                            <td>Patient 501 (RX-0001)</td>
+                            <td>192.168.1.42</td>
+                        </tr>
+                        <tr>
+                            <td>10/18/2026 14:26 EST</td>
+                            <td>Dr. Sarah Mitchell</td>
+                            <td><span class="badge bg-light text-success border">Session Review</span></td>
+                            <td>Session S-008117</td>
+                            <td>192.168.1.42</td>
+                        </tr>
+                        <tr>
+                            <td>10/18/2026 14:10 EST</td>
+                            <td>Dr. Sarah Mitchell</td>
+                            <td><span class="badge bg-light text-dark border">Note Signed</span></td>
+                            <td>Note CN-2026-081</td>
+                            <td>192.168.1.42</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

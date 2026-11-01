@@ -1,0 +1,200 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Reports";
+    ViewData["Subtitle"] = "Clinical patient report: interactive view before printing or export";
+}
+
+<!-- Breadcrumb -->
+<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+    <span>Reports</span> <span class="mx-1">/</span> <span style="color:var(--text-dark);font-weight:600;">Preview and generation</span>
+</div>
+
+<!-- Header Action Row -->
+<div class="content-header">
+    <div>
+        <h2 class="content-title">Reports</h2>
+        <p class="content-subtitle">Clinical patient report: interactive view before printing or export.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;" type="button" onclick="window.print()">
+            <i class="bi bi-printer me-1"></i> Print
+        </button>
+        <button class="btn btn-primary-navy btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;" type="button">
+            <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
+        </button>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Left Configuration Panel -->
+    <div class="col-12 col-lg-4">
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Report settings</h3>
+            </div>
+            <div class="dash-card-body p-4">
+                <div class="mb-3">
+                    <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">PATIENT SELECTION</label>
+                    <select class="form-select" style="border-radius:var(--btn-radius);font-size:13px;">
+                        <option value="501" selected>Patient 501 (RX-0001)</option>
+                        <option value="502">Patient 502 (RX-0002)</option>
+                        <option value="503">Patient 503 (RX-0003)</option>
+                    </select>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">DATE FROM</label>
+                        <input type="date" class="form-control" value="2026-10-01" style="border-radius:var(--btn-radius);font-size:13px;" />
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">DATE TO</label>
+                        <input type="date" class="form-control" value="2026-10-18" style="border-radius:var(--btn-radius);font-size:13px;" />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label mb-2" style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">SECTIONS TO INCLUDE</label>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" checked id="sec-1" />
+                        <label class="form-check-label small" for="sec-1">Patient summary & demographics</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" checked id="sec-2" />
+                        <label class="form-check-label small" for="sec-2">Session telemetry history</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" checked id="sec-3" />
+                        <label class="form-check-label small" for="sec-3">Modality split & duration analysis</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" checked id="sec-4" />
+                        <label class="form-check-label small" for="sec-4">Therapeutic response observations</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked id="sec-5" />
+                        <label class="form-check-label small" for="sec-5">Clinician sign-off & CPT attestation</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-outline-secondary w-100 btn-sm py-2" type="button" style="border-radius:var(--btn-radius);font-weight:600;">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Refresh Preview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Paper Report Preview -->
+    <div class="col-12 col-lg-8">
+        <div style="background:#FFFFFF;border:1px solid #D1D5DB;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,0.08);padding:40px;min-height:750px;position:relative;">
+            <!-- Document Header -->
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--primary-navy);padding-bottom:20px;margin-bottom:24px;">
+                <div>
+                    <img src="~/images/logos/reflect-horizontal-logo-full-color-rgb.svg" alt="Reflect XR" style="height:44px;object-fit:contain;margin-bottom:4px;" />
+                    <div style="font-size:10px;font-weight:600;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;">CLINICAL PROVIDER TELEMETRY REPORT</div>
+                </div>
+                <div style="text-align:right;">
+                    <span class="badge" style="background:#FEF3C7;color:#D97706;border:1px solid #F59E0B;font-size:10px;">CONFIDENTIAL RECORD</span>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Date: 10/18/2026</div>
+                </div>
+            </div>
+
+            <!-- Patient / Provider Meta -->
+            <div class="row g-2 mb-4 p-3" style="background:#F8F9FC;border-radius:6px;font-size:12.5px;">
+                <div class="col-6"><strong>Patient Identifier:</strong> Patient 501 (RX-0001)</div>
+                <div class="col-6"><strong>Reporting Period:</strong> 10/01/2026 – 10/18/2026</div>
+                <div class="col-6"><strong>Supervising Clinician:</strong> Dr. Sarah Mitchell, MD</div>
+                <div class="col-6"><strong>Primary Protocol:</strong> Cognitive Calm (Anxiety Protocol)</div>
+            </div>
+
+            <!-- KPI Summary Boxes -->
+            <div class="row g-3 mb-4">
+                <div class="col-4">
+                    <div class="p-3 border rounded text-center" style="background:#FAFAFC;">
+                        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Recorded Sessions</div>
+                        <div style="font-size:24px;font-weight:800;color:var(--text-dark);">3</div>
+                        <div style="font-size:11px;color:var(--text-muted);">Active sessions</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="p-3 border rounded text-center" style="background:#FAFAFC;">
+                        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Engagement Time</div>
+                        <div style="font-size:24px;font-weight:800;color:var(--text-dark);">57 min</div>
+                        <div style="font-size:11px;color:var(--text-muted);">Total duration</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="p-3 border rounded text-center" style="background:#FAFAFC;">
+                        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Platform Split</div>
+                        <div style="font-size:24px;font-weight:800;color:var(--text-dark);">2 / 1</div>
+                        <div style="font-size:11px;color:var(--text-muted);">2 XR / 1 Mobile</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session History Table -->
+            <div class="mb-4">
+                <div style="font-size:13px;font-weight:700;color:var(--text-dark);text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #E5E7EB;padding-bottom:4px;">
+                    Session Engagement History
+                </div>
+                <table class="table table-sm table-bordered" style="font-size:12px;">
+                    <thead style="background:#F3F4F6;">
+                        <tr>
+                            <th>DATE</th>
+                            <th>PLATFORM</th>
+                            <th>MODULE</th>
+                            <th>DURATION</th>
+                            <th>COMPLETION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>10/18/2026</td>
+                            <td>Reflect XR</td>
+                            <td>Cognitive Calm</td>
+                            <td>24 min</td>
+                            <td><span class="text-success fw-bold">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>10/11/2026</td>
+                            <td>Reflect Mobile</td>
+                            <td>Cognitive Calm</td>
+                            <td>15 min</td>
+                            <td><span class="text-success fw-bold">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>10/04/2026</td>
+                            <td>Reflect XR</td>
+                            <td>Body Relaxation</td>
+                            <td>18 min</td>
+                            <td><span class="text-success fw-bold">Completed</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Clinical Assessment & Attestation -->
+            <div class="mb-4">
+                <div style="font-size:13px;font-weight:700;color:var(--text-dark);text-transform:uppercase;margin-bottom:8px;border-bottom:1px solid #E5E7EB;padding-bottom:4px;">
+                    Clinician Evaluation & Notes
+                </div>
+                <p style="font-size:12.5px;line-height:1.6;color:var(--text-body);">
+                    Patient maintains reliable engagement cadence across both Reflect XR and mobile modalities. Session length is consistent with the outpatient stress-reduction protocol. No adverse autonomic or simulator discomfort events logged.
+                </p>
+            </div>
+
+            <!-- Signature block -->
+            <div style="margin-top:40px;border-top:1px dashed #CBD5E1;padding-top:20px;display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                    <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Dr. Sarah Mitchell, MD</div>
+                    <div style="font-size:11px;color:var(--text-muted);">Lead Clinician · Remote Monitoring Program</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-family:'Courier New', monospace;font-size:12px;color:#1E3A8A;background:#EFF6FF;padding:4px 8px;border-radius:4px;border:1px solid #BFDBFE;">
+                        DIGITALLY SIGNED · 10/18/2026 14:35:10 EST
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

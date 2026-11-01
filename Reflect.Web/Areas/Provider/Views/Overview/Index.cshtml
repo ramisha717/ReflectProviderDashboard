@@ -1,0 +1,253 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Overview";
+    ViewData["Subtitle"] = "Clinical summary of patient engagement — Synthetic data only.";
+
+    var apiUrl = Url.Action("Index", "Overview", new { area = "Provider" });
+    var patientsUrl = Url.Action("IndexPage", "Patients", new { area = "Provider" });
+}
+
+<!-- KPI Cards -->
+<div id="overview-loading" class="loading-state">
+    <div class="spinner-border text-primary spinner-border-sm me-2" role="status"></div>
+    <span>Loading overview data…</span>
+</div>
+<div id="overview-error" class="alert alert-danger d-none" role="alert"></div>
+
+<div id="overview-content" class="d-none">
+    <!-- KPI Row -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label"><i class="bi bi-people me-1"></i> Total Patients</div>
+            <div class="kpi-value" id="kpi-total-patients">—</div>
+            <div class="kpi-sub">Enrolled in programme</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label"><i class="bi bi-activity me-1"></i> Active Patients</div>
+            <div class="kpi-value" id="kpi-active-patients">—</div>
+            <div class="kpi-sub">Sessions in last 30 days</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label"><i class="bi bi-calendar-check me-1"></i> Sessions This Month</div>
+            <div class="kpi-value" id="kpi-sessions-month">—</div>
+            <div class="kpi-sub">XR + Mobile combined</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label"><i class="bi bi-exclamation-triangle me-1"></i> Needs Review</div>
+            <div class="kpi-value" id="kpi-patients-review">—</div>
+            <div class="kpi-sub">Patients flagged for attention</div>
+        </div>
+    </div>
+
+    <!-- Real-time Trends Chart -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">Real-time Trends</h3>
+            <span style="font-size:12px;color:var(--text-muted);">Weekly engagement by platform</span>
+        </div>
+        <div class="dash-card-body">
+            <canvas id="weekly-engagement-chart" height="220"></canvas>
+        </div>
+        <div class="chart-legend">
+            <div class="chart-legend-item">
+                <span class="legend-dot navy"></span> Reflect XR
+            </div>
+            <div class="chart-legend-item">
+                <span class="legend-dot coral"></span> Reflect Mobile
+            </div>
+        </div>
+    </div>
+
+    <!-- Two Column: Attention Queue + Recent Activity -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+        <!-- Patients Needing Attention -->
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Patients Needing Attention</h3>
+                <a asp-area="Provider" asp-controller="Overview" asp-action="AttentionReview" class="profile-link" style="font-size:12px;">
+                    View queue &rarr;
+                </a>
+            </div>
+            <div class="dash-card-body" style="padding:0;">
+                <div id="attention-empty" class="d-none" style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;">
+                    <i class="bi bi-check-circle" style="font-size:24px;display:block;margin-bottom:8px;color:var(--status-active);"></i>
+                    No patients require attention at the moment.
+                </div>
+                <table id="attention-table" class="attention-table d-none">
+                    <thead>
+                        <tr>
+                            <th>Patient Code</th>
+                            <th>Signal</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Recent Activity</h3>
+            </div>
+            <div class="dash-card-body" style="padding:0;">
+                <div id="activity-empty" class="d-none" style="padding:32px;text-align:center;color:var(--text-muted);font-size:13px;">
+                    No recent activity found.
+                </div>
+                <table id="activity-table" class="activity-table d-none">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Platform</th>
+                            <th>Date</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <a href="@patientsUrl" class="quick-action-btn primary">
+            <i class="bi bi-people"></i> View Patients
+        </a>
+        <a asp-area="Provider" asp-controller="Reports" asp-action="IndexPage" class="quick-action-btn secondary">
+            <i class="bi bi-bar-chart-line"></i> Generate Reports
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var apiUrl = '@Html.Raw(apiUrl)';
+        var loading = document.getElementById('overview-loading');
+        var errorBox = document.getElementById('overview-error');
+        var content = document.getElementById('overview-content');
+        var kTotal = document.getElementById('kpi-total-patients');
+        var kActive = document.getElementById('kpi-active-patients');
+        var kMonth = document.getElementById('kpi-sessions-month');
+        var kReview = document.getElementById('kpi-patients-review');
+        var chartCanvas = document.getElementById('weekly-engagement-chart');
+        var attEmpty = document.getElementById('attention-empty');
+        var attTable = document.getElementById('attention-table');
+        var attTBody = attTable.querySelector('tbody');
+        var actEmpty = document.getElementById('activity-empty');
+        var actTable = document.getElementById('activity-table');
+        var actTBody = actTable.querySelector('tbody');
+
+        function esc(txt) { return (txt == null ? '' : txt).toString(); }
+        function show(el) { el.classList.remove('d-none'); }
+        function hide(el) { el.classList.add('d-none'); }
+
+        fetch(apiUrl)
+            .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(function(data) {
+                hide(loading);
+                show(content);
+
+                kTotal.textContent = esc(data.totalPatients);
+                kActive.textContent = esc(data.activePatients);
+                kMonth.textContent = esc(data.sessionsThisMonth);
+                kReview.textContent = esc(data.patientsNeedingReview);
+
+                // Weekly engagement bar chart
+                if (Array.isArray(data.weeklyEngagement) && data.weeklyEngagement.length) {
+                    var labels = data.weeklyEngagement.map(function(v) { return new Date(v.weekStart).toLocaleDateString('en-US', {month:'short', day:'numeric'}); });
+                    var xr = data.weeklyEngagement.map(function(v) { return v.reflectXRMinutes; });
+                    var mob = data.weeklyEngagement.map(function(v) { return v.reflectMobileMinutes; });
+                    new Chart(chartCanvas.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Reflect XR',
+                                    data: xr,
+                                    backgroundColor: '#1F305E',
+                                    borderRadius: 4,
+                                    barPercentage: 0.6,
+                                    categoryPercentage: 0.7
+                                },
+                                {
+                                    label: 'Reflect Mobile',
+                                    data: mob,
+                                    backgroundColor: '#E87B7B',
+                                    borderRadius: 4,
+                                    barPercentage: 0.6,
+                                    categoryPercentage: 0.7
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false }
+                            },
+                            scales: {
+                                x: {
+                                    grid: { display: false },
+                                    ticks: { color: '#8B90A0', font: { size: 11, family: "'IBM Plex Sans', sans-serif" } }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    grid: { color: '#F0F1F5' },
+                                    ticks: { color: '#8B90A0', font: { size: 11, family: "'IBM Plex Sans', sans-serif" } }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Attention queue
+                var att = data.attentionQueue || [];
+                if (!att.length) {
+                    show(attEmpty);
+                } else {
+                    att.forEach(function(row) {
+                        var tr = document.createElement('tr');
+                        var pId = encodeURIComponent(row.patientId || 'demo-501');
+                        var pCode = esc(row.patientCode || 'Patient 501');
+                        tr.innerHTML =
+                            '<td><a href="/Provider/Patients/SinceLastVisit?patientId=' + pId + '" class="fw-bold text-decoration-none" style="color:var(--primary-navy);">' + pCode + ' <i class="bi bi-arrow-right" style="font-size:11px;"></i></a></td>' +
+                            '<td><span class="badge" style="background:#FEF3C7;color:#D97706;font-size:11px;">' + esc(row.signalType) + '</span></td>' +
+                            '<td>' + esc(row.reason) + '</td>';
+                        attTBody.appendChild(tr);
+                    });
+                    show(attTable);
+                }
+
+                // Recent activity
+                var activity = data.recentActivity || [];
+                if (!activity.length) {
+                    show(actEmpty);
+                } else {
+                    activity.forEach(function(row) {
+                        var tr = document.createElement('tr');
+                        var d = row.startedAt ? new Date(row.startedAt).toLocaleDateString() : '-';
+                        var pId = encodeURIComponent(row.patientId || 'demo-501');
+                        var pCode = esc(row.patientCode || 'Patient 501');
+                        var sId = esc(row.sessionId || 'S-008117');
+                        tr.innerHTML =
+                            '<td><a href="/Provider/Patients/SinceLastVisit?patientId=' + pId + '" class="fw-bold text-decoration-none" style="color:var(--primary-navy);">' + pCode + '</a></td>' +
+                            '<td><span class="badge bg-light text-dark border">' + esc(row.platform) + '</span></td>' +
+                            '<td>' + d + '</td>' +
+                            '<td><a href="/Provider/Patients/SessionDetails?sessionId=' + sId + '&patientId=' + pId + '" class="text-decoration-none fw-semibold" style="color:var(--text-dark);">' + esc(row.durationMinutes) + ' min <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;color:var(--text-muted);"></i></a></td>';
+                        actTBody.appendChild(tr);
+                    });
+                    show(actTable);
+                }
+            })
+            .catch(function(err) {
+                hide(loading);
+                errorBox.textContent = 'Failed to load Overview data: ' + err.message;
+                show(errorBox);
+            });
+    });
+</script>
+}

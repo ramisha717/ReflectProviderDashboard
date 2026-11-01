@@ -1,0 +1,192 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Since Last Visit";
+    ViewData["Subtitle"] = "Patient 501: Summary of activity recorded since last appointment.";
+}
+
+<!-- Breadcrumb -->
+<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
+    <a asp-area="Provider" asp-controller="Patients" asp-action="IndexPage" class="text-decoration-none" style="color:var(--text-muted);">Patients</a>
+    <span class="mx-1">/</span>
+    <span style="color:var(--text-muted);">Patient 501</span>
+    <span class="mx-1">/</span>
+    <span style="color:var(--text-dark);font-weight:600;">Since Last Visit Summary</span>
+</div>
+
+@await Html.PartialAsync("_PatientSubNav", "since-last-visit")
+
+<!-- Header Action Row -->
+<div class="content-header">
+    <div>
+        <h2 class="content-title">Since Last Visit</h2>
+        <p class="content-subtitle">Patient 501: Summary of activity recorded since last appointment.</p>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;" type="button">
+            <i class="bi bi-file-earmark-plus me-1"></i> Include in report
+        </button>
+        <button class="btn btn-primary-navy btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;" type="button">
+            <i class="bi bi-check2-circle me-1"></i> Mark as reviewed
+        </button>
+    </div>
+</div>
+
+<!-- 4 KPI Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-calendar-event me-1"></i> Recorded Sessions</div>
+        <div class="kpi-value">3</div>
+        <div class="kpi-sub">Recorded since 10/04/2026</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-stopwatch me-1"></i> Engagement Time</div>
+        <div class="kpi-value">57 min</div>
+        <div class="kpi-sub">Total active telemetry</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-sliders me-1"></i> Platform Split</div>
+        <div class="kpi-value">2 / 1</div>
+        <div class="kpi-sub">2 Reflect XR / 1 Mobile</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label"><i class="bi bi-speedometer me-1"></i> Avg Duration / Session</div>
+        <div class="kpi-value">22 min</div>
+        <div class="kpi-sub">Consistent with protocol</div>
+    </div>
+</div>
+
+<!-- Two Cards Row: What changed? + Therapeutic Response Summary -->
+<div class="row g-4 mb-4">
+    <!-- What changed? -->
+    <div class="col-12 col-md-6">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">What changed?</h3>
+                <span class="badge bg-light text-dark border">Recent dynamics</span>
+            </div>
+            <div class="dash-card-body p-4">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                    <span class="badge rounded-pill bg-light text-primary border p-2" style="font-size:12px;">1</span>
+                    <div>
+                        <div class="fw-bold" style="color:var(--text-dark);font-size:13.5px;">Session frequency stable</div>
+                        <div class="small text-muted">Averaging approx 3 sessions / week, matching outpatient plan.</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-start gap-3 mb-3">
+                    <span class="badge rounded-pill bg-light text-primary border p-2" style="font-size:12px;">2</span>
+                    <div>
+                        <div class="fw-bold" style="color:var(--text-dark);font-size:13.5px;">Reflect XR usage increased</div>
+                        <div class="small text-muted">Patient preferred headset modality over mobile app for evening sessions.</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-start gap-3">
+                    <span class="badge rounded-pill bg-light text-primary border p-2" style="font-size:12px;">3</span>
+                    <div>
+                        <div class="fw-bold" style="color:var(--text-dark);font-size:13.5px;">Engagement duration consistent with plan</div>
+                        <div class="small text-muted">22-minute median duration meets clinical compliance target.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Therapeutic response summary -->
+    <div class="col-12 col-md-6">
+        <div class="dash-card h-100 mb-0">
+            <div class="dash-card-header">
+                <h3 class="dash-card-title">Therapeutic response summary</h3>
+                <span class="badge bg-success" style="font-size:11px;">Normal response</span>
+            </div>
+            <div class="dash-card-body p-4">
+                <p style="font-size:13.5px;line-height:1.6;color:var(--text-body);margin-bottom:16px;">
+                    Self-reported mood stable. No adverse simulator symptoms or discomfort recorded during this period.
+                </p>
+                <div class="p-3 rounded-2" style="background:var(--bg-table-header);border:1px solid var(--border-light);">
+                    <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;margin-bottom:4px;">
+                        SUGGESTED CLINICAL RESPONSE
+                    </div>
+                    <div style="font-size:13px;color:var(--text-dark);font-weight:600;">
+                        Continue scheduled care plan. Review progress in next session and reinforce module variety.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Activity Table Card -->
+<div class="table-card mb-4">
+    <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="background:var(--bg-table-header);">
+        <h3 class="dash-card-title" style="font-size:13px;margin:0;">Detailed activity recorded in the last 14 days</h3>
+        <span class="small text-muted">3 total events</span>
+    </div>
+    <div class="table-responsive">
+        <table class="patients-table">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>TIME</th>
+                    <th>PLATFORM</th>
+                    <th>MODULE</th>
+                    <th>DURATION</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold" style="color:var(--text-dark);">
+                        <a asp-area="Provider" asp-controller="Patients" asp-action="SessionDetails" asp-route-sessionId="S-008117" class="text-decoration-none" style="color:var(--primary-navy);">
+                            10/18/2026 <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;"></i>
+                        </a>
+                    </td>
+                    <td>14:02 EST</td>
+                    <td><span class="badge bg-light text-dark border">Reflect XR</span></td>
+                    <td>Cognitive Calm</td>
+                    <td>24 min</td>
+                    <td><span class="badge bg-success" style="font-size:11px;">Completed</span></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold" style="color:var(--text-dark);">
+                        <a asp-area="Provider" asp-controller="Patients" asp-action="SessionDetails" asp-route-sessionId="S-008116" class="text-decoration-none" style="color:var(--primary-navy);">
+                            10/11/2026 <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;"></i>
+                        </a>
+                    </td>
+                    <td>09:15 EST</td>
+                    <td><span class="badge bg-light text-dark border">Reflect Mobile</span></td>
+                    <td>Cognitive Calm</td>
+                    <td>15 min</td>
+                    <td><span class="badge bg-success" style="font-size:11px;">Completed</span></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold" style="color:var(--text-dark);">
+                        <a asp-area="Provider" asp-controller="Patients" asp-action="SessionDetails" asp-route-sessionId="S-008115" class="text-decoration-none" style="color:var(--primary-navy);">
+                            10/04/2026 <i class="bi bi-box-arrow-up-right ms-1" style="font-size:10px;"></i>
+                        </a>
+                    </td>
+                    <td>18:40 EST</td>
+                    <td><span class="badge bg-light text-dark border">Reflect XR</span></td>
+                    <td>Body Relaxation</td>
+                    <td>18 min</td>
+                    <td><span class="badge bg-success" style="font-size:11px;">Completed</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer Actions -->
+<div class="d-flex align-items-center justify-content-between p-3 rounded-3" style="background:var(--bg-white);border:1px solid var(--border-light);">
+    <div class="d-flex align-items-center gap-2">
+        <a asp-area="Provider" asp-controller="Patients" asp-action="IndexPage" class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;">
+            <i class="bi bi-arrow-left me-1"></i> View All Patients
+        </a>
+        <a asp-area="Provider" asp-controller="Patients" asp-action="ClinicalNotes" class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;">
+            <i class="bi bi-pencil-square me-1"></i> Edit Note
+        </a>
+    </div>
+    <div>
+        <button class="btn btn-primary-navy btn-sm" type="button" style="border-radius:var(--btn-radius);font-weight:600;">
+            <i class="bi bi-check2-all me-1"></i> Mark Reviewed
+        </button>
+    </div>
+</div>

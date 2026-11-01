@@ -10,4 +10,9 @@ public interface IPatientRepository
     Guid patientId,
     CancellationToken cancellationToken);
 
+  Task SetReviewStatusAsync(
+    Guid patientId,
+    string status,
+    CancellationToken cancellationToken);
+
 }
