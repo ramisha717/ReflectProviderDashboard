@@ -1,0 +1,41 @@
+[
+  {
+    "isCategory": true,
+    "label": "Provider Dashboard"
+  },
+  {
+    "label": "Overview",
+    "url": "/Provider/Overview/IndexPage",
+    "icon": "ri-dashboard-line"
+  },
+  {
+    "label": "Session History",
+    "url": "/Provider/PatientSessionHistory/IndexPage",
+    "icon": "ri-history-line"
+  },
+  {
+    "label": "Patients",
+    "url": "/Provider/Patients/IndexPage",
+    "icon": "ri-group-line"
+  },
+  {
+    "label": "Progress",
+    "url": "/Provider/Progress/IndexPage",
+    "icon": "ri-bar-chart-line"
+  },
+  {
+    "label": "Monitoring",
+    "url": "/Provider/MonitoringDocumentation/IndexPage",
+    "icon": "ri-clipboard-line"
+  },
+  {
+    "label": "Reports",
+    "url": "/Provider/Reports/IndexPage",
+    "icon": "ri-file-text-line"
+  },
+  {
+    "label": "Settings",
+    "url": "/Provider/Settings/IndexPage",
+    "icon": "ri-settings-3-line"
+  }
+]

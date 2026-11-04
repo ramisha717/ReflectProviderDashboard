@@ -1,5 +1,6 @@
 using Reflect.Domain.Entities;
 using Reflect.Domain.Repositories;
+using Reflect.Web.Services;
 
 namespace Reflect.Web.Models.ViewModels.Overview.Index;
 
@@ -21,6 +22,7 @@ public class OverviewIndexViewModel
     IPatientRepository patientsRepo,
     IPatientSessionRepository sessionsRepo,
     IPatientAccessRepository patientAccessRepo,
+    AttentionAcknowledgementService acknowledgements,
     Guid clinicianId,
     int? inactivityThresholdDays,
     int? frequencyDeclineThresholdPercent,
@@ -142,7 +144,8 @@ foreach (var patient in allPatients)
 
         double inactiveDays = (now - lastActivity).TotalDays;
 
-        if (inactiveDays >= inactivityThresholdDays.Value)
+        if (inactiveDays >= inactivityThresholdDays.Value &&
+            !acknowledgements.IsAcknowledged(clinicianId, patient.Id, "Inactivity", lastActivity))
         {
           AttentionQueue.Add(new OverviewAttentionRowViewModel
           {
@@ -175,7 +178,9 @@ foreach (var patient in allPatients)
               previousCount;
 
           if (declinePercent >=
-              frequencyDeclineThresholdPercent.Value)
+              frequencyDeclineThresholdPercent.Value &&
+              !acknowledgements.IsAcknowledged(clinicianId, patient.Id, "Frequency Decline",
+                  patientSessions.Count > 0 ? patientSessions[0].StartedAt : DateTimeOffset.MinValue))
           {
             AttentionQueue.Add(new OverviewAttentionRowViewModel
             {

@@ -4,6 +4,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using Reflect.Domain.Services;
+using Reflect.Web.Extensions;
 
 namespace Reflect.Web.Services;
 
@@ -40,8 +41,8 @@ public class ReportFileExportService : IReportFileExportService
 
                     column.Item().Text(
                         $"Reporting period: " +
-                        $"{report.PeriodStart:yyyy-MM-dd} to " +
-                        $"{report.PeriodEnd:yyyy-MM-dd}");
+                        $"{report.PeriodStart.ToUsDateString()} to " +
+                        $"{report.PeriodEnd.ToUsDateString()}");
 
                     column.Item().Text(
                         $"Platform: {report.PlatformFilter ?? "All Platforms"}");
@@ -80,9 +81,9 @@ public class ReportFileExportService : IReportFileExportService
         AppendCsvRow(csv, "Report", report.Title);
         AppendCsvRow(csv, "Patient", report.PatientCode);
         AppendCsvRow(
-            csv, "Period Start", report.PeriodStart.ToString("O"));
+            csv, "Period Start", report.PeriodStart.ToUsDateString());
         AppendCsvRow(
-            csv, "Period End", report.PeriodEnd.ToString("O"));
+            csv, "Period End", report.PeriodEnd.ToUsDateString());
         AppendCsvRow(
             csv, "Platform", report.PlatformFilter ?? "All Platforms");
 
@@ -134,3 +135,4 @@ public class ReportFileExportService : IReportFileExportService
         return "\"" + value.Replace("\"", "\"\"") + "\"";
     }
 }
+

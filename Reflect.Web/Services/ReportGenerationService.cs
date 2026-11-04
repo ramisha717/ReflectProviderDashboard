@@ -2,6 +2,7 @@
 using Reflect.Domain.Entities;
 using Reflect.Domain.Enums;
 using Reflect.Domain.Services;
+using Reflect.Web.Extensions;
 
 namespace Reflect.Web.Services;
 
@@ -13,7 +14,7 @@ public class ReportGenerationService : IReportGenerationService
     IReadOnlyList<PatientSession> sessions,
     DateTimeOffset periodStart,
     DateTimeOffset periodEnd,
-    string? platformFilter,
+    string platformFilter,
     bool includeSessionCountAndDuration,
     bool includePlatformActivity,
     bool includeModuleActivity,
@@ -311,7 +312,7 @@ public class ReportGenerationService : IReportGenerationService
       foreach (var session in sessions)
       {
           section.Lines.Add(
-              $"{session.StartedAt:yyyy-MM-dd HH:mm zzz} | " +
+              $"{session.StartedAt.ToUsDateTimeString()} | " +
               $"{session.Platform} | " +
               $"{session.ModuleName} | " +
               $"{session.DurationMinutes} minutes");

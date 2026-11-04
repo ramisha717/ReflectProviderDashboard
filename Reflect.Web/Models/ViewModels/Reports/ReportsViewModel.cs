@@ -3,6 +3,7 @@ using Reflect.Domain.Entities;
 using Reflect.Domain.Enums;
 using Reflect.Domain.Repositories;
 using Reflect.Domain.Services;
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Models.ViewModels.Reports;
 
@@ -19,7 +20,7 @@ public class ReportRequest
     public DateTimeOffset PeriodEnd { get; set; } =
         DateTimeOffset.UtcNow;
 
-    public string? PlatformFilter { get; set; }
+    public string PlatformFilter { get; set; } = string.Empty;
 
     public bool IncludeSessionCountAndDuration { get; set; } = true;
 
@@ -61,7 +62,7 @@ public class ReportsViewModel
         _generator = generator;
     }
 
-    public async Task<ReportPreviewViewModel?> GeneratePreviewAsync(
+    public async Task<ReportPreviewViewModel> GeneratePreviewAsync(
         ReportRequest request,
         CancellationToken cancellationToken)
     {
@@ -105,7 +106,7 @@ public class ReportsViewModel
         };
     }
 
-    public async Task<IReadOnlyList<ReportExport>?> GetRecentExportsAsync(
+    public async Task<IReadOnlyList<ReportExport>> GetRecentExportsAsync(
         Guid patientId,
         CancellationToken cancellationToken)
     {
@@ -121,27 +122,29 @@ public class ReportsViewModel
             cancellationToken);
     }
 
-    private static void ValidateRequest(ReportRequest request)
+    
+private static void ValidateRequest(ReportRequest request)
+{
+    if (request.PeriodStart > request.PeriodEnd)
     {
-        if (request.PeriodStart > request.PeriodEnd)
-        {
-            throw new ArgumentException(
-                "The reporting period start must not be after its end.");
-        }
-
-        if (!Enum.IsDefined(request.ReportType) ||
-            request.ReportType == ReportType.RtmStatus)
-        {
-            throw new ArgumentException(
-                "The selected report template is not available.");
-        }
-
-        if (!string.IsNullOrWhiteSpace(request.PlatformFilter) &&
-            request.PlatformFilter != "Reflect XR" &&
-            request.PlatformFilter != "Reflect Mobile")
-        {
-            throw new ArgumentException(
-                "Invalid platform filter.");
-        }
+        throw new ArgumentException(
+            ProviderMessages.InvalidReportingDateRange);
     }
+
+    if (!Enum.IsDefined(request.ReportType) ||
+        request.ReportType == ReportType.RtmStatus)
+    {
+        throw new ArgumentException(
+            ProviderMessages.ReportTemplateUnavailable);
+    }
+
+    if (!string.IsNullOrWhiteSpace(request.PlatformFilter) &&
+        request.PlatformFilter != "Reflect XR" &&
+        request.PlatformFilter != "Reflect Mobile")
+    {
+        throw new ArgumentException(
+            ProviderMessages.InvalidPlatformFilter);
+    }
+}
+
 }

@@ -8,48 +8,24 @@
    Official Brand Typography
    ============================================================ */
 @font-face {
-    font-family: 'IBM Plex Sans Condensed';
-    src: url('../fonts/IBMPlexSans_Condensed-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'IBM Plex Sans Condensed';
-    src: url('../fonts/IBMPlexSans_Condensed-SemiBoldItalic.ttf') format('truetype');
-    font-weight: 600;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'IBM Plex Sans Condensed';
-    src: url('../fonts/IBMPlexSans_Condensed-Bold.ttf') format('truetype');
+    font-family: 'Plex Condensed';
+    src: url('../fonts/IBMPlexSans_Condensed-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'IBM Plex Sans Condensed';
-    src: url('../fonts/IBMPlexSans_Condensed-BoldItalic.ttf') format('truetype');
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'IBM Plex Sans';
-    src: url('../fonts/IBMPlexSans-Regular.ttf') format('truetype');
+    font-family: 'Plex Sans';
+    src: url('../fonts/IBMPlexSans-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'IBM Plex Sans';
-    src: url('../fonts/IBMPlexSans-Italic.ttf') format('truetype');
+    font-family: 'Plex Sans';
+    src: url('../fonts/IBMPlexSans-Italic.woff2') format('woff2');
     font-weight: 400;
     font-style: italic;
     font-display: swap;
@@ -105,9 +81,29 @@
     --btn-radius: 8px;
 
     /* Typography */
-    --font-primary: 'IBM Plex Sans Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-secondary: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-family: var(--font-secondary);
+    --heading-font-family: 'Plex Condensed', sans-serif;
+    --default-font-family: 'Plex Sans', sans-serif;
+
+    --font-primary: var(--heading-font-family);
+    --font-secondary: var(--default-font-family);
+    --font-family: var(--default-font-family);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .page-title,
+    .card-title,
+    .sidebar-nav .nav-link,
+    .btn,
+    .badge {
+        font-family: var(--heading-font-family);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: none;
+    }
 
     /* Status Colors */
     --status-active: #22C55E;
@@ -122,7 +118,12 @@
 }
 
 /* Brand Typography Headings and Elements */
-h1, h2, h3, h4, h5, h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
 .page-title,
 .content-title,
 .dash-card-title,
@@ -141,15 +142,18 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ----- Global Reset & Base ----- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     font-family: var(--font-family);
-    font-size: 14px;
+    font-size: 0.875rem;
     color: var(--text-body);
     background-color: var(--bg-body);
     -webkit-font-smoothing: antialiased;
@@ -220,14 +224,14 @@ html, body {
 }
 
 .brand-title {
-    font-size: 15px;
+    font-size: 0.9375rem;
     font-weight: 800;
     letter-spacing: 1.5px;
     color: var(--text-white);
 }
 
 .brand-sub {
-    font-size: 8px;
+    font-size: 0.5rem;
     font-weight: 500;
     letter-spacing: 0.8px;
     color: rgba(255, 255, 255, 0.5);
@@ -239,7 +243,7 @@ html, body {
     display: inline-block;
     margin-top: 12px;
     padding: 4px 10px;
-    font-size: 9px;
+    font-size: 0.5625rem;
     font-weight: 700;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.6);
@@ -267,7 +271,7 @@ html, body {
     padding: 11px 16px;
     border-radius: 8px;
     color: var(--text-sidebar);
-    font-size: 13.5px;
+    font-size: 0.84375rem;
     font-weight: 500;
     text-decoration: none;
     transition: all 0.15s ease;
@@ -297,7 +301,7 @@ html, body {
 }
 
 .nav-icon {
-    font-size: 17px;
+    font-size: 1.0625rem;
     width: 20px;
     text-align: center;
     flex-shrink: 0;
@@ -309,7 +313,8 @@ html, body {
 }
 
 .active-dot {
-    display: none; /* Hidden by default; visible only when needed */
+    display: none;
+    /* Hidden by default; visible only when needed */
 }
 
 /* Sidebar Footer */
@@ -328,7 +333,7 @@ html, body {
     align-items: center;
     color: var(--text-sidebar);
     text-decoration: none;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 500;
     padding: 8px 12px;
     border-radius: 8px;
@@ -355,7 +360,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--text-white);
     flex-shrink: 0;
@@ -366,7 +371,7 @@ html, body {
 }
 
 .user-name {
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     color: var(--text-white);
     white-space: nowrap;
@@ -409,7 +414,7 @@ html, body {
 }
 
 .page-title {
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-dark);
     margin: 0;
@@ -417,7 +422,7 @@ html, body {
 }
 
 .header-subtitle {
-    font-size: 12.5px;
+    font-size: 0.78125rem;
     color: var(--text-muted);
     margin-top: 2px;
 }
@@ -439,7 +444,7 @@ html, body {
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-light);
-    font-size: 14px;
+    font-size: 0.875rem;
     pointer-events: none;
 }
 
@@ -448,7 +453,7 @@ html, body {
     padding: 8px 12px 8px 36px;
     border: 1px solid var(--border-light);
     border-radius: var(--btn-radius);
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-family: var(--font-family);
     background: var(--bg-body);
     color: var(--text-body);
@@ -468,7 +473,7 @@ html, body {
 .demo-badge {
     display: inline-block;
     padding: 4px 10px;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     letter-spacing: 0.8px;
     color: var(--accent-amber-text);
@@ -498,7 +503,7 @@ html, body {
     border: 1px solid #FDE68A;
     border-radius: var(--btn-radius);
     margin-bottom: 20px;
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 .badge-prototype {
@@ -507,14 +512,14 @@ html, body {
     background: var(--accent-amber-bg);
     color: var(--accent-amber-text);
     font-weight: 700;
-    font-size: 10px;
+    font-size: 0.625rem;
     letter-spacing: 0.5px;
     border-radius: 4px;
 }
 
 .prototype-text {
     color: var(--text-muted);
-    font-size: 12px;
+    font-size: 0.75rem;
 }
 
 /* Content Header */
@@ -526,14 +531,14 @@ html, body {
 }
 
 .content-title {
-    font-size: 22px;
+    font-size: 1.375rem;
     font-weight: 700;
     color: var(--text-dark);
     margin: 0 0 4px;
 }
 
 .content-subtitle {
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: var(--text-muted);
     margin: 0;
 }
@@ -562,7 +567,7 @@ html, body {
 }
 
 .kpi-label {
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.6px;
@@ -571,7 +576,7 @@ html, body {
 }
 
 .kpi-value {
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 800;
     color: var(--text-dark);
     line-height: 1.1;
@@ -579,7 +584,7 @@ html, body {
 }
 
 .kpi-sub {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
@@ -604,7 +609,7 @@ html, body {
 }
 
 .dash-card-title {
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
     color: var(--text-dark);
     margin: 0;
@@ -628,7 +633,7 @@ html, body {
     gap: 20px;
     padding: 12px 20px;
     border-top: 1px solid var(--border-subtle);
-    font-size: 12px;
+    font-size: 0.75rem;
     color: var(--text-muted);
 }
 
@@ -645,8 +650,13 @@ html, body {
     flex-shrink: 0;
 }
 
-.legend-dot.navy { background: var(--primary-navy); }
-.legend-dot.coral { background: var(--accent-coral); }
+.legend-dot.navy {
+    background: var(--primary-navy);
+}
+
+.legend-dot.coral {
+    background: var(--accent-coral);
+}
 
 /* ============================================================
    TABLES
@@ -667,7 +677,7 @@ html, body {
 
 .patients-table thead th {
     padding: 12px 20px;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -689,14 +699,14 @@ html, body {
 }
 
 .sort-icon {
-    font-size: 11px;
+    font-size: 0.6875rem;
     margin-left: 4px;
     opacity: 0.5;
 }
 
 .patients-table tbody td {
     padding: 14px 20px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: var(--text-body);
     border-bottom: 1px solid var(--border-subtle);
     vertical-align: middle;
@@ -730,7 +740,7 @@ html, body {
 .profile-link {
     color: var(--primary-navy);
     text-decoration: none;
-    font-size: 12.5px;
+    font-size: 0.78125rem;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -743,7 +753,7 @@ html, body {
 
 .table-footer {
     padding: 12px 20px;
-    font-size: 12px;
+    font-size: 0.75rem;
     color: var(--text-muted);
     border-top: 1px solid var(--border-light);
     background: var(--bg-table-header);
@@ -758,7 +768,7 @@ html, body {
     justify-content: center;
     padding: 48px;
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 0.8125rem;
 }
 
 /* ============================================================
@@ -784,7 +794,7 @@ html, body {
     padding: 9px 12px 9px 36px;
     border: 1px solid var(--border-light);
     border-radius: var(--btn-radius);
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-family: var(--font-family);
     background: var(--bg-white);
     color: var(--text-body);
@@ -804,7 +814,7 @@ html, body {
 
 .pill-btn {
     padding: 6px 14px;
-    font-size: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
     font-family: var(--font-family);
     border: 1px solid var(--border-light);
@@ -841,7 +851,7 @@ html, body {
     align-items: center;
     gap: 4px;
     padding: 9px 18px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     font-weight: 600;
     font-family: var(--font-family);
     color: var(--text-white);
@@ -884,7 +894,7 @@ html, body {
     justify-content: center;
     gap: 8px;
     padding: 14px 20px;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 600;
     font-family: var(--font-family);
     border-radius: var(--btn-radius);
@@ -956,7 +966,7 @@ html, body {
 .attention-table th,
 .activity-table th {
     padding: 10px 20px;
-    font-size: 11px;
+    font-size: 0.6875rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -968,7 +978,7 @@ html, body {
 .attention-table td,
 .activity-table td {
     padding: 12px 20px;
-    font-size: 13px;
+    font-size: 0.8125rem;
     color: var(--text-body);
     border-bottom: 1px solid var(--border-subtle);
 }
@@ -1009,7 +1019,7 @@ html, body {
     }
 
     .sidebar-nav .nav-link .nav-icon {
-        font-size: 20px;
+        font-size: 1.25rem;
         margin: 0;
     }
 
@@ -1057,7 +1067,9 @@ html, body {
     }
 
     .provider-header {
-        padding: 0 16px;
+        height: auto;
+        min-height: var(--header-height);
+        padding: 16px;
     }
 
     .header-search-box {
@@ -1074,7 +1086,7 @@ html, body {
     }
 
     .kpi-value {
-        font-size: 22px;
+        font-size: 1.375rem;
     }
 
     .content-header {
@@ -1096,7 +1108,7 @@ html, body {
     }
 
     .page-title {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
 }
 
@@ -1107,7 +1119,7 @@ html, body {
     display: none;
     background: none;
     border: none;
-    font-size: 22px;
+    font-size: 1.375rem;
     color: var(--text-dark);
     cursor: pointer;
     padding: 4px 8px;
@@ -1139,7 +1151,479 @@ html, body {
 /* ============================================================
    UTILITIES
    ============================================================ */
-.text-navy { color: var(--primary-navy) !important; }
-.text-coral { color: var(--accent-coral) !important; }
-.bg-navy { background-color: var(--primary-navy) !important; }
-.bg-coral { background-color: var(--accent-coral) !important; }
+.text-navy {
+    color: var(--primary-navy) !important;
+}
+
+.text-coral {
+    color: var(--accent-coral) !important;
+}
+
+.bg-navy {
+    background-color: var(--primary-navy) !important;
+}
+
+.bg-coral {
+    background-color: var(--accent-coral) !important;
+}
+
+/* Mobile responsiveness: prevent horizontal overflow */
+@media (max-width: 767.98px) {
+    .provider-main {
+        min-width: 0;
+    }
+
+    .provider-header {
+        flex-wrap: nowrap;
+    }
+}
+
+/* Reflect XR theme tokens required by the technical specification */
+:root {
+    --primary-rgb: 255, 130, 130;
+    --danger-rgb: 255, 130, 130;
+    --success-rgb: 31, 48, 94;
+    --warning-rgb: 232, 163, 61;
+    --info-rgb: 88, 111, 138;
+    --default-text-color: #1F305E;
+    --text-muted: #586F8A;
+    --custom-white: #F5F6F8;
+    --default-border: #D8DCE1;
+    --bootstrap-card-border: rgb(var(--info-rgb));
+    --header-bg: #FAFAFB;
+}
+
+[data-theme-mode="dark"] {
+    --success-rgb: 154, 168, 218;
+    --warning-rgb: 240, 185, 104;
+    --info-rgb: 141, 163, 194;
+    --default-text-color: rgba(255, 255, 255, 0.85);
+    --text-muted: rgba(255, 255, 255, 0.55);
+    --custom-white: #243566;
+    --default-border: rgba(255, 255, 255, 0.12);
+    --header-bg: #1F305E;
+}
+
+/* Dark-mode values for existing dashboard styles */
+[data-theme-mode="dark"] {
+    --bg-body: #1F305E;
+    --bg-white: #243566;
+    --bg-card: #243566;
+    --bg-sidebar: #1F305E;
+    --bg-header: #1F305E;
+    --bg-table-header: #2A3F73;
+    --bg-hover-row: #2A3F73;
+    --bg-kpi: #243566;
+
+    --text-dark: rgba(255, 255, 255, 0.95);
+    --text-body: rgba(255, 255, 255, 0.85);
+    --text-muted: rgba(255, 255, 255, 0.55);
+    --text-light: rgba(255, 255, 255, 0.65);
+
+    --border-light: rgba(255, 255, 255, 0.12);
+    --border-subtle: rgba(255, 255, 255, 0.12);
+    --border-card: rgba(255, 255, 255, 0.12);
+}
+
+/* Keep Overview table text readable in dark mode */
+[data-theme-mode="dark"] .attention-table,
+[data-theme-mode="dark"] .activity-table {
+    --bs-table-color: rgba(255, 255, 255, 0.85);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Improve Reflect XR chart contrast in dark mode */
+[data-theme-mode="dark"] {
+    --primary-navy: #9AA8DA;
+}
+
+/* Header theme toggle */
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--default-border);
+    border-radius: 8px;
+    background: var(--bg-card);
+    color: var(--default-text-color);
+    cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+    opacity: 0.8;
+}
+
+/* Accessibility panel */
+.accessibility-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+}
+
+.accessibility-panel[hidden] {
+    display: none !important;
+}
+
+.accessibility-panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 1100;
+    width: min(310px, calc(100vw - 32px));
+    padding: 18px;
+    border: 1px solid var(--default-border);
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--default-text-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.accessibility-heading {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 16px;
+    color: inherit;
+}
+
+.accessibility-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+}
+
+.accessibility-field:last-child {
+    margin-bottom: 0;
+}
+
+.accessibility-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--default-border);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--default-text-color);
+    font-size: 1rem;
+}
+
+.accessibility-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.accessibility-checkbox-label input {
+    width: 18px;
+    height: 18px;
+    accent-color: #FF8282;
+}
+
+.accessibility-wrapper button:focus-visible,
+.accessibility-select:focus-visible,
+.accessibility-checkbox-label input:focus-visible {
+    outline: 2px solid #FF8282;
+    outline-offset: 3px;
+}
+
+/* Required color-blind friendly mode */
+html[data-a11y-colorblind="true"] {
+    filter: saturate(0.4);
+}
+
+/* Allow the accessibility text-size setting to scale rem-based text */
+html {
+    font-size: 100%;
+}
+
+@media (max-width: 767.98px) {
+    .accessibility-panel {
+        right: -8px;
+    }
+}
+
+/* Clearly identify the accessibility control */
+#accessibilityToggle {
+    width: auto;
+    min-height: 40px;
+    padding: 0 12px;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#accessibilityToggle i {
+    font-size: 1.25rem;
+}
+
+/* Accessibility panel appearance */
+.accessibility-panel {
+    width: 310px;
+    max-width: calc(100vw - 32px);
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.accessibility-heading {
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--default-border);
+}
+
+/* Phone layout: keep the panel entirely inside the viewport */
+@media (max-width: 767.98px) {
+    .accessibility-panel {
+        position: fixed;
+        top: 72px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        max-width: none;
+        max-height: calc(100dvh - 88px);
+        overflow-y: auto;
+        z-index: 2000;
+    }
+
+    #accessibilityToggle {
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #accessibilityToggle i {
+        display: inline-block;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .accessibility-button-label {
+        display: none;
+    }
+}
+
+
+.provider-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+}
+
+.provider-breadcrumb li+li::before {
+    content: "/";
+    margin-right: 0.5rem;
+    color: var(--text-muted, #6b7280);
+}
+
+.provider-breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.provider-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.provider-breadcrumb [aria-current="page"] {
+    color: var(--text-muted, #6b7280);
+}
+
+
+.sidebar-profile-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-profile-button .user-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.sidebar-profile-button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+}
+
+.sidebar-user .dropdown-menu {
+    min-width: 12rem;
+    padding: 0.5rem;
+}
+
+.sidebar-user .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Progress Index: readable secondary text in dark mode */
+[data-theme-mode="dark"] #progress-dashboard .text-muted {
+    color: #C5CCE0 !important;
+}
+
+[data-theme-mode="dark"] #progress-dashboard .dash-card-body>p {
+    color: #C5CCE0 !important;
+}
+
+/* ============================================================
+   PATIENTS — Responsive toolbar and profile chart
+   ============================================================ */
+/* The eight columns are generated by the Patients AJAX controller. */
+#drawer-weekly-engagement .patient-weekly-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.375rem;
+    min-width: 0;
+}
+
+#drawer-weekly-engagement .patient-weekly-total {
+    color: var(--text-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+}
+
+#drawer-weekly-engagement .patient-weekly-bars {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: min(100%, 2.375rem);
+    height: 8.125rem;
+    min-height: 8.125rem;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 0.1875rem 0.1875rem 0 0;
+}
+
+#drawer-weekly-engagement .patient-weekly-xr,
+#drawer-weekly-engagement .patient-weekly-mobile {
+    display: block;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+#drawer-weekly-engagement .patient-weekly-xr {
+    background-color: var(--primary-navy);
+}
+
+#drawer-weekly-engagement .patient-weekly-mobile {
+    background-color: var(--accent-coral);
+}
+
+#drawer-weekly-engagement .patient-weekly-date {
+    color: var(--text-muted);
+    font-size: 0.625rem;
+    line-height: 1.25;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+/* Scope mobile overrides to the Patients page; other pages are unchanged. */
+@media (max-width: 48rem) {
+    body:has(#patients-config) .header-search-box {
+        display: none;
+    }
+
+    body:has(#patients-config) .filter-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    body:has(#patients-config) .table-search-box {
+        width: 100%;
+    }
+
+    body:has(#patients-config) .filter-toolbar>div:last-child {
+        display: flex !important;
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+        width: 100%;
+    }
+
+    body:has(#patients-config) .filter-pills {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 0.375rem;
+    }
+
+    body:has(#patients-config) .pill-btn {
+        flex: 1 1 auto;
+        padding: 0.5rem 0.625rem;
+    }
+
+    body:has(#patients-config) .btn-add-demo {
+        width: 100%;
+        text-align: center;
+    }
+
+    body:has(#patients-config) .table-footer {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.375rem;
+    }
+
+    body:has(#patients-config) .patient-profile-drawer {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    body:has(#patients-config) .patient-profile-drawer .kpi-card {
+        padding: 0.75rem;
+        min-width: 0;
+    }
+
+    body:has(#patients-config) #profile-drawer-body {
+        padding: 1rem !important;
+    }
+
+    body:has(#patients-config) #drawer-weekly-engagement {
+        gap: 0.25rem !important;
+    }
+}
+
+@media (max-width: 25rem) {
+
+    body:has(#patients-config) #drawer-weekly-engagement .patient-weekly-total,
+    body:has(#patients-config) #drawer-weekly-engagement .patient-weekly-date {
+        font-size: 0.5625rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .patient-profile-drawer {
+        transition: none;
+    }
+}
+
+
+/* Hide DEMO DATA badge on mobile across all dashboard pages */
+@media (max-width: 48rem) {
+    .provider-header .demo-badge {
+        display: none !important;
+    }
+}

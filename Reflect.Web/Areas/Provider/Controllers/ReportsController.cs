@@ -5,6 +5,7 @@ using Reflect.Domain.Entities;
 using Reflect.Domain.Repositories;
 using Reflect.Domain.Services;
 using Reflect.Web.Models.ViewModels.Reports;
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Areas.Provider.Controllers;
 
@@ -42,12 +43,13 @@ public class ReportsController : Controller
     }
 
     [HttpPost("Preview")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Preview(
         [FromBody] ReportRequest request,
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest("A report request is required.");
+            return BadRequest(ProviderMessages.ReportRequestRequired);
 
         if (!await _authorization.CanAccessPatientAsync(
             request.PatientId, cancellationToken))
@@ -61,7 +63,7 @@ public class ReportsController : Controller
                 request, cancellationToken);
 
             if (preview is null)
-                return NotFound("Patient not found.");
+                return NotFound(ProviderMessages.PatientNotFound);
 
             return Ok(preview);
         }
@@ -72,18 +74,19 @@ public class ReportsController : Controller
     }
 
     [HttpPost("Export")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Export(
         [FromBody] ReportRequest request,
         [FromQuery] string format,
         CancellationToken cancellationToken)
     {
         if (request is null)
-            return BadRequest("A report request is required.");
+            return BadRequest(ProviderMessages.ReportRequestRequired);
 
         format = format?.Trim().ToLowerInvariant() ?? "";
 
         if (format is not ("pdf" or "csv"))
-            return BadRequest("Format must be pdf or csv.");
+            return BadRequest(ProviderMessages.InvalidReportFormat);
 
         var clinicianId = _currentUser.ClinicianId;
 
@@ -96,7 +99,7 @@ public class ReportsController : Controller
             return Forbid();
         }
 
-        ReportPreviewViewModel? preview;
+        ReportPreviewViewModel preview;
 
         try
         {
@@ -109,7 +112,7 @@ public class ReportsController : Controller
         }
 
         if (preview is null)
-            return NotFound("Patient not found.");
+            return NotFound(ProviderMessages.PatientNotFound);
 
         var report = preview.Report;
 
@@ -157,7 +160,7 @@ public class ReportsController : Controller
         CancellationToken cancellationToken)
     {
         if (patientId == Guid.Empty)
-            return BadRequest("A patient ID is required.");
+            return BadRequest(ProviderMessages.PatientIdRequired);
 
         if (!await _authorization.CanAccessPatientAsync(
             patientId, cancellationToken))
@@ -169,7 +172,7 @@ public class ReportsController : Controller
             patientId, cancellationToken);
 
         if (exports is null)
-            return NotFound("Patient not found.");
+            return NotFound(ProviderMessages.PatientNotFound);
 
         return Ok(exports);
     }

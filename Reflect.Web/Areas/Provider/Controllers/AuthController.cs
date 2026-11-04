@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Areas.Provider.Controllers;
 
@@ -16,6 +17,7 @@ public class AuthController : Controller
 
     [AllowAnonymous]
     [HttpPost("Login")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login()
     {
         var claims = new List<Claim>
@@ -34,16 +36,18 @@ public class AuthController : Controller
             CookieAuthenticationDefaults.AuthenticationScheme,
             principal);
 
-        return Ok(new { message = "Demo clinician signed in." });
+        return Ok(new { message = ProviderMessages.DemoClinicianSignedIn });
     }
 
     [Authorize]
     [HttpPost("Logout")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(
             CookieAuthenticationDefaults.AuthenticationScheme);
 
-        return Ok(new { message = "Signed out." });
+        return Ok(new { message = ProviderMessages.SignedOut });
     }
 }
+

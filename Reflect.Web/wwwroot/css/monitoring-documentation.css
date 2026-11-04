@@ -1,0 +1,304 @@
+/* Monitoring Documentation: scoped to this screen. */
+.monitoring-page {
+  color: var(--text-body);
+}
+
+.monitoring-page [hidden] {
+  display: none !important;
+}
+
+.monitoring-prototype-note {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .8rem;
+  font-size: .8rem;
+  color: var(--text-muted);
+  margin-bottom: 1.4rem;
+}
+
+.monitoring-prototype-label,
+.monitoring-draft-badge {
+  display: inline-block;
+  border-radius: 999rem;
+  background: var(--accent-amber-bg);
+  color: var(--primary-navy);
+  font-weight: 700;
+  font-size: .72rem;
+  padding: .35rem .85rem;
+}
+
+.monitoring-heading {
+  margin-bottom: 1.2rem;
+}
+
+.monitoring-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(17rem, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.monitoring-panel {
+  min-width: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--card-radius);
+  padding: 1.35rem;
+}
+
+.monitoring-panel-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--primary-navy);
+}
+
+.monitoring-draft-badge {
+  margin-bottom: 1rem;
+}
+
+.monitoring-patient-summary {
+  border-bottom: 1px solid var(--border-light);
+  padding: .3rem 0 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.monitoring-patient-summary strong {
+  display: block;
+  color: var(--primary-navy);
+  margin-bottom: .55rem;
+}
+
+.monitoring-patient-summary p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: .88rem;
+}
+
+.monitoring-feedback {
+  font-size: .87rem;
+  margin-bottom: .65rem;
+}
+
+.monitoring-feedback:empty {
+  display: none;
+}
+
+.monitoring-feedback.is-error {
+  color: var(--status-danger);
+}
+
+.monitoring-loading {
+  padding: 1rem 0;
+}
+
+.monitoring-summary-section {
+  margin-bottom: 1.25rem;
+}
+
+.monitoring-summary-section h4,
+.monitoring-notes-field label,
+.monitoring-limitations h4 {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  margin: 0 0 .65rem;
+}
+
+.monitoring-summary-section p {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.monitoring-notes-field {
+  margin-top: 1.5rem;
+}
+
+.monitoring-notes-field label {
+  display: block;
+}
+
+.monitoring-notes-field textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  min-height: 7rem;
+  border: 1px solid var(--border-card);
+  background: var(--bg-card);
+  color: var(--text-body);
+  border-radius: .5rem;
+  padding: .85rem;
+  font: inherit;
+}
+
+.monitoring-field-hint {
+  margin: .4rem 0 0;
+  color: var(--text-muted);
+  font-size: .78rem;
+}
+
+.monitoring-limitations {
+  margin-top: 1.4rem;
+}
+
+.monitoring-limitations p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.monitoring-side-column {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.monitoring-field {
+  margin: 0 0 1.2rem;
+}
+
+.monitoring-field label,
+.monitoring-includes legend {
+  display: block;
+  color: var(--text-muted);
+  font-size: .83rem;
+  font-weight: 700;
+  margin-bottom: .55rem;
+}
+
+.monitoring-field select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  background: var(--bg-table-header);
+  color: var(--text-body);
+  border: 1px solid var(--border-light);
+  border-radius: .55rem;
+  padding: .65rem .7rem;
+}
+
+.monitoring-includes {
+  padding: 0;
+  border: 0;
+  margin: .3rem 0 1.35rem;
+}
+
+.monitoring-includes label {
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  margin: 0 0 .9rem;
+  font-size: .9rem;
+}
+
+.monitoring-includes input {
+  margin-top: .25rem;
+  accent-color: var(--primary-navy);
+}
+
+.monitoring-primary-button,
+.monitoring-secondary-button {
+  border-radius: var(--btn-radius);
+  font-weight: 700;
+  padding: .7rem 1rem;
+  min-height: 2.65rem;
+}
+
+.monitoring-primary-button {
+  color: var(--text-white);
+  background: var(--primary-navy);
+  border: 1px solid var(--primary-navy);
+}
+
+.monitoring-secondary-button {
+  color: var(--primary-navy);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+}
+
+.monitoring-page button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.monitoring-page button:focus-visible,
+.monitoring-page select:focus-visible,
+.monitoring-page textarea:focus-visible {
+  outline: .18rem solid var(--status-info);
+  outline-offset: .15rem;
+}
+
+.monitoring-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.3rem;
+}
+
+.monitoring-checklist li {
+  display: flex;
+  gap: .65rem;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+  color: var(--primary-navy);
+  font-weight: 600;
+}
+
+.monitoring-checklist i {
+  flex: 0 0 auto;
+}
+
+.monitoring-actions {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+}
+
+.monitoring-actions>button {
+  flex: 1 1 8rem;
+}
+
+.monitoring-guidance p,
+.monitoring-guidance li {
+  font-size: .86rem;
+  line-height: 1.5;
+}
+
+.monitoring-guidance ul {
+  padding-left: 1.3rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 60rem) {
+  .monitoring-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 48rem) {
+  .monitoring-panel {
+    padding: 1rem;
+  }
+
+  .monitoring-actions {
+    flex-direction: column;
+  }
+
+  .monitoring-actions>button,
+  .monitoring-settings>button {
+    width: 100%;
+    flex: none;
+  }
+
+  .monitoring-summary-section p,
+  .monitoring-limitations p {
+    font-size: 1rem;
+  }
+}

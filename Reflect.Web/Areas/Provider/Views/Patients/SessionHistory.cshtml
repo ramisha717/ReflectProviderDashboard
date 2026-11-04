@@ -1,0 +1,92 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Patient session history";
+    ViewData["Subtitle"] = "Review individual sessions and module usage.";
+    var dataUrl = Url.Action("Index", "PatientSessionHistory", new { area = "Provider" });
+    var detailUrl = Url.Action("SessionDetails", "Patients", new { area = "Provider" });
+}
+
+<div class="session-history-page" id="session-history-page"
+     data-index-url="@dataUrl" data-detail-url="@detailUrl">
+    <div class="prototype-notice">
+        <span class="prototype-notice-badge">PROTOTYPE · SYNTHETIC DATA</span>
+        <span>UX prototype only — not for clinical use.</span>
+    </div>
+
+    <div class="session-history-heading">
+        <h2>Sessions</h2>
+        <p>Synthetic activity records from Reflect XR and Reflect Mobile.</p>
+    </div>
+
+    <form id="session-history-filters" class="session-history-filters" novalidate>
+        <div class="session-history-field">
+            <label for="history-patient">Profile ID</label>
+            <select id="history-patient" name="patientCode">
+                <option value="">All profiles</option>
+            </select>
+        </div>
+        <div class="session-history-field">
+            <label for="history-platform">Platform</label>
+            <select id="history-platform" name="platform">
+                <option value="">All platforms</option>
+            </select>
+        </div>
+        <div class="session-history-field session-history-date-field">
+            <span class="session-history-label">Date range</span>
+            <div class="session-history-dates">
+                <label for="history-start">From <span class="visually-hidden">date</span></label>
+                <input id="history-start" name="startDate" type="date" />
+                <label for="history-end">To <span class="visually-hidden">date</span></label>
+                <input id="history-end" name="endDate" type="date" />
+            </div>
+        </div>
+        <div class="session-history-field">
+            <label for="history-module">Module</label>
+            <select id="history-module" name="module">
+                <option value="">All modules</option>
+            </select>
+        </div>
+        <button class="session-history-apply" type="submit">Apply filters</button>
+    </form>
+
+    <div class="session-history-table-card">
+        <div id="session-history-loading" class="session-history-message" role="status">Loading sessions…</div>
+        <div id="session-history-error" class="session-history-message session-history-error" role="alert" hidden></div>
+        <div id="session-history-empty" class="session-history-message" role="status" hidden>No sessions match these filters.</div>
+        <div class="session-history-table-scroll">
+            <table class="session-history-table" id="session-history-table" hidden>
+                <caption class="visually-hidden">Patient sessions. Select a session to preview it.</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">SESSION ID</th>
+                        <th scope="col">PROFILE</th>
+                        <th scope="col">DATE / TIME</th>
+                        <th scope="col">PLATFORM</th>
+                        <th scope="col">MODULE / INTERVENTION</th>
+                        <th scope="col">DURATION</th>
+                        <th scope="col">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody id="session-history-tbody"></tbody>
+            </table>
+        </div>
+        <section class="session-history-preview" id="session-history-preview" aria-labelledby="session-preview-title" hidden>
+            <h3 id="session-preview-title">Selected session preview</h3>
+            <div class="session-history-preview-content">
+                <div>
+                    <p class="session-history-preview-primary" id="session-preview-primary"></p>
+                    <p class="session-history-preview-secondary" id="session-preview-secondary"></p>
+                </div>
+                <a class="session-history-detail-link" id="session-preview-link" href="#">Open session detail</a>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/session-history.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="~/js/services/patientSessionHistory/indexService.js" asp-append-version="true"></script>
+    <script src="~/js/controllers/patientSessionHistory/indexController.js" asp-append-version="true"></script>
+}

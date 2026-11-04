@@ -23,11 +23,11 @@ public class PatientSessionsIndexViewModel
     IPatientSessionRepository sessionsRepo,
     IPatientAccessRepository patientAccessRepo,
     Guid clinicianId,
-    string? patientCode,
-    string? platform,
+    string patientCode,
+    string platform,
     DateOnly? startDate,
     DateOnly? endDate,
-    string? module,
+    string module,
     CancellationToken cancellationToken)
   {
     if (startDate.HasValue && endDate.HasValue &&

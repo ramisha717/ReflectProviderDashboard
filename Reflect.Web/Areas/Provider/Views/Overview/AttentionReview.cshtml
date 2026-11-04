@@ -1,199 +1,51 @@
+@model Reflect.Web.Models.ViewModels.Overview.Index.OverviewIndexViewModel
 @{
     Layout = "_ProviderLayout";
     ViewData["Title"] = "Attention Review";
-    ViewData["Subtitle"] = "Review and act on current attention queue items: each one or in batch.";
+    ViewData["Subtitle"] = "Review patient attention signals.";
+    var reviewCount = Model.AttentionQueue.Count(x => x.SignalType == "Needs Review");
+    var activityCount = Model.AttentionQueue.Count - reviewCount;
 }
-
-<!-- Breadcrumb -->
-<div style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">
-    <a asp-area="Provider" asp-controller="Overview" asp-action="IndexPage" class="text-decoration-none" style="color:var(--text-muted);">Overview</a>
-    <span class="mx-1">/</span>
-    <span style="color:var(--text-dark);font-weight:600;">Attention Review</span>
-</div>
-
-<!-- Header Action Row -->
 <div class="content-header">
-    <div>
-        <h2 class="content-title">Attention Review</h2>
-        <p class="content-subtitle">Review and act on current attention queue items: individually or in batch.</p>
-    </div>
-    <div class="d-flex align-items-center gap-2">
-        <a asp-area="Provider" asp-controller="Overview" asp-action="IndexPage" class="btn btn-outline-secondary btn-sm" style="border-radius:var(--btn-radius);font-weight:600;font-size:12.5px;padding:8px 16px;">
-            <i class="bi bi-arrow-left me-1"></i> Back to Overview
-        </a>
-    </div>
+    <div><h1 class="content-title">Attention Review</h1><p class="content-subtitle">Review current patient attention signals.</p></div>
+    <a asp-area="Provider" asp-controller="Overview" asp-action="Index"
+       asp-route-inactivityThresholdDays="@Model.InactivityThresholdDays"
+       asp-route-frequencyDeclineThresholdPercent="@Model.FrequencyDeclineThresholdPercent"
+       class="btn btn-outline-secondary btn-sm">Back to Overview</a>
 </div>
-
-<!-- 4 Queue Summary Cards -->
-<div class="kpi-grid">
-    <div class="kpi-card">
-        <div class="kpi-label"><i class="bi bi-flag me-1"></i> Total Flagged</div>
-        <div class="kpi-value">3</div>
-        <div class="kpi-sub">Total queue items</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label"><i class="bi bi-clock me-1"></i> Active Reviews</div>
-        <div class="kpi-value" style="color:var(--accent-amber-text);">2</div>
-        <div class="kpi-sub">Require provider review</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label"><i class="bi bi-exclamation-octagon me-1"></i> Actionable Items</div>
-        <div class="kpi-value" style="color:var(--accent-coral);">1</div>
-        <div class="kpi-sub">Outreach recommended</div>
-    </div>
-    <div class="kpi-card">
-        <div class="kpi-label"><i class="bi bi-check2-circle me-1"></i> Completed Reviews</div>
-        <div class="kpi-value" style="color:var(--status-active);">5</div>
-        <div class="kpi-sub">Resolved this month</div>
-    </div>
+<div class="kpi-grid mb-3">
+    <div class="kpi-card card custom-card"><div class="kpi-label">Total Flagged</div><div class="kpi-value">@Model.AttentionQueue.Count</div><div class="kpi-sub">Open queue items</div></div>
+    <div class="kpi-card card custom-card"><div class="kpi-label">Needs Review</div><div class="kpi-value">@reviewCount</div><div class="kpi-sub">Clinical review signals</div></div>
+    <div class="kpi-card card custom-card"><div class="kpi-label">Activity Alerts</div><div class="kpi-value">@activityCount</div><div class="kpi-sub">Inactivity and frequency decline</div></div>
 </div>
-
-<!-- Table Card: Attention Items -->
-<div class="table-card mb-4">
-    <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="background:var(--bg-table-header);">
-        <h3 class="dash-card-title" style="font-size:13px;margin:0;">Attention Items Queue</h3>
-        <span class="badge bg-light text-dark border">3 patients needing review</span>
-    </div>
-    <div class="table-responsive">
-        <table class="patients-table">
-            <thead>
-                <tr>
-                    <th style="width:40px;"><input class="form-check-input" type="checkbox" id="check-all" /></th>
-                    <th>PATIENT</th>
-                    <th>SIGNAL / TRIGGER</th>
-                    <th>DATE FLAGGED</th>
-                    <th>STATUS</th>
-                    <th>ACTION</th>
-                </tr>
-            </thead>
+<div class="table-card card custom-card mb-4">
+    <div class="card-header"><div class="card-title">Attention Items Queue</div></div>
+    <div class="card-body table-responsive">
+        <table class="table table-bordered text-nowrap align-middle">
+            <thead><tr><th>Patient</th><th>Signal</th><th>Reason</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
-                <tr id="row-patient-504">
-                    <td><input class="form-check-input row-check" type="checkbox" /></td>
-                    <td class="fw-bold" style="color:var(--text-dark);">
-                        <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="text-decoration-none" style="color:var(--primary-navy);">
-                            Patient 504 (RX-0004)
-                        </a>
-                    </td>
+            @foreach (var item in Model.AttentionQueue)
+            {
+                <tr>
+                    <td><a asp-area="Provider" asp-controller="Patients" asp-action="IndexPage" asp-route-patientId="@item.PatientId">@item.PatientCode</a></td>
+                    <td>@item.SignalType</td><td class="text-wrap">@item.Reason</td><td>Needs attention</td>
                     <td>
-                        <span class="badge" style="background:#FEE2E2;color:#B91C1C;font-size:11px;">Inactivity</span>
-                        <span class="ms-1" style="font-size:12.5px;">No recorded activity for 8 days</span>
-                    </td>
-                    <td class="text-muted" style="font-size:12.5px;">10/17/2026</td>
-                    <td>
-                        <span class="badge" style="background:#FEF3C7;color:#D97706;font-size:11px;">NEW ENTRY</span>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size:12px;border-radius:4px;">
-                                View Patient
-                            </a>
-                            <button class="btn btn-primary-navy btn-sm py-1 px-2 btn-mark-reviewed" data-row="row-patient-504" type="button" style="font-size:12px;border-radius:4px;">
-                                Mark Reviewed
-                            </button>
-                        </div>
+                        <form asp-area="Provider" asp-controller="Overview" asp-action="MarkReviewed" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="patientId" value="@item.PatientId" />
+                            <input type="hidden" name="signalType" value="@item.SignalType" />
+                            <input type="hidden" name="inactivityThresholdDays" value="@Model.InactivityThresholdDays" />
+                            <input type="hidden" name="frequencyDeclineThresholdPercent" value="@Model.FrequencyDeclineThresholdPercent" />
+                            <button type="submit" class="btn btn-primary btn-sm">Mark Reviewed</button>
+                        </form>
                     </td>
                 </tr>
-                <tr id="row-patient-502">
-                    <td><input class="form-check-input row-check" type="checkbox" /></td>
-                    <td class="fw-bold" style="color:var(--text-dark);">
-                        <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="text-decoration-none" style="color:var(--primary-navy);">
-                            Patient 502 (RX-0002)
-                        </a>
-                    </td>
-                    <td>
-                        <span class="badge" style="background:#FEF3C7;color:#D97706;font-size:11px;">Frequency Decline</span>
-                        <span class="ms-1" style="font-size:12.5px;">Session frequency dropped &gt;35%</span>
-                    </td>
-                    <td class="text-muted" style="font-size:12.5px;">10/16/2026</td>
-                    <td>
-                        <span class="badge" style="background:#FEF3C7;color:#D97706;font-size:11px;">UNDER REVIEW</span>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size:12px;border-radius:4px;">
-                                View Patient
-                            </a>
-                            <button class="btn btn-primary-navy btn-sm py-1 px-2 btn-mark-reviewed" data-row="row-patient-502" type="button" style="font-size:12px;border-radius:4px;">
-                                Mark Reviewed
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr id="row-patient-507">
-                    <td><input class="form-check-input row-check" type="checkbox" /></td>
-                    <td class="fw-bold" style="color:var(--text-dark);">
-                        <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="text-decoration-none" style="color:var(--primary-navy);">
-                            Patient 507 (RX-0007)
-                        </a>
-                    </td>
-                    <td>
-                        <span class="badge" style="background:#E0E7FF;color:#3730A3;font-size:11px;">Survey Trigger</span>
-                        <span class="ms-1" style="font-size:12.5px;">Low response score recorded on check-in</span>
-                    </td>
-                    <td class="text-muted" style="font-size:12.5px;">10/14/2026</td>
-                    <td>
-                        <span class="badge bg-success" style="font-size:11px;">RESOLVED</span>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center gap-2">
-                            <a asp-area="Provider" asp-controller="Patients" asp-action="SinceLastVisit" class="btn btn-outline-secondary btn-sm py-1 px-2" style="font-size:12px;border-radius:4px;">
-                                View Patient
-                            </a>
-                            <button class="btn btn-outline-secondary btn-sm py-1 px-2" disabled type="button" style="font-size:12px;border-radius:4px;">
-                                Reviewed
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+            }
+            @if (Model.AttentionQueue.Count == 0)
+            {
+                <tr><td colspan="5" class="text-center text-muted">No patients currently require attention.</td></tr>
+            }
             </tbody>
         </table>
     </div>
 </div>
-
-<!-- Bottom Batch Actions -->
-<div class="d-flex justify-content-between align-items-center p-3 rounded-3" style="background:var(--bg-white);border:1px solid var(--border-light);">
-    <div class="small text-muted">
-        <i class="bi bi-info-circle me-1"></i> Select items to process in batch
-    </div>
-    <div class="d-flex align-items-center gap-2">
-        <button class="btn btn-outline-secondary btn-sm" id="btn-batch-open" type="button" style="border-radius:var(--btn-radius);font-weight:600;">
-            <i class="bi bi-box-arrow-up-right me-1"></i> Open Selected
-        </button>
-        <button class="btn btn-primary-navy btn-sm" id="btn-batch-mark" type="button" style="border-radius:var(--btn-radius);font-weight:600;">
-            <i class="bi bi-check2-all me-1"></i> Batch Mark Reviewed
-        </button>
-    </div>
-</div>
-
-@section Scripts {
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var checkAll = document.getElementById('check-all');
-        var rowChecks = document.querySelectorAll('.row-check');
-
-        if (checkAll) {
-            checkAll.addEventListener('change', function() {
-                rowChecks.forEach(function(c) { c.checked = checkAll.checked; });
-            });
-        }
-
-        document.querySelectorAll('.btn-mark-reviewed').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var rowId = this.getAttribute('data-row');
-                var row = document.getElementById(rowId);
-                if (row) {
-                    var statusTd = row.children[4];
-                    statusTd.innerHTML = '<span class="badge bg-success" style="font-size:11px;">RESOLVED</span>';
-                    this.outerHTML = '<button class="btn btn-outline-secondary btn-sm py-1 px-2" disabled style="font-size:12px;border-radius:4px;">Reviewed</button>';
-                }
-            });
-        });
-
-        document.getElementById('btn-batch-mark').addEventListener('click', function() {
-            document.querySelectorAll('.btn-mark-reviewed').forEach(function(btn) {
-                btn.click();
-            });
-        });
-    });
-</script>
-}

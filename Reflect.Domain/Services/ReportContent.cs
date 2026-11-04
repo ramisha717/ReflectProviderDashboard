@@ -13,7 +13,7 @@ public class ReportContent
 
     public DateTimeOffset PeriodEnd { get; set; }
 
-    public string? PlatformFilter { get; set; }
+    public string PlatformFilter { get; set; } = string.Empty;
 
     public string Title { get; set; } = string.Empty;
 

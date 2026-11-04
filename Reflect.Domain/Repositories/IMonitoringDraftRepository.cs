@@ -5,7 +5,7 @@ namespace Reflect.Domain.Repositories;
 
 public interface IMonitoringDraftRepository
 {
-    Task<MonitoringDraft?> GetByPatientAndClinicianAsync(
+    Task<MonitoringDraft> GetByPatientAndClinicianAsync(
       Guid patientId,
       Guid clinicianId,
       CancellationToken cancellationToken);

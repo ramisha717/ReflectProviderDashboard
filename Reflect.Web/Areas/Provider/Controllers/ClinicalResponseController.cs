@@ -1,13 +1,13 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Reflect.Domain.Repositories;
 using Reflect.Web.Models.ViewModels.ClinicalResponse.Index;
 using Reflect.Web.Models.ViewModels.ClinicalResponse.Create;
 using Microsoft.AspNetCore.Authorization;
 using Reflect.Domain.Services;
-
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Areas.Provider.Controllers;
-
 
 [Area("Provider")]
 [Authorize(Policy = "ClinicianOnly")]
@@ -30,11 +30,17 @@ public class ClinicalResponseController : Controller
         _currentUser = currentUser;
     }
 
+    [HttpGet]
+    public IActionResult IndexPage()
+    {
+        return View("~/Areas/Provider/Views/Patients/ClinicalResponse.cshtml");
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Index(
         Guid patientId,
         CancellationToken cancellationToken)
     {
-
         if (!await _authorization.CanAccessPatientAsync(
             patientId,
             cancellationToken))
@@ -66,7 +72,6 @@ public class ClinicalResponseController : Controller
             return Unauthorized();
         }
 
-
         try
         {
             var observation = await viewModel.PrepareDataForSave(
@@ -89,7 +94,7 @@ public class ClinicalResponseController : Controller
             {
                 observationId = observation.Id,
                 patientId = observation.PatientId,
-                message = "Clinical observation created successfully."
+                message = ProviderMessages.ObservationCreated
             });
         }
         catch (ArgumentException ex)
@@ -97,6 +102,5 @@ public class ClinicalResponseController : Controller
             return BadRequest(ex.Message);
         }
     }
-
-
 }
+

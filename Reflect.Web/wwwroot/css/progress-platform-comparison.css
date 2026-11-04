@@ -1,0 +1,300 @@
+.platform-comparison {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0
+}
+
+.platform-comparison-notice {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+  color: var(--text-muted);
+  font-size: .82rem
+}
+
+.platform-comparison-notice strong {
+  border-radius: 2rem;
+  padding: .35rem .8rem;
+  background: #f8e8ce;
+  color: #1f325d;
+  font-size: .73rem
+}
+
+.platform-comparison-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap
+}
+
+.platform-comparison-heading h1 {
+  font-size: 1.6rem;
+  color: var(--primary-navy);
+  font-weight: 700;
+  margin: 0
+}
+
+.platform-comparison-heading p {
+  color: var(--text-muted);
+  margin: .25rem 0 0
+}
+
+.platform-comparison-actions {
+  display: flex;
+  align-items: end;
+  gap: .6rem;
+  flex-wrap: wrap
+}
+
+.platform-comparison-actions label {
+  font-size: .8rem;
+  font-weight: 600
+}
+
+.platform-comparison-actions .form-select {
+  min-width: 9rem
+}
+
+.platform-comparison-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem
+}
+
+.platform-comparison-card {
+  border: 1px solid var(--border-color, #cbd5e1);
+  background: var(--card-bg, #fff);
+  border-radius: .75rem;
+  padding: 1.2rem;
+  min-width: 0
+}
+
+.platform-comparison-card>h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  margin: 0 0 1rem
+}
+
+.platform-comparison-kpi {
+  border-left: .25rem solid var(--primary-navy)
+}
+
+.platform-comparison-kpi.mobile {
+  border-left-color: var(--accent-coral)
+}
+
+.platform-comparison-kpi h2 {
+  font-size: .78rem;
+  color: var(--text-muted);
+  margin: 0
+}
+
+.platform-comparison-kpi p {
+  font-size: 1.65rem;
+  color: var(--primary-navy);
+  font-weight: 700;
+  margin: .45rem 0
+}
+
+.platform-comparison-kpi small,
+.platform-comparison-hint {
+  font-size: .82rem;
+  color: var(--text-muted)
+}
+
+.platform-comparison-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 1rem
+}
+
+.platform-comparison-chart {
+  display: flex;
+  align-items: stretch;
+  gap: .5rem;
+  height: 15rem;
+  padding: .5rem 0;
+  border-bottom: 1px solid var(--border-color, #d4dce5)
+}
+
+.platform-comparison-week {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  font-size: .75rem;
+  color: var(--text-muted)
+}
+
+.platform-comparison-bars {
+  height: 12.5rem;
+  width: 100%;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: .18rem;
+  min-width: 0
+}
+
+.platform-comparison-bar {
+  width: 40%;
+  max-width: 2rem;
+  min-height: 0;
+  border-radius: .2rem .2rem 0 0;
+  background: var(--primary-navy)
+}
+
+.platform-comparison-bar.mobile {
+  background: var(--accent-coral)
+}
+
+.platform-comparison-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  font-size: .8rem
+}
+
+.platform-comparison-legend span:before {
+  content: '';
+  display: inline-block;
+  width: .65rem;
+  height: .65rem;
+  margin-right: .4rem;
+  border-radius: 50%;
+  background: var(--primary-navy)
+}
+
+.platform-comparison-legend span.mobile:before {
+  background: var(--accent-coral)
+}
+
+.platform-comparison-data {
+  margin-top: 1rem;
+  font-size: .85rem
+}
+
+.platform-comparison-data summary {
+  cursor: pointer
+}
+
+.platform-comparison-table {
+  font-size: .86rem
+}
+
+.platform-comparison-table th,
+.platform-comparison-table td {
+  padding: .8rem .4rem;
+  vertical-align: middle
+}
+
+.platform-comparison-context p {
+  font-size: 1.05rem;
+  color: var(--primary-navy)
+}
+
+.platform-comparison-context li {
+  margin: .5rem 0;
+  color: var(--text-muted)
+}
+
+@media(max-width:70rem) {
+  .platform-comparison-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+  }
+
+  .platform-comparison-main {
+    grid-template-columns: 1fr
+  }
+}
+
+@media(max-width:35rem) {
+  .platform-comparison-kpis {
+    grid-template-columns: 1fr
+  }
+
+  .platform-comparison-card {
+    padding: 1rem
+  }
+
+  .platform-comparison-chart {
+    gap: .15rem
+  }
+
+  .platform-comparison-bars {
+    gap: .08rem
+  }
+
+  .platform-comparison-actions {
+    width: 100%
+  }
+}
+
+/* Keep each pair of bars and its week label in the same grid column. */
+.platform-comparison-chart {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .5rem;
+  height: auto;
+  min-height: 15rem;
+  padding: .5rem 0 0;
+  align-items: end
+}
+
+.platform-comparison-week {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: .3rem
+}
+
+.platform-comparison-week>span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: .75rem;
+  line-height: 1.3
+}
+
+.platform-comparison-bars {
+  height: 12.5rem;
+  flex: none;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: .18rem
+}
+
+.platform-comparison-bar {
+  flex: 0 1 2rem;
+  min-width: 0;
+  width: 40%;
+  max-width: 2rem
+}
+
+@media(min-width:48rem) {
+  .platform-comparison-chart {
+    grid-template-columns: repeat(8, minmax(0, 1fr))
+  }
+}
+
+@media(max-width:35rem) {
+  .platform-comparison-chart {
+    gap: .25rem
+  }
+
+  .platform-comparison-bars {
+    gap: .1rem
+  }
+}

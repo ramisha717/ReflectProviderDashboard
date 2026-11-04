@@ -13,7 +13,7 @@ public interface IReportGenerationService
     IReadOnlyList<PatientSession> sessions,
     DateTimeOffset periodStart,
     DateTimeOffset periodEnd,
-    string? platformFilter,
+    string platformFilter,
     bool includeSessionCountAndDuration,
     bool includePlatformActivity,
     bool includeModuleActivity,

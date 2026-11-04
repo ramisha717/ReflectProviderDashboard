@@ -1,9 +1,11 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Reflect.Domain.Repositories;
 using Reflect.Domain.Services;
 using Reflect.Web.Models.ViewModels.Progress.Index;
 using Reflect.Web.Models.ViewModels.Progress.PlatformComparison;
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Areas.Provider.Controllers;
 
@@ -31,19 +33,14 @@ public class ProgressController : Controller
     [HttpGet]
     public IActionResult IndexPage()
     {
-        return View("Index");
+        return RedirectToAction(nameof(Index));
     }
 
+    [HttpGet]
     public async Task<IActionResult> Index(
         int days = 30,
         CancellationToken cancellationToken = default)
     {
-        // If regular browser navigation requested the UI
-        if (Request.Headers["Accept"].ToString().Contains("text/html") && !Request.Query.ContainsKey("format"))
-        {
-            return View("Index");
-        }
-
         var clinicianId = _currentUser.ClinicianId;
 
         if (!clinicianId.HasValue)
@@ -53,7 +50,7 @@ public class ProgressController : Controller
 
         if (days != 30 && days != 60)
         {
-            return BadRequest("Only 30 or 60 days are supported.");
+            return BadRequest(ProviderMessages.InvalidDayPeriod);
         }
 
         var viewModel = new ProgressIndexViewModel();
@@ -66,9 +63,27 @@ public class ProgressController : Controller
             days,
             cancellationToken);
 
-        return Json(viewModel);
+        return View(viewModel);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> PlatformComparisonPage(
+        int days = 30,
+        CancellationToken cancellationToken = default)
+    {
+        var clinicianId = _currentUser.ClinicianId;
+        if (!clinicianId.HasValue) return Unauthorized();
+        if (days != 30 && days != 60)
+            return BadRequest(ProviderMessages.InvalidWeekPeriod);
+
+        var model = new ProgressPlatformComparisonViewModel();
+        await model.PrepareData(
+            _sessionsRepo, _patientsRepo, _patientAccess,
+            clinicianId.Value, days, cancellationToken);
+        return View("PlatformComparison", model);
+    }
+
+    [HttpGet]
     public async Task<IActionResult> PlatformComparison(
         int days = 30,
         CancellationToken cancellationToken = default)
@@ -82,7 +97,7 @@ public class ProgressController : Controller
 
         if (days != 30 && days != 60)
         {
-            return BadRequest("Only 30 or 60 days are supported.");
+            return BadRequest(ProviderMessages.InvalidDayPeriod);
         }
 
         var viewModel = new ProgressPlatformComparisonViewModel();

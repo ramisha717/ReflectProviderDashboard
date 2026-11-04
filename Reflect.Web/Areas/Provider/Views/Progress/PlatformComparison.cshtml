@@ -1,0 +1,109 @@
+@model Reflect.Web.Models.ViewModels.Progress.PlatformComparison.ProgressPlatformComparisonViewModel
+@using System.Globalization
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Progress — XR vs Mobile";
+    ViewData["Subtitle"] = "Compare usage across Reflect XR and Reflect Mobile.";
+    var maxWeekly = Math.Max(1, Model.WeeklyActivity.SelectMany(w => new[] { w.ReflectXRSessions, w.ReflectMobileSessions }).DefaultIfEmpty(0).Max());
+    var xrTotal = TimeSpan.FromMinutes(Model.XRTotalDurationMinutes);
+    var mobileTotal = TimeSpan.FromMinutes(Model.MobileTotalDurationMinutes);
+    string Duration(int minutes) => $"{minutes / 60}h {minutes % 60}m";
+}
+<div class="platform-comparison">
+    <div class="platform-comparison-notice">
+        <strong>PROTOTYPE · SYNTHETIC DATA</strong>
+        <span>UX prototype only — not for clinical use.</span>
+    </div>
+    <div class="platform-comparison-heading">
+        <div>
+            <h1>Cross-platform activity</h1>
+            <p>Use the shared timeline to understand engagement across experiences.</p>
+        </div>
+        <div class="platform-comparison-actions">
+            <label for="comparison-period">Reporting period</label>
+            <form method="get" asp-area="Provider" asp-controller="Progress" asp-action="PlatformComparisonPage">
+                <select id="comparison-period" name="days" class="form-select" >
+                    @if (Model.SelectedDays == 30)
+                    {
+                        <option value="30" selected>4 weeks</option>
+                        <option value="60">8 weeks</option>
+                    }
+                    else
+                    {
+                        <option value="30">4 weeks</option>
+                        <option value="60" selected>8 weeks</option>
+                    }
+                </select>
+                <button class="btn btn-primary-navy" type="submit">Apply</button>
+            </form>
+            <a class="btn btn-outline-secondary" asp-area="Provider" asp-controller="Progress" asp-action="Index"
+               asp-route-days="@Model.SelectedDays">Back to Progress</a>
+        </div>
+    </div>
+    <div class="platform-comparison-kpis">
+        <section class="platform-comparison-card platform-comparison-kpi xr">
+            <h2>Reflect XR sessions</h2><p>@Model.ReflectXRSessions</p><small>Recorded XR sessions</small>
+        </section>
+        <section class="platform-comparison-card platform-comparison-kpi mobile">
+            <h2>Reflect Mobile sessions</h2><p>@Model.ReflectMobileSessions</p><small>Recorded Mobile sessions</small>
+        </section>
+        <section class="platform-comparison-card platform-comparison-kpi xr">
+            <h2>XR median duration</h2><p>@Model.XRMedianDurationMinutes.ToString("0.#", CultureInfo.InvariantCulture) min</p><small>Per session</small>
+        </section>
+        <section class="platform-comparison-card platform-comparison-kpi mobile">
+            <h2>Mobile median duration</h2><p>@Model.MobileMedianDurationMinutes.ToString("0.#", CultureInfo.InvariantCulture) min</p><small>Per session</small>
+        </section>
+    </div>
+    <div class="platform-comparison-main">
+        <section class="platform-comparison-card" aria-labelledby="comparison-chart-title">
+            <h2 id="comparison-chart-title">Platform activity over time</h2>
+            <p class="platform-comparison-hint">Weekly session counts, oldest to newest.</p>
+            <div class="platform-comparison-chart" role="img" aria-label="Weekly XR and Mobile session counts; exact values are in the accessible table below.">
+                @foreach (var week in Model.WeeklyActivity)
+                {
+                    var xrHeight = (100.0 * week.ReflectXRSessions / maxWeekly).ToString("0.###", CultureInfo.InvariantCulture);
+                    var mobileHeight = (100.0 * week.ReflectMobileSessions / maxWeekly).ToString("0.###", CultureInfo.InvariantCulture);
+                    <div class="platform-comparison-week">
+                        <div class="platform-comparison-bars">
+                            <div class="platform-comparison-bar xr" style="height:@(xrHeight)%" title="Week @(week.WeekNumber): @week.ReflectXRSessions XR sessions"></div>
+                            <div class="platform-comparison-bar mobile" style="height:@(mobileHeight)%" title="Week @(week.WeekNumber): @week.ReflectMobileSessions Mobile sessions"></div>
+                        </div>
+                        <span>W@(week.WeekNumber)</span>
+                    </div>
+                }
+            </div>
+            <div class="platform-comparison-legend"><span class="xr">Reflect XR</span><span class="mobile">Reflect Mobile</span></div>
+            <details class="platform-comparison-data">
+                <summary>Weekly counts (accessible data)</summary>
+                <div class="table-responsive"><table class="table table-sm">
+                    <thead><tr><th scope="col">Week</th><th scope="col">XR sessions</th><th scope="col">Mobile sessions</th></tr></thead>
+                    <tbody>@foreach (var week in Model.WeeklyActivity) { <tr><th scope="row">@week.WeekNumber</th><td>@week.ReflectXRSessions</td><td>@week.ReflectMobileSessions</td></tr> }</tbody>
+                </table></div>
+            </details>
+        </section>
+        <section class="platform-comparison-card" aria-labelledby="comparison-table-title">
+            <h2 id="comparison-table-title">Platform comparison</h2>
+            <div class="table-responsive"><table class="table platform-comparison-table">
+                <thead><tr><th scope="col">Measure</th><th scope="col">XR</th><th scope="col">Mobile</th></tr></thead>
+                <tbody>
+                    <tr><th scope="row">Sessions</th><td>@Model.ReflectXRSessions</td><td>@Model.ReflectMobileSessions</td></tr>
+                    <tr><th scope="row">Total time</th><td>@Duration(Model.XRTotalDurationMinutes)</td><td>@Duration(Model.MobileTotalDurationMinutes)</td></tr>
+                    <tr><th scope="row">Active days</th><td>@Model.XRActiveDays</td><td>@Model.MobileActiveDays</td></tr>
+                </tbody>
+            </table></div>
+            <p class="platform-comparison-hint">Totals reflect authorized patient sessions in the selected reporting period.</p>
+        </section>
+    </div>
+    <section class="platform-comparison-card platform-comparison-context">
+        <h2>Interpret with context</h2>
+        <p><strong>Different experiences may support different activities. Compare patterns, not value judgments.</strong></p>
+        <ul>
+            <li>XR and Mobile provide different interaction experiences.</li>
+            <li>Session counts and durations describe recorded activity, not clinical outcomes.</li>
+            <li>Missing activity may reflect access or logging—not necessarily disengagement.</li>
+        </ul>
+    </section>
+</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/progress-platform-comparison.css" asp-append-version="true" />
+}

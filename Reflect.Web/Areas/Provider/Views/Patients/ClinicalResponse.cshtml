@@ -1,0 +1,87 @@
+@{
+    Layout = "_ProviderLayout";
+    ViewData["Title"] = "Clinical Response & Observations";
+    ViewData["Subtitle"] = "Review and document observations for an authorized patient.";
+    var indexUrl = Url.Action("Index", "ClinicalResponse", new { area = "Provider" });
+    var createUrl = Url.Action("Create", "ClinicalResponse", new { area = "Provider" });
+}
+
+<div id="clinical-response-config" data-index-url="@indexUrl" data-create-url="@createUrl"></div>
+<div class="clinical-response-page">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <div>
+            <a class="small" href="@Url.Action("IndexPage", "Patients", new { area = "Provider" })">Patients</a>
+            <h2 class="content-title mt-2 mb-1">Clinical Response &amp; Observations</h2>
+            <p class="content-subtitle mb-0" id="clinical-patient-label">Select a patient to review clinical observations.</p>
+        </div>
+        <button id="clinical-create-open" type="button" class="btn btn-primary-navy" disabled>
+            <i class="ri-add-line" aria-hidden="true"></i> Add observation
+        </button>
+    </div>
+
+    <div class="dash-card mb-3">
+        <div class="dash-card-body p-3">
+            <label class="form-label fw-semibold" for="clinical-patient-id">Patient ID</label>
+            <div class="d-flex flex-wrap gap-2">
+                <input id="clinical-patient-id" class="form-control clinical-id-input" type="text" placeholder="Enter patient ID" autocomplete="off" />
+                <button id="clinical-load" type="button" class="btn btn-outline-primary">Load observations</button>
+            </div>
+            <div class="form-text">Open this page from a patient profile to select the patient automatically.</div>
+        </div>
+    </div>
+
+    <div id="clinical-alert" class="alert alert-danger d-none" role="alert"></div>
+    <div id="clinical-loading" class="d-none mb-3" role="status">Loading observations…</div>
+    <div class="table-card">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center gap-2">
+            <h3 class="dash-card-title mb-0">Recent observations</h3>
+            <span id="clinical-count" class="small text-muted">No patient selected</span>
+        </div>
+        <div class="table-responsive">
+            <table class="patients-table clinical-table">
+                <caption class="visually-hidden">Clinical observations for the selected patient</caption>
+                <thead><tr><th scope="col">OBSERVED (ET)</th><th scope="col">TYPE</th><th scope="col">NOTES</th><th scope="col">CLINICIAN ID</th></tr></thead>
+                <tbody id="clinical-observations-body"></tbody>
+            </table>
+        </div>
+        <p id="clinical-empty" class="p-3 mb-0 text-muted">Select a patient to view observations.</p>
+    </div>
+</div>
+
+<div class="modal fade" id="clinical-create-modal" tabindex="-1" aria-labelledby="clinical-create-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="clinical-create-form" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="clinical-create-title">New clinical observation</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Patient: <strong id="clinical-form-patient"></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label" for="clinical-type">Observation type</label>
+                        <input class="form-control" id="clinical-type" name="ObservationType" required maxlength="120" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="clinical-notes">Observation notes</label>
+                        <textarea class="form-control" id="clinical-notes" name="Notes" rows="5" required></textarea>
+                    </div>
+                    <div id="clinical-form-error" class="alert alert-danger d-none" role="alert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="clinical-save" class="btn btn-primary-navy">Save observation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/clinical-response.css" asp-append-version="true" />
+}
+@section Scripts {
+    <script src="~/js/services/clinicalResponse/indexService.js" asp-append-version="true"></script>
+    <script src="~/js/controllers/clinicalResponse/indexController.js" asp-append-version="true"></script>
+}

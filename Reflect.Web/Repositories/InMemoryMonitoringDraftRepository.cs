@@ -8,14 +8,14 @@ public class InMemoryMonitoringDraftRepository : IMonitoringDraftRepository
 {
   private readonly List<MonitoringDraft> _drafts = new();
 
-  public Task<MonitoringDraft?> GetByPatientAndClinicianAsync(
+  public Task<MonitoringDraft> GetByPatientAndClinicianAsync(
       Guid patientId,
       Guid clinicianId,
       CancellationToken cancellationToken)
   {
     cancellationToken.ThrowIfCancellationRequested();
 
-    MonitoringDraft? draft = _drafts.FirstOrDefault(
+    MonitoringDraft draft = _drafts.FirstOrDefault(
         d => !d.IsDeleted
             && d.PatientId == patientId
             && d.ClinicianId == clinicianId);
@@ -48,7 +48,7 @@ public class InMemoryMonitoringDraftRepository : IMonitoringDraftRepository
   {
     cancellationToken.ThrowIfCancellationRequested();
 
-    MonitoringDraft? existing = _drafts.FirstOrDefault(
+    MonitoringDraft existing = _drafts.FirstOrDefault(
         d => d.Id == draft.Id && !d.IsDeleted);
 
     if (existing == null)
@@ -69,7 +69,7 @@ public class InMemoryMonitoringDraftRepository : IMonitoringDraftRepository
   {
     cancellationToken.ThrowIfCancellationRequested();
 
-    MonitoringDraft? existing = _drafts.FirstOrDefault(
+    MonitoringDraft existing = _drafts.FirstOrDefault(
       d => d.Id == draftId && !d.IsDeleted);
 
     if (existing == null)

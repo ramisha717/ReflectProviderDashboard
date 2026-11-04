@@ -1,9 +1,10 @@
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Reflect.Domain.Repositories;
 using Reflect.Domain.Services;
 using Reflect.Web.Models.ViewModels.PatientSessions.Index;
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Areas.Provider.Controllers;
 
@@ -28,41 +29,36 @@ public class PatientSessionHistoryController : Controller
         _patientAccess = patientAccess;
     }
 
+    [HttpGet]
+    public IActionResult IndexPage()
+    {
+        return View("~/Areas/Provider/Views/Patients/SessionHistory.cshtml");
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Index(
-        string? patientCode,
-        string? platform,
+        string patientCode,
+        string platform,
         DateOnly? startDate,
         DateOnly? endDate,
-        string? module,
+        string module,
         CancellationToken cancellationToken)
     {
+        if (startDate.HasValue && endDate.HasValue && startDate.Value > endDate.Value)
+        {
+            return BadRequest(new { message = ProviderMessages.InvalidDateRange });
+        }
+
         var clinicianId = _currentUser.ClinicianId;
+        if (!clinicianId.HasValue) return Unauthorized();
 
-        if (!clinicianId.HasValue)
-        {
-            return Unauthorized();
-        }
+        var model = new PatientSessionsIndexViewModel();
+        await model.PrepareData(
+            _patients, _sessions, _patientAccess, clinicianId.Value,
+            patientCode, platform, startDate, endDate, module, cancellationToken);
 
-        if (startDate.HasValue && endDate.HasValue &&
-            startDate.Value > endDate.Value)
-        {
-            return BadRequest("Start date cannot be after end date.");
-        }
-
-        var viewModel = new PatientSessionsIndexViewModel();
-
-        await viewModel.PrepareData(
-            _patients,
-            _sessions,
-            _patientAccess,
-            clinicianId.Value,
-            patientCode,
-            platform,
-            startDate,
-            endDate,
-            module,
-            cancellationToken);
-
-        return Json(viewModel);
+        return Json(model);
     }
 }
+
+

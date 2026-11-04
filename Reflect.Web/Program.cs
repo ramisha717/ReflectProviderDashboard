@@ -1,15 +1,18 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Reflect.Domain.Repositories;
 using Reflect.Domain.Services;
 using Reflect.Web.Models.ViewModels.Reports;
 using Reflect.Web.Repositories;
 using Reflect.Web.Services;
+using Reflect.Web.Standins;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+});
 
 builder.Services.AddSingleton<IPatientRepository, InMemoryPatientRepository>();
 builder.Services.AddSingleton<IPatientSessionRepository, InMemoryPatientSessionRepository>();
@@ -55,8 +58,27 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddSingleton<IPatientAccessRepository, InMemoryPatientAccessRepository>();
 builder.Services.AddScoped<IPatientAuthorizationService, PatientAuthorizationService>();
+builder.Services.AddSingleton<AttentionAcknowledgementService>();
 
 var app = builder.Build();
+
+// Content Security Policy required by the Reflect XR technical specification.
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["Content-Security-Policy"] =
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline'; " +
+        "style-src 'self' 'unsafe-inline'; " +
+        "img-src 'self' data:; " +
+        "font-src 'self' data:; " +
+        "connect-src 'self' wss:; " +
+        "frame-ancestors 'none'; " +
+        "base-uri 'self'; " +
+        "object-src 'none'; " +
+        "form-action 'self';";
+
+    await next();
+});
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -68,22 +90,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// Auto-authenticate Demo Clinician for seamless local testing
-app.Use(async (context, next) =>
-{
-    if (context.User?.Identity?.IsAuthenticated != true)
-    {
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, "20000000-0000-0000-0000-000000000001"),
-            new(ClaimTypes.Role, "Clinician"),
-            new(ClaimTypes.Name, "Dr. Sarah Mitchell")
-        };
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        context.User = new ClaimsPrincipal(identity);
-    }
-    await next();
-});
+app.UseDemoClinicianAuthentication();
 
 app.UseAuthentication();
 app.UseAuthorization();

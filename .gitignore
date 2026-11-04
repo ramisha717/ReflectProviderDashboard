@@ -489,3 +489,9 @@ test-report.pdf
 Reflect.Web/.aspnet/
 Reflect.Web/.local/
 Library/
+.local/
+build-warnings.txt
+**/bin/
+**/obj/
+.env
+.env.*

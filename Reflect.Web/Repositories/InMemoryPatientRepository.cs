@@ -48,13 +48,13 @@ public class InMemoryPatientRepository : IPatientRepository
     return Task.FromResult(results);
   }
 
-  public Task<Patient?> GetByIdAsync(
+  public Task<Patient> GetByIdAsync(
     Guid patientId,
     CancellationToken cancellationToken)
   {
     cancellationToken.ThrowIfCancellationRequested();
 
-    Patient? result = _patients
+    Patient result = _patients
       .Where(patient => !patient.IsDeleted)
       .FirstOrDefault(patient => patient.Id == patientId);
 
@@ -71,12 +71,12 @@ public class InMemoryPatientRepository : IPatientRepository
 
     lock (_patients)
     {
-      Patient? patient = _patients.FirstOrDefault(
+      Patient patient = _patients.FirstOrDefault(
         p => p.Id == patientId && !p.IsDeleted);
 
       if (patient is null)
       {
-        throw new KeyNotFoundException("Patient not found.");
+        throw new EntityNotFoundException("Patient not found.");
       }
 
       patient.ReviewStatus = status;
@@ -84,6 +84,26 @@ public class InMemoryPatientRepository : IPatientRepository
 
     return Task.CompletedTask;
   }
+
+  public Task AddAsync(
+  Patient patient,
+  CancellationToken cancellationToken)
+{
+  cancellationToken.ThrowIfCancellationRequested();
+
+  lock (_patients)
+  {
+    if (_patients.Any(p => p.Id == patient.Id ||
+      p.PatientCode == patient.PatientCode))
+    {
+        throw new InvalidOperationException("A patient with this ID or code already exists.");
+    }
+
+      _patients.Add(patient);
+  }
+
+  return Task.CompletedTask;
+}
 
 
 }

@@ -1,0 +1,74 @@
+.clinical-response-page {
+  max-width: 76rem;
+}
+
+.clinical-id-input {
+  max-width: 32rem;
+  min-width: 12rem;
+  flex: 1 1 16rem;
+}
+
+.clinical-table {
+  width: 100%;
+}
+
+.clinical-table td {
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.clinical-table td:nth-child(3) {
+  min-width: 15rem;
+  max-width: 32rem;
+  white-space: pre-wrap;
+}
+
+.clinical-response-page :focus-visible {
+  outline: 0.15rem solid var(--primary-navy, #243b67);
+  outline-offset: 0.15rem;
+}
+
+@media (max-width: 48rem) {
+  .clinical-table thead {
+    display: none;
+  }
+
+  .clinical-table,
+  .clinical-table tbody,
+  .clinical-table tr,
+  .clinical-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .clinical-table tr {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border-light, #ddd);
+  }
+
+  .clinical-table td {
+    padding: 0.25rem 0;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .clinical-table td:nth-child(1)::before {
+    content: 'Observed (ET): ';
+    font-weight: 700;
+  }
+
+  .clinical-table td:nth-child(2)::before {
+    content: 'Type: ';
+    font-weight: 700;
+  }
+
+  .clinical-table td:nth-child(3)::before {
+    content: 'Notes: ';
+    font-weight: 700;
+  }
+
+  .clinical-table td:nth-child(4)::before {
+    content: 'Clinician ID: ';
+    font-weight: 700;
+  }
+}

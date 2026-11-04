@@ -1,9 +1,13 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Reflect.Domain.Repositories;
 using Reflect.Web.Models.ViewModels.Patients.Index;
 using Reflect.Web.Models.ViewModels.Patients.Profile;
+using Reflect.Web.Models.ViewModels.Patients.SessionDetails;
 using Microsoft.AspNetCore.Authorization;
 using Reflect.Domain.Services;
+using Reflect.Domain.Entities;
+using Reflect.Web.Messages;
 
 namespace Reflect.Web.Areas.Provider.Controllers;
 
@@ -38,25 +42,36 @@ public class PatientsController : Controller
   }
 
   [HttpGet]
-  public IActionResult SinceLastVisit(Guid? patientId)
+  public async Task<IActionResult> SessionDetails(
+    Guid sessionId, Guid patientId, CancellationToken cancellationToken)
   {
-    ViewBag.PatientId = patientId;
-    return View("SinceLastVisit");
+    if (sessionId == Guid.Empty || patientId == Guid.Empty) return NotFound();
+    if (!await _authorization.CanAccessPatientAsync(patientId, cancellationToken))
+      return Forbid();
+
+    var model = new PatientSessionDetailsViewModel();
+    if (!await model.PrepareData(sessionId, patientId, _patients, _sessions, cancellationToken))
+      return NotFound();
+
+    return View("SessionDetails", model);
   }
 
-  [HttpGet]
-  public IActionResult ClinicalNotes(Guid? patientId)
+  [HttpPost]
+  [ValidateAntiForgeryToken]
+  public async Task<IActionResult> FlagSessionForReview(
+    Guid sessionId, Guid patientId, CancellationToken cancellationToken)
   {
-    ViewBag.PatientId = patientId;
-    return View("ClinicalNotes");
-  }
+    if (sessionId == Guid.Empty || patientId == Guid.Empty) return NotFound();
+    if (!await _authorization.CanAccessPatientAsync(patientId, cancellationToken))
+      return Forbid();
 
-  [HttpGet]
-  public IActionResult SessionDetails(string? sessionId, Guid? patientId)
-  {
-    ViewBag.SessionId = sessionId ?? "S-008117";
-    ViewBag.PatientId = patientId;
-    return View("SessionDetails");
+    var model = new PatientSessionDetailsViewModel();
+    if (!await model.PrepareData(sessionId, patientId, _patients, _sessions, cancellationToken))
+      return NotFound();
+
+    await _patients.SetReviewStatusAsync(patientId, "Needs Review", cancellationToken);
+    TempData["SessionReviewMessage"] = ProviderMessages.PatientFlaggedForReview;
+    return RedirectToAction(nameof(SessionDetails), new { sessionId, patientId });
   }
 
   public async Task<IActionResult> Index(CancellationToken cancellationToken)
@@ -101,5 +116,59 @@ public class PatientsController : Controller
     await viewModel.PrepareData(patientId, _patients, _sessions, cancellationToken);
 
     return Json(viewModel);
+  }
+
+  [HttpPost]
+  [ValidateAntiForgeryToken]
+  public async Task<IActionResult> AddDemo(
+    [FromBody] AddDemoPatientRequest request,
+    CancellationToken cancellationToken)
+  {
+    var clinicianId = _currentUser.ClinicianId;
+
+    if (!clinicianId.HasValue)
+        return Unauthorized();
+
+    var patientCode = request.PatientCode?.Trim();
+
+    if (string.IsNullOrWhiteSpace(patientCode))
+        return BadRequest(ProviderMessages.PatientCodeRequired);
+
+    if (patientCode.Length > 100)
+        return BadRequest(ProviderMessages.PatientCodeTooLong);
+
+    if (request.ReviewStatus != "Reviewed" &&
+        request.ReviewStatus != "Needs Review")
+        return BadRequest(ProviderMessages.InvalidReviewStatus);
+
+    var patient = new Patient
+    {
+        Id = Guid.NewGuid(),
+        PatientCode = patientCode,
+        ReviewStatus = request.ReviewStatus,
+        IsActive = false
+    };
+
+    try
+    {
+        await _patients.AddAsync(patient, cancellationToken);
+    }
+    catch (InvalidOperationException)
+    {
+        return Conflict(ProviderMessages.DuplicatePatientCode);
+    }
+
+    await _patientAccess.GrantAccessAsync(
+        clinicianId.Value,
+        patient.Id,
+        cancellationToken);
+
+    return Ok(new { patientId = patient.Id });
+  }
+
+  public sealed class AddDemoPatientRequest
+  {
+    public string PatientCode { get; set; }  = string.Empty;
+    public string ReviewStatus { get; set; } = string.Empty;
   }
 }
