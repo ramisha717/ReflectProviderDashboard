@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Reflect.Domain/Reflect.Domain.csproj" />
+  <Project Path="Reflect.Tests/Reflect.Tests.csproj" />
   <Project Path="Reflect.Web/Reflect.Web.csproj" />
 </Solution>

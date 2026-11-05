@@ -495,3 +495,55 @@ build-warnings.txt
 **/obj/
 .env
 .env.*
+
+
+# .NET build outputs
+**/bin/
+**/obj/
+**/TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Python environments and local tooling
+.venv/
+.local/
+dotnet/
+Library/
+--project/
+run/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+appsettings.Development.local.json
+**/secrets.json
+*.pfx
+*.p12
+*.key
+*.pem
+
+# Generated reports and temporary files
+test-report.csv
+test-report.pdf
+*.tmp
+*.log
+
+# Local diagnostic files
+build-warnings.txt
+cookies.txt
+

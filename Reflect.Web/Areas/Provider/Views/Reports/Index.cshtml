@@ -8,6 +8,7 @@
      data-patients-url="@Url.Action("Index", "Patients", new { area = "Provider", format = "json" })"
      data-preview-url="@Url.Action("Preview", "Reports", new { area = "Provider" })"
      data-export-url="@Url.Action("Export", "Reports", new { area = "Provider" })"
+     data-verify-url="@Url.Action("VerifySignedPackage", "Reports", new { area = "Provider" })"
      data-recent-url="@Url.Action("RecentExports", "Reports", new { area = "Provider" })">
     @Html.AntiForgeryToken()
     <div class="reports-notice"><span class="reports-prototype">PROTOTYPE · SYNTHETIC DATA</span><span>UX prototype only — not for clinical use.</span></div>
@@ -41,12 +42,22 @@
                 <button type="button" id="reports-preview-button" class="reports-primary">Generate preview</button>
                 <button type="button" id="reports-pdf" class="reports-secondary" disabled>Export PDF</button>
                 <button type="button" id="reports-csv" class="reports-secondary" disabled>Export CSV</button>
+                <button type="button" id="reports-signed-pdf" class="reports-secondary" disabled>Signed PDF ZIP</button>
+                <button type="button" id="reports-signed-csv" class="reports-secondary" disabled>Signed CSV ZIP</button>
             </div>
         </section>
     </div>
     <section class="reports-card reports-preview" id="reports-preview-panel" aria-labelledby="reports-preview-title" hidden>
         <h2 id="reports-preview-title">Report preview</h2>
         <p id="reports-preview-meta"></p><div id="reports-preview-sections"></div>
+    </section>
+    <section class="reports-card" aria-labelledby="reports-verify-title">
+        <h2 id="reports-verify-title">Verify signed report</h2>
+        <p>Upload a signed report ZIP. Verification uses the server's trusted signing key, not the public key inside the ZIP.</p>
+        <label for="reports-signed-package">Signed report ZIP</label>
+        <input id="reports-signed-package" type="file" accept=".zip,application/zip" />
+        <button type="button" id="reports-verify" class="reports-secondary">Verify signature</button>
+        <p id="reports-verify-result" role="status" aria-live="polite"></p>
     </section>
     <section class="reports-card reports-recent" aria-labelledby="reports-recent-title">
         <h2 id="reports-recent-title">Recent exports</h2>

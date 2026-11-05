@@ -22,6 +22,8 @@ builder.Services.AddSingleton<ISummaryGenerationService, TemplateSummaryGenerati
 builder.Services.AddSingleton<IReportExportRepository, InMemoryReportExportRepository>();
 builder.Services.AddScoped<IReportGenerationService, ReportGenerationService>();
 builder.Services.AddScoped<IReportFileExportService, ReportFileExportService>();
+builder.Services.AddSingleton<IReportSigningService, ReportSigningService>();
+builder.Services.AddScoped<ISignedReportService, SignedReportService>();
 builder.Services.AddScoped<ReportsViewModel>();
 
 builder.Services.AddHttpContextAccessor();
