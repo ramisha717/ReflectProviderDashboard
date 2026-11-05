@@ -18,6 +18,7 @@
     {
         <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     }
+    <link rel="stylesheet" href="~/standins/theme.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -230,7 +231,8 @@
     {
         <script src="~/assets/libs/chartjs/chart.umd.js" asp-append-version="true"></script>
     }
-    <script src="~/js/provider.js" asp-append-version="true"></script>
+    <script src="~/standins/provider-shell.js" asp-append-version="true"></script>
+    <script src="~/standins/shared-services.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

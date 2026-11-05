@@ -1186,31 +1186,7 @@ body {
     }
 }
 
-/* Reflect XR theme tokens required by the technical specification */
-:root {
-    --primary-rgb: 255, 130, 130;
-    --danger-rgb: 255, 130, 130;
-    --success-rgb: 31, 48, 94;
-    --warning-rgb: 232, 163, 61;
-    --info-rgb: 88, 111, 138;
-    --default-text-color: #1F305E;
-    --text-muted: #586F8A;
-    --custom-white: #F5F6F8;
-    --default-border: #D8DCE1;
-    --bootstrap-card-border: rgb(var(--info-rgb));
-    --header-bg: #FAFAFB;
-}
-
-[data-theme-mode="dark"] {
-    --success-rgb: 154, 168, 218;
-    --warning-rgb: 240, 185, 104;
-    --info-rgb: 141, 163, 194;
-    --default-text-color: rgba(255, 255, 255, 0.85);
-    --text-muted: rgba(255, 255, 255, 0.55);
-    --custom-white: #243566;
-    --default-border: rgba(255, 255, 255, 0.12);
-    --header-bg: #1F305E;
-}
+/* Demo theme tokens are provided by wwwroot/standins/theme.css. */
 
 /* Keep Overview table text readable in dark mode */
 [data-theme-mode="dark"] .attention-table,
