@@ -8,8 +8,8 @@
     <title>@ViewData["Title"] - Reflect Provider Dashboard</title>
     
     <!-- Bootstrap CSS & Icons -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/remixicon/fonts/remixicon.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/libs/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/assets/libs/remixicon/fonts/remixicon.css" asp-append-version="true" />
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
     <!-- Provider Theme CSS -->
@@ -224,11 +224,11 @@
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @if (ViewData["ProviderScreenOwnsChartJs"] is not true)
     {
-        <script src="~/lib/chartjs/chart.umd.js" asp-append-version="true"></script>
+        <script src="~/assets/libs/chartjs/chart.umd.js" asp-append-version="true"></script>
     }
     <script src="~/js/provider.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
