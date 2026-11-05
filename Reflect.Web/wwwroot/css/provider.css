@@ -1306,7 +1306,9 @@ body {
 }
 
 /* Required color-blind friendly mode */
-html[data-a11y-colorblind="true"] body {
+/* Filter the document root, not body: a filtered body becomes the
+   containing block for the fixed-position patient drawer. */
+html[data-a11y-colorblind="true"] {
     filter: saturate(0.4);
 }
 
@@ -1601,4 +1603,18 @@ html {
     .provider-header .demo-badge {
         display: none !important;
     }
+}
+
+/* Patients: constrain the page at tablet widths; the table alone scrolls. */
+body:has(#patients-config) .provider-main,
+body:has(#patients-config) .provider-content,
+body:has(#patients-config) .table-card {
+    min-width: 0;
+    max-width: 100%;
+}
+
+body:has(#patients-config) .table-card>.table-responsive {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }

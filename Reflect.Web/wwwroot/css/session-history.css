@@ -271,3 +271,17 @@
     grid-template-columns: auto minmax(0, 1fr);
   }
 }
+
+/* Session History: keep wide data tables inside their own scroll region. */
+body:has(#session-history-page) .provider-main,
+body:has(#session-history-page) .provider-content,
+.session-history-page,
+.session-history-table-card {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.session-history-table-scroll {
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+}

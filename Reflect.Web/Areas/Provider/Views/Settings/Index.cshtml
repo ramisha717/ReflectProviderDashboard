@@ -23,19 +23,25 @@
 </div>
 
 <!-- Settings Navigation Tabs -->
-<ul class="nav nav-pills mb-4 gap-2" id="settingsTabs" role="tablist">
+<ul class="nav nav-tabs mb-4 gap-2" id="settingsTabs" role="tablist">
     <li class="nav-item" role="presentation">
-        <button class="pill-btn active" id="tab-privacy" data-bs-toggle="pill" data-bs-target="#content-privacy" type="button" role="tab">
+        <button class="nav-link active" id="tab-privacy"
+                data-bs-toggle="tab" data-bs-target="#content-privacy"
+                type="button" role="tab" aria-controls="content-privacy" aria-selected="true">
             <i class="ri-shield-keyhole-line me-1"></i> Privacy & Access
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="pill-btn" id="tab-integrations" data-bs-toggle="pill" data-bs-target="#content-integrations" type="button" role="tab">
+        <button class="nav-link" id="tab-integrations"
+                data-bs-toggle="tab" data-bs-target="#content-integrations"
+                type="button" role="tab" aria-controls="content-integrations" aria-selected="false">
             <i class="ri-node-tree me-1"></i> EHR Integrations
         </button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="pill-btn" id="tab-audit" data-bs-toggle="pill" data-bs-target="#content-audit" type="button" role="tab">
+        <button class="nav-link" id="tab-audit"
+                data-bs-toggle="tab" data-bs-target="#content-audit"
+                type="button" role="tab" aria-controls="content-audit" aria-selected="false">
             <i class="ri-file-list-3-line me-1"></i> Audit Trail
         </button>
     </li>
