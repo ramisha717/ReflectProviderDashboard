@@ -58,6 +58,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<ICurrentClinicianUserService, CurrentClinicianUserService>();
 builder.Services.AddSingleton<IPatientAccessRepository, InMemoryPatientAccessRepository>();
 builder.Services.AddScoped<IPatientAuthorizationService, PatientAuthorizationService>();
 builder.Services.AddSingleton<AttentionAcknowledgementService>();

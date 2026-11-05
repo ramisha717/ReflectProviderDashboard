@@ -14,13 +14,13 @@ public class PatientSessionHistoryController : Controller
 {
     private readonly IPatientRepository _patients;
     private readonly IPatientSessionRepository _sessions;
-    private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentClinicianUserService _currentUser;
     private readonly IPatientAccessRepository _patientAccess;
 
     public PatientSessionHistoryController(
         IPatientRepository patients,
         IPatientSessionRepository sessions,
-        ICurrentUserService currentUser,
+        ICurrentClinicianUserService currentUser,
         IPatientAccessRepository patientAccess)
     {
         _patients = patients;
@@ -60,5 +60,7 @@ public class PatientSessionHistoryController : Controller
         return Json(model);
     }
 }
+
+
 
 

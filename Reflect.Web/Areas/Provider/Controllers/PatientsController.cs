@@ -17,14 +17,14 @@ public class PatientsController : Controller
 {
   private readonly IPatientRepository _patients;
   private readonly IPatientSessionRepository _sessions;
-  private readonly ICurrentUserService _currentUser;
+  private readonly ICurrentClinicianUserService _currentUser;
   private readonly IPatientAccessRepository _patientAccess;
   private readonly IPatientAuthorizationService _authorization;
 
   public PatientsController (
   IPatientRepository patients,
   IPatientSessionRepository sessions,
-  ICurrentUserService currentUser,
+  ICurrentClinicianUserService currentUser,
   IPatientAccessRepository patientAccess,
   IPatientAuthorizationService authorization)
   {
@@ -172,3 +172,4 @@ public class PatientsController : Controller
     public string ReviewStatus { get; set; } = string.Empty;
   }
 }
+

@@ -7,7 +7,4 @@ public interface ICurrentUserService
     string Email { get; }
     bool IsAuthenticated { get; }
     bool IsInRole(string role);
-
-    // Existing dashboard-specific property
-    Guid? ClinicianId { get; }
 }

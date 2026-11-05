@@ -6,11 +6,11 @@ namespace Reflect.Web.Services;
 
 public class PatientAuthorizationService : IPatientAuthorizationService
 {
-    private readonly ICurrentUserService _currentUserService;
+    private readonly ICurrentClinicianUserService _currentUserService;
     private readonly IPatientAccessRepository _patientAccessRepository;
 
     public PatientAuthorizationService(
-        ICurrentUserService currentUserService,
+        ICurrentClinicianUserService currentUserService,
         IPatientAccessRepository patientAccessRepository)
     {
         _currentUserService = currentUserService;

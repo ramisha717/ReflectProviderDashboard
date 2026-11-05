@@ -113,13 +113,9 @@ public sealed class AccessControlTests
         }
     }
 
-    private sealed class FakeUser(Guid? clinicianId) : ICurrentUserService
+    private sealed class FakeUser(Guid? clinicianId) : ICurrentClinicianUserService
     {
         public Guid? ClinicianId => clinicianId;
-        public Guid? UserId => clinicianId;
-        public string EntraObjectId => "";
-        public string Email => "";
-        public bool IsAuthenticated => clinicianId.HasValue;
-        public bool IsInRole(string role) => role == "Clinician" && clinicianId.HasValue;
     }
 }
+

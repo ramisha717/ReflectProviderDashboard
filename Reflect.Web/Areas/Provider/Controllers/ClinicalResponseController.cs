@@ -16,13 +16,13 @@ public class ClinicalResponseController : Controller
     private readonly IPatientRepository _patients;
     private readonly IClinicalObservationRepository _observations;
     private readonly IPatientAuthorizationService _authorization;
-    private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentClinicianUserService _currentUser;
 
     public ClinicalResponseController(
         IPatientRepository patients,
         IClinicalObservationRepository observations,
         IPatientAuthorizationService authorization,
-        ICurrentUserService currentUser)
+        ICurrentClinicianUserService currentUser)
     {
         _patients = patients;
         _observations = observations;

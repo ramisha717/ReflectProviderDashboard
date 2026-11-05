@@ -20,7 +20,7 @@ public class ReportsController : Controller
     private readonly ISignedReportService _signedReports;
     private readonly IReportFileExportService _fileExporter;
     private readonly IReportExportRepository _exportRepository;
-    private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentClinicianUserService _currentUser;
     private readonly IPatientAuthorizationService _authorization;
 
     public ReportsController(
@@ -28,7 +28,7 @@ public class ReportsController : Controller
         ISignedReportService signedReports,
         IReportFileExportService fileExporter,
         IReportExportRepository exportRepository,
-        ICurrentUserService currentUser,
+        ICurrentClinicianUserService currentUser,
         IPatientAuthorizationService authorization)
     {
         _reports = reports;

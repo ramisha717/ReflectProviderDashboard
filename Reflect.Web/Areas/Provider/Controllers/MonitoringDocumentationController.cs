@@ -18,7 +18,7 @@ public class MonitoringDocumentationController : Controller
     private readonly IClinicalObservationRepository _observations;
     private readonly IMonitoringDraftRepository _drafts;
     private readonly ISummaryGenerationService _summaryService;
-    private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentClinicianUserService _currentUser;
     private readonly IPatientAuthorizationService _authorization;
 
     public MonitoringDocumentationController(
@@ -27,7 +27,7 @@ public class MonitoringDocumentationController : Controller
         IClinicalObservationRepository observations,
         IMonitoringDraftRepository drafts,
         ISummaryGenerationService summaryService,
-        ICurrentUserService currentUser,
+        ICurrentClinicianUserService currentUser,
         IPatientAuthorizationService authorization)
     {
         _patients = patients;

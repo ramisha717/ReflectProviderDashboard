@@ -5,9 +5,6 @@ namespace Reflect.Web.Services;
 
 public class CurrentUserService : ICurrentUserService
 {
-    private static readonly Guid DemoClinicianId =
-        Guid.Parse("20000000-0000-0000-0000-000000000001");
-
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
@@ -39,5 +36,4 @@ public class CurrentUserService : ICurrentUserService
     public bool IsInRole(string role) =>
         User?.IsInRole(role) == true;
 
-    public Guid? ClinicianId => UserId ?? DemoClinicianId;
 }

@@ -16,13 +16,13 @@ public class ProgressController : Controller
     private readonly IPatientSessionRepository _sessionsRepo;
     private readonly IPatientRepository _patientsRepo;
     private readonly IPatientAccessRepository _patientAccess;
-    private readonly ICurrentUserService _currentUser;
+    private readonly ICurrentClinicianUserService _currentUser;
 
     public ProgressController(
         IPatientSessionRepository sessionsRepo,
         IPatientRepository patientsRepo,
         IPatientAccessRepository patientAccess,
-        ICurrentUserService currentUser)
+        ICurrentClinicianUserService currentUser)
     {
         _sessionsRepo = sessionsRepo;
         _patientsRepo = patientsRepo;

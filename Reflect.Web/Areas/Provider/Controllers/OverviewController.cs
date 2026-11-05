@@ -15,14 +15,14 @@ public class OverviewController : Controller
 {
   private readonly IPatientRepository _patients;
   private readonly IPatientSessionRepository _sessions;
-  private readonly ICurrentUserService _currentUser;
+  private readonly ICurrentClinicianUserService _currentUser;
   private readonly IPatientAccessRepository _patientAccess;
   private readonly AttentionAcknowledgementService _acknowledgements;
 
   public OverviewController(
     IPatientRepository patients,
     IPatientSessionRepository sessions,
-    ICurrentUserService currentUser,
+    ICurrentClinicianUserService currentUser,
     IPatientAccessRepository patientAccess,
     AttentionAcknowledgementService acknowledgements)
   {
