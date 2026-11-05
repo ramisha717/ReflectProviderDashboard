@@ -395,7 +395,8 @@ body {
    HEADER
    ============================================================ */
 .provider-header {
-    height: var(--header-height);
+    height: auto;
+    min-height: var(--header-height);
     background: var(--bg-header);
     border-bottom: 1px solid var(--border-light);
     display: flex;
@@ -1331,7 +1332,7 @@ body {
 }
 
 /* Required color-blind friendly mode */
-html[data-a11y-colorblind="true"] {
+html[data-a11y-colorblind="true"] body {
     filter: saturate(0.4);
 }
 
