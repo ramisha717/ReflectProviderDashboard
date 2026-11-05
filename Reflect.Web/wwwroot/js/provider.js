@@ -424,7 +424,7 @@
                 position: 'fixed',
                 inset: '0',
                 zIndex: '2100',
-                background: 'var(--bg-body, rgba(0,0,0,0.85))',
+                background: 'var(--header-bg)',
                 opacity: '0.96',
                 display: 'flex',
                 alignItems: 'center',
@@ -754,9 +754,4 @@
     });
 
 })(window);
-
-
-
-
-
 

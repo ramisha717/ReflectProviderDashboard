@@ -20,7 +20,7 @@
 .prototype-notice-badge {
   display: inline-flex;
   align-items: center;
-  background: #f9e9cf;
+  background: rgba(var(--warning-rgb), 0.15);
   color: var(--primary-navy);
   border-radius: 2rem;
   padding: .35rem .85rem;
@@ -101,7 +101,7 @@
   border: 0;
   border-radius: .5rem;
   background: var(--primary-navy);
-  color: #fff;
+  color: var(--header-bg);
   font-size: .8125rem;
   font-weight: 700;
   white-space: nowrap;
@@ -175,7 +175,7 @@
 }
 
 .session-history-error {
-  color: #a52222;
+  color: rgb(var(--danger-rgb));
 }
 
 .session-history-preview {

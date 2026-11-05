@@ -1,40 +1,23 @@
 .reports-page {
-  --reports-text: var(--primary-navy, #203361);
-  --reports-muted: var(--text-muted, #617995);
-  --reports-surface: var(--card-bg, #f8f9fc);
-  --reports-border: #c6d0dd;
-  --reports-control-bg: #ffffff;
-  --reports-control-text: #203361;
-  --reports-secondary-bg: transparent;
-  --reports-secondary-text: #203361;
-  --reports-divider: #d6dfe9;
-  --reports-message-bg: #eef4fc;
-  --reports-message-border: #b8c9de;
-  --reports-primary-bg: #203361;
-  --reports-primary-hover: #344e83;
-  --reports-primary-text: #ffffff;
+  --reports-text: var(--default-text-color);
+  --reports-muted: var(--text-muted);
+  --reports-surface: var(--custom-white);
+  --reports-border: var(--default-border);
+  --reports-control-bg: var(--custom-white);
+  --reports-control-text: var(--default-text-color);
+  --reports-secondary-bg: var(--custom-white);
+  --reports-secondary-text: var(--default-text-color);
+  --reports-divider: var(--default-border);
+  --reports-message-bg: rgba(var(--info-rgb), 0.1);
+  --reports-message-border: var(--default-border);
+  --reports-primary-bg: rgb(var(--success-rgb));
+  --reports-primary-hover: rgb(var(--info-rgb));
+  --reports-primary-text: var(--header-bg);
 
   color: var(--reports-text);
 }
 
 /* Dark theme overrides */
-[data-theme-mode="dark"] .reports-page {
-  --reports-text: #edf2ff;
-  --reports-muted: #b5c5de;
-  --reports-surface: #263b66;
-  --reports-border: #50658c;
-  --reports-control-bg: #1b2d50;
-  --reports-control-text: #f1f5ff;
-  --reports-secondary-bg: #263b66;
-  --reports-secondary-text: #edf2ff;
-  --reports-divider: #4c6086;
-  --reports-message-bg: #2a416e;
-  --reports-message-border: #5b75a4;
-  --reports-primary-bg: #486db0;
-  --reports-primary-hover: #5c80c3;
-  --reports-primary-text: #ffffff;
-}
-
 .reports-notice {
   display: flex;
   align-items: center;
@@ -46,12 +29,12 @@
 }
 
 .reports-prototype {
-  background: #fbead0;
+  background: rgba(var(--warning-rgb), 0.15);
   border-radius: 2rem;
   padding: .45rem .8rem;
   font-size: .68rem;
   font-weight: 700;
-  color: #203361;
+  color: var(--default-text-color);
 }
 
 .reports-heading {
@@ -309,7 +292,7 @@
 .reports-page button:focus-visible,
 .reports-page select:focus-visible,
 .reports-page input:focus-visible {
-  outline: 3px solid #7da7f0;
+  outline: 3px solid rgb(var(--info-rgb));
   outline-offset: 2px;
 }
 

@@ -19,11 +19,11 @@ const OverviewIndexController = {
     if (!labels.length) return;
 
     const css = getComputedStyle(document.documentElement);
-    const themeColor = (name, fallback) =>
-      css.getPropertyValue(name).trim() || fallback;
+    const themeColor = (name) => css.getPropertyValue(name).trim();
+    const themeRgb = (name) => `rgb(${themeColor(name)})`;
 
-    const textColor = themeColor('--text-muted', '#8B90A0');
-    const gridColor = themeColor('--border-color', '#F0F1F5');
+    const textColor = themeColor('--text-muted');
+    const gridColor = themeColor('--default-border');
 
     new Chart(canvas.getContext('2d'), {
       type: 'bar',
@@ -33,7 +33,7 @@ const OverviewIndexController = {
           {
             label: 'Reflect XR',
             data: xr,
-            backgroundColor: themeColor('--primary-navy', '#1F305E'),
+            backgroundColor: themeRgb('--success-rgb'),
             borderRadius: 4,
             barPercentage: 0.6,
             categoryPercentage: 0.7
@@ -41,7 +41,7 @@ const OverviewIndexController = {
           {
             label: 'Reflect Mobile',
             data: mobile,
-            backgroundColor: themeColor('--accent-coral', '#E87B7B'),
+            backgroundColor: themeRgb('--primary-rgb'),
             borderRadius: 4,
             barPercentage: 0.6,
             categoryPercentage: 0.7

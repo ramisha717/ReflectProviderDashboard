@@ -26,7 +26,7 @@
     function showMessage(text, error) {
       message.hidden = !text;
       message.textContent = text || '';
-      message.style.borderColor = error ? '#b91c1c' : '#b8c9de';
+      message.style.borderColor = error ? 'rgb(var(--danger-rgb))' : 'var(--default-border)';
     }
 
     function textNode(tag, content, className) {

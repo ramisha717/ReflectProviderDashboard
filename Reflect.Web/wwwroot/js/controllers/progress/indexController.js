@@ -44,17 +44,13 @@
 
       const styles = getComputedStyle(document.documentElement);
 
-      const navy = styles.getPropertyValue('--primary-navy').trim()
-        || '#1F305E';
+      const navy = `rgb(${styles.getPropertyValue('--success-rgb').trim()})`;
 
-      const coral = styles.getPropertyValue('--accent-coral').trim()
-        || '#E87B7B';
+      const coral = `rgb(${styles.getPropertyValue('--primary-rgb').trim()})`;
 
-      const text = styles.getPropertyValue('--text-body').trim()
-        || '#666666';
+      const text = styles.getPropertyValue('--default-text-color').trim();
 
-      const grid = styles.getPropertyValue('--border-light').trim()
-        || '#E5E7EB';
+      const grid = styles.getPropertyValue('--default-border').trim();
 
       const weeklyCanvas =
         document.getElementById('progress-weekly-chart');
