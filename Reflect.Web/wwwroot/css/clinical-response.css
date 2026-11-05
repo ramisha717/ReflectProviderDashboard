@@ -24,7 +24,7 @@
 }
 
 .clinical-response-page :focus-visible {
-  outline: 0.15rem solid var(--primary-navy, #243b67);
+  outline: 0.15rem solid rgb(var(--success-rgb));
   outline-offset: 0.15rem;
 }
 
@@ -43,7 +43,7 @@
 
   .clinical-table tr {
     padding: 0.75rem;
-    border-bottom: 1px solid var(--border-light, #ddd);
+    border-bottom: 1px solid var(--default-border);
   }
 
   .clinical-table td {
@@ -71,4 +71,38 @@
     content: 'Clinician ID: ';
     font-weight: 700;
   }
+}
+
+/* Keep the Add Observation dialog readable in every supported theme. */
+#clinical-create-modal .modal-content {
+  background-color: var(--custom-white);
+  color: var(--default-text-color);
+  border-color: var(--default-border);
+}
+
+#clinical-create-modal .modal-header,
+#clinical-create-modal .modal-footer {
+  border-color: var(--default-border);
+}
+
+#clinical-create-modal .modal-title,
+#clinical-create-modal .form-label,
+#clinical-create-modal .modal-body p {
+  color: var(--default-text-color);
+}
+
+#clinical-create-modal .form-control {
+  background-color: var(--custom-white);
+  color: var(--default-text-color);
+  border-color: var(--default-border);
+}
+
+#clinical-create-modal .form-control:focus {
+  background-color: var(--custom-white);
+  color: var(--default-text-color);
+  border-color: rgb(var(--info-rgb));
+}
+
+[data-theme-mode="dark"] #clinical-create-modal .btn-close {
+  filter: invert(1);
 }

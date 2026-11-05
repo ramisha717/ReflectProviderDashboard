@@ -16,8 +16,8 @@
 .platform-comparison-notice strong {
   border-radius: 2rem;
   padding: .35rem .8rem;
-  background: #f8e8ce;
-  color: #1f325d;
+  background: var(--custom-white);
+  color: var(--default-text-color);
   font-size: .73rem
 }
 
@@ -31,7 +31,7 @@
 
 .platform-comparison-heading h1 {
   font-size: 1.6rem;
-  color: var(--primary-navy);
+  color: var(--default-text-color);
   font-weight: 700;
   margin: 0
 }
@@ -64,8 +64,8 @@
 }
 
 .platform-comparison-card {
-  border: 1px solid var(--border-color, #cbd5e1);
-  background: var(--card-bg, #fff);
+  border: 1px solid var(--default-border);
+  background: var(--custom-white);
   border-radius: .75rem;
   padding: 1.2rem;
   min-width: 0
@@ -74,16 +74,16 @@
 .platform-comparison-card>h2 {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--primary-navy);
+  color: var(--default-text-color);
   margin: 0 0 1rem
 }
 
 .platform-comparison-kpi {
-  border-left: .25rem solid var(--primary-navy)
+  border-left: .25rem solid rgb(var(--success-rgb))
 }
 
 .platform-comparison-kpi.mobile {
-  border-left-color: var(--accent-coral)
+  border-left-color: rgb(var(--primary-rgb))
 }
 
 .platform-comparison-kpi h2 {
@@ -94,7 +94,7 @@
 
 .platform-comparison-kpi p {
   font-size: 1.65rem;
-  color: var(--primary-navy);
+  color: var(--default-text-color);
   font-weight: 700;
   margin: .45rem 0
 }
@@ -117,7 +117,7 @@
   gap: .5rem;
   height: 15rem;
   padding: .5rem 0;
-  border-bottom: 1px solid var(--border-color, #d4dce5)
+  border-bottom: 1px solid var(--default-border)
 }
 
 .platform-comparison-week {
@@ -146,11 +146,11 @@
   max-width: 2rem;
   min-height: 0;
   border-radius: .2rem .2rem 0 0;
-  background: var(--primary-navy)
+  background: rgb(var(--success-rgb))
 }
 
 .platform-comparison-bar.mobile {
-  background: var(--accent-coral)
+  background: rgb(var(--primary-rgb))
 }
 
 .platform-comparison-legend {
@@ -167,11 +167,11 @@
   height: .65rem;
   margin-right: .4rem;
   border-radius: 50%;
-  background: var(--primary-navy)
+  background: rgb(var(--success-rgb))
 }
 
 .platform-comparison-legend span.mobile:before {
-  background: var(--accent-coral)
+  background: rgb(var(--primary-rgb))
 }
 
 .platform-comparison-data {
@@ -195,7 +195,7 @@
 
 .platform-comparison-context p {
   font-size: 1.05rem;
-  color: var(--primary-navy)
+  color: rgb(var(--success-rgb))
 }
 
 .platform-comparison-context li {
@@ -297,4 +297,34 @@
   .platform-comparison-bars {
     gap: .1rem
   }
+}
+
+/* Theme tokens from the integration specification; keep the comparison self-contained. */
+.platform-comparison {
+  color: var(--default-text-color);
+}
+
+.platform-comparison-card {
+  color: var(--default-text-color);
+}
+
+.platform-comparison-card>h2,
+.platform-comparison-heading h1,
+.platform-comparison-kpi p,
+.platform-comparison-context p {
+  color: var(--default-text-color);
+}
+
+.platform-comparison .platform-comparison-table,
+.platform-comparison .platform-comparison-data .table {
+  --bs-table-color: var(--default-text-color);
+  --bs-table-bg: var(--custom-white);
+  --bs-table-border-color: var(--default-border);
+  color: var(--default-text-color);
+}
+
+.platform-comparison .platform-comparison-actions label,
+.platform-comparison .platform-comparison-legend,
+.platform-comparison .platform-comparison-data summary {
+  color: var(--default-text-color);
 }
