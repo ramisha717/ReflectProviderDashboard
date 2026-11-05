@@ -3,7 +3,8 @@
 @using System.Text.Json
 @using Reflect.Web.Extensions
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
+    ViewData["ProviderScreenOwnsChartJs"] = true;
     ViewData["Title"] = "Overview";
     ViewData["Subtitle"] = "Clinical summary of patient engagement — Synthetic data only.";
 
@@ -169,6 +170,11 @@
 </div>
 
 @section Scripts {
+    <script src="~/lib/chartjs/chart.umd.js" asp-append-version="true"></script>
     <script src="~/js/controllers/overview/indexController.js" asp-append-version="true" defer></script>
 }
 
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+}

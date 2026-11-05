@@ -1,5 +1,5 @@
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Monitoring — Documentation";
     ViewData["Subtitle"] = "Prepare a clinician-reviewed summary from selected activity.";
     var patientsUrl = Url.Action("Index", "Patients", new { area = "Provider", format = "json" });
@@ -10,6 +10,7 @@
 }
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/monitoring-documentation.css" asp-append-version="true" />
 }
 
@@ -133,6 +134,7 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/controllers/patients/dateFormatting.js" asp-append-version="true"></script>
     <script src="~/js/services/monitoringDocumentation/indexService.js" asp-append-version="true"></script>
     <script src="~/js/controllers/monitoringDocumentation/indexController.js" asp-append-version="true"></script>
 }

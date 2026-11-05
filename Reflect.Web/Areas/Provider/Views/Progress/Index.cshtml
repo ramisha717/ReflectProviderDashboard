@@ -3,7 +3,8 @@
 @using System.Text.Json
 
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
+    ViewData["ProviderScreenOwnsChartJs"] = true;
     ViewData["Title"] = "Progress";
     ViewData["Subtitle"] = "Review patient engagement trends and session activity.";
 
@@ -254,8 +255,13 @@
 </div>
 
 @section Scripts {
+    <script src="~/lib/chartjs/chart.umd.js" asp-append-version="true"></script>
     <script src="~/js/controllers/progress/indexController.js"
             asp-append-version="true"
             defer></script>
 }
 
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+}

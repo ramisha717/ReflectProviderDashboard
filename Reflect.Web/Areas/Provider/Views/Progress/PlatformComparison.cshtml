@@ -1,13 +1,14 @@
 @model Reflect.Web.Models.ViewModels.Progress.PlatformComparison.ProgressPlatformComparisonViewModel
 @using System.Globalization
 @{
-    Layout = "_ProviderLayout";
+   
     ViewData["Title"] = "Progress — XR vs Mobile";
     ViewData["Subtitle"] = "Compare usage across Reflect XR and Reflect Mobile.";
     var maxWeekly = Math.Max(1, Model.WeeklyActivity.SelectMany(w => new[] { w.ReflectXRSessions, w.ReflectMobileSessions }).DefaultIfEmpty(0).Max());
     var xrTotal = TimeSpan.FromMinutes(Model.XRTotalDurationMinutes);
     var mobileTotal = TimeSpan.FromMinutes(Model.MobileTotalDurationMinutes);
     string Duration(int minutes) => $"{minutes / 60}h {minutes % 60}m";
+    ViewData["ProviderScreenOwnsStyles"] = true;
 }
 <div class="platform-comparison">
     <div class="platform-comparison-notice">
@@ -105,5 +106,6 @@
     </section>
 </div>
 @section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/progress-platform-comparison.css" asp-append-version="true" />
 }

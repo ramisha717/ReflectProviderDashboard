@@ -2,7 +2,7 @@
 @using System.Globalization
 @using Reflect.Web.Extensions
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Session Details";
     ViewData["Subtitle"] = "Recorded session details for " + Model.PatientCode;
     var eastern = TimeZoneInfo.FindSystemTimeZoneById("America/New_York");
@@ -98,6 +98,7 @@
     </section>
 </div>
 @section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/session-details.css" asp-append-version="true" />
 }
 @section Scripts {

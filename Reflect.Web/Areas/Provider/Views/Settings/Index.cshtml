@@ -1,5 +1,5 @@
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Settings";
     ViewData["Subtitle"] = "Privacy controls, audit logs, and clinical telemetry integrations";
 }
@@ -194,3 +194,7 @@
         </div>
     </div>
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+}

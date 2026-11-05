@@ -1,5 +1,5 @@
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Reports";
     ViewData["Subtitle"] = "Create a patient-specific report for clinical review.";
 }
@@ -65,9 +65,11 @@
     </section>
 </div>
 @section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/reports.css" asp-append-version="true" />
 }
 @section Scripts {
+    <script src="~/js/controllers/patients/dateFormatting.js" asp-append-version="true"></script>
     <script src="~/js/services/reports/indexService.js" asp-append-version="true"></script>
     <script src="~/js/controllers/reports/indexController.js" asp-append-version="true"></script>
 }

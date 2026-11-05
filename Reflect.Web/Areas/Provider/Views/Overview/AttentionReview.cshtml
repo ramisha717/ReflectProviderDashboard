@@ -1,6 +1,7 @@
 @model Reflect.Web.Models.ViewModels.Overview.Index.OverviewIndexViewModel
 @{
-    Layout = "_ProviderLayout";
+    // The Provider Area _ViewStart chooses the demo layout; the host can replace it on merge.
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Attention Review";
     ViewData["Subtitle"] = "Review patient attention signals.";
     var reviewCount = Model.AttentionQueue.Count(x => x.SignalType == "Needs Review");
@@ -49,3 +50,7 @@
         </table>
     </div>
 </div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+}

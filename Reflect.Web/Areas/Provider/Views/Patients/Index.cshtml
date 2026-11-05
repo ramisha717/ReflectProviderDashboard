@@ -1,6 +1,6 @@
 
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Patients";
     ViewData["Subtitle"] = "Find and review patient engagement records · Synthetic records only.";
 
@@ -188,7 +188,7 @@
                     <input type="text"
                         id="new-patient-code"
                         class="form-control"
-                        placeholder="e.g. Patient 501"
+                        placeholder="e.g. RX-RX-00F3A7B5"
                         required
                         style="border-radius:var(--btn-radius);" />
 
@@ -572,7 +572,12 @@
      data-add-demo-url="@addDemoUrl"
      hidden></div>
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+}
+
 @section Scripts {
+    <script src="~/js/controllers/patients/dateFormatting.js" asp-append-version="true"></script>
     <script src="~/js/services/patients/indexService.js"
             asp-append-version="true"></script>
 

@@ -1,5 +1,5 @@
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Patient session history";
     ViewData["Subtitle"] = "Review individual sessions and module usage.";
     var dataUrl = Url.Action("Index", "PatientSessionHistory", new { area = "Provider" });
@@ -84,9 +84,11 @@
 </div>
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/session-history.css" asp-append-version="true" />
 }
 @section Scripts {
+    <script src="~/js/controllers/patients/dateFormatting.js" asp-append-version="true"></script>
     <script src="~/js/services/patientSessionHistory/indexService.js" asp-append-version="true"></script>
     <script src="~/js/controllers/patientSessionHistory/indexController.js" asp-append-version="true"></script>
 }

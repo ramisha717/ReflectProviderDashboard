@@ -13,7 +13,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
     <!-- Provider Theme CSS -->
-    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+    @* During incremental migration, only screens declaring their own styles skip the demo layout's fallback. *@
+    @if (ViewData["ProviderScreenOwnsStyles"] is not true)
+    {
+        <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
+    }
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -222,7 +226,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/chartjs/chart.umd.js" asp-append-version="true"></script>
+    @if (ViewData["ProviderScreenOwnsChartJs"] is not true)
+    {
+        <script src="~/lib/chartjs/chart.umd.js" asp-append-version="true"></script>
+    }
     <script src="~/js/provider.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

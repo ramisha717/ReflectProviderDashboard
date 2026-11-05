@@ -1,5 +1,5 @@
 @{
-    Layout = "_ProviderLayout";
+    ViewData["ProviderScreenOwnsStyles"] = true;
     ViewData["Title"] = "Clinical Response & Observations";
     ViewData["Subtitle"] = "Review and document observations for an authorized patient.";
     var indexUrl = Url.Action("Index", "ClinicalResponse", new { area = "Provider" });
@@ -79,9 +79,11 @@
 </div>
 
 @section Styles {
+    <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/clinical-response.css" asp-append-version="true" />
 }
 @section Scripts {
+    <script src="~/js/controllers/patients/dateFormatting.js" asp-append-version="true"></script>
     <script src="~/js/services/clinicalResponse/indexService.js" asp-append-version="true"></script>
     <script src="~/js/controllers/clinicalResponse/indexController.js" asp-append-version="true"></script>
 }
