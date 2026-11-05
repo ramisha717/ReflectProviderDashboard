@@ -194,11 +194,9 @@ body.dark .session-detail-notice {
   color: var(--text-muted);
 }
 
-[data-theme-mode="dark"] .session-detail-card,
-.dark-mode .session-detail-card,
-body.dark .session-detail-card {
-  background: var(--custom-white);
-  border-color: var(--text-muted);
+[data-theme-mode="dark"] .session-detail-card {
+  background-color: var(--custom-white);
+  border-color: var(--default-border);
   color: var(--default-text-color);
 }
 
@@ -243,7 +241,7 @@ body.dark .session-detail-facts>div {
 body.dark .session-detail-nav .btn {
   color: var(--default-text-color);
   border-color: var(--text-muted);
-  background: transparent;
+  background-color: transparent;
 }
 
 [data-theme-mode="dark"] .session-detail-nav .btn:hover,
@@ -305,63 +303,4 @@ body.dark .session-detail-review-state.needs-review {
   .session-detail-facts dd {
     text-align: left;
   }
-}
-
-
-/* Session Details: dark-mode contrast fix */
-
-[data-theme-mode="dark"] .session-detail-card {
-  background-color: var(--default-text-color);
-  border-color: var(--text-muted);
-  color: var(--default-text-color);
-}
-
-[data-theme-mode="dark"] .session-detail-card>h2,
-[data-theme-mode="dark"] .session-detail-kpi p,
-[data-theme-mode="dark"] .session-detail-facts dd {
-  color: var(--default-text-color);
-}
-
-[data-theme-mode="dark"] .session-detail-kpi h2,
-[data-theme-mode="dark"] .session-detail-kpi small,
-[data-theme-mode="dark"] .session-detail-card>p,
-[data-theme-mode="dark"] .session-detail-facts dt {
-  color: var(--text-muted);
-}
-
-[data-theme-mode="dark"] .session-detail-facts>div {
-  border-bottom-color: var(--text-muted);
-}
-
-[data-theme-mode="dark"] .session-detail-heading h1 {
-  color: var(--default-text-color);
-}
-
-[data-theme-mode="dark"] .session-detail-heading p,
-[data-theme-mode="dark"] .session-detail-notice {
-  color: var(--text-muted);
-}
-
-[data-theme-mode="dark"] .session-detail-nav .btn {
-  color: var(--default-text-color);
-  border-color: var(--text-muted);
-  background-color: transparent;
-}
-
-[data-theme-mode="dark"] .session-detail-nav .btn:hover,
-[data-theme-mode="dark"] .session-detail-nav .btn:focus-visible {
-  color: var(--default-text-color);
-  background-color: var(--default-text-color);
-  border-color: var(--default-text-color);
-}
-
-[data-theme-mode="dark"] .session-detail-review-state {
-  color: var(--default-text-color);
-  border-color: var(--text-muted);
-}
-
-[data-theme-mode="dark"] .session-detail-review-state.needs-review {
-  color: rgb(var(--warning-rgb));
-  background-color: rgb(var(--warning-rgb));
-  border-color: rgb(var(--warning-rgb));
 }
