@@ -1,29 +1,28 @@
 @model Reflect.Web.Models.ViewModels.Progress.PlatformComparison.ProgressPlatformComparisonViewModel
 @using System.Globalization
 @{
-   
     ViewData["Title"] = "Progress — XR vs Mobile";
-    ViewData["Subtitle"] = "Compare usage across Reflect XR and Reflect Mobile.";
+    ViewData["Subtitle"] = "Compare usage across Reflect XR and Reflect Mobile, modules, and daily activity.";
     var maxWeekly = Math.Max(1, Model.WeeklyActivity.SelectMany(w => new[] { w.ReflectXRSessions, w.ReflectMobileSessions }).DefaultIfEmpty(0).Max());
-    var xrTotal = TimeSpan.FromMinutes(Model.XRTotalDurationMinutes);
-    var mobileTotal = TimeSpan.FromMinutes(Model.MobileTotalDurationMinutes);
     string Duration(int minutes) => $"{minutes / 60}h {minutes % 60}m";
     ViewData["ProviderScreenOwnsStyles"] = true;
 }
+
 <div class="platform-comparison">
     <div class="platform-comparison-notice">
         <strong>PROTOTYPE · SYNTHETIC DATA</strong>
         <span>UX prototype only — not for clinical use.</span>
     </div>
+
     <div class="platform-comparison-heading">
         <div>
             <h1>Cross-platform activity</h1>
-            <p>Use the shared timeline to understand engagement across experiences.</p>
+            <p>Use the shared timeline to understand engagement across platforms, individual modules, and time of day.</p>
         </div>
         <div class="platform-comparison-actions">
             <label for="comparison-period">Reporting period</label>
             <form method="get" asp-area="Provider" asp-controller="Progress" asp-action="PlatformComparisonPage">
-                <select id="comparison-period" name="days" class="form-select" >
+                <select id="comparison-period" name="days" class="form-select">
                     @if (Model.SelectedDays == 30)
                     {
                         <option value="30" selected>4 weeks</option>
@@ -41,6 +40,8 @@
                asp-route-days="@Model.SelectedDays">Back to Progress</a>
         </div>
     </div>
+
+    <!-- Preserved High-Level KPI Summary Cards -->
     <div class="platform-comparison-kpis">
         <section class="platform-comparison-card platform-comparison-kpi xr">
             <h2>Reflect XR sessions</h2><p>@Model.ReflectXRSessions</p><small>Recorded XR sessions</small>
@@ -55,6 +56,8 @@
             <h2>Mobile median duration</h2><p>@Model.MobileMedianDurationMinutes.ToString("0.#", CultureInfo.InvariantCulture) min</p><small>Per session</small>
         </section>
     </div>
+
+    <!-- Preserved Platform Activity Over Time & Top Table -->
     <div class="platform-comparison-main">
         <section class="platform-comparison-card" aria-labelledby="comparison-chart-title">
             <h2 id="comparison-chart-title">Platform activity over time</h2>
@@ -95,6 +98,280 @@
             <p class="platform-comparison-hint">Totals reflect authorized patient sessions in the selected reporting period.</p>
         </section>
     </div>
+
+    <!-- SECTION 1: Module Comparisons (Within Reflect XR and Within Reflect Mobile) -->
+    <div class="platform-comparison-section-header">
+        <h2>Module engagement comparison</h2>
+        <p>Compare session volume and duration across individual modules within each platform.</p>
+    </div>
+
+    <div class="platform-comparison-modules-grid">
+        <!-- Reflect XR Modules (17 Modules) -->
+        <section class="platform-comparison-card" aria-labelledby="xr-modules-title">
+            <div class="platform-comparison-card-header-flex">
+                <div>
+                    <h2 id="xr-modules-title"><i class="ri-headphone-line me-1" aria-hidden="true"></i>Reflect XR — Module activity</h2>
+                    <p class="platform-comparison-hint">Comparison among all 17 XR modules.</p>
+                </div>
+                <span class="badge bg-success-transparent text-success">@Model.ReflectXRSessions total XR sessions</span>
+            </div>
+
+            <div class="module-bars-list" role="img" aria-label="Reflect XR module session breakdown bar chart">
+                @foreach (var m in Model.XRModules.OrderByDescending(x => x.SessionCount))
+                {
+                    var barWidth = (100.0 * m.SessionCount / Model.XRMaxModuleSessions).ToString("0.###", CultureInfo.InvariantCulture);
+                    <div class="module-bar-item">
+                        <div class="module-bar-meta">
+                            <span class="module-bar-name">@m.ModuleName</span>
+                            <span class="module-bar-category">@m.ProgramOrGroup</span>
+                        </div>
+                        <div class="module-bar-track">
+                            <div class="module-bar-fill xr" style="width: @(barWidth)%" title="@m.ModuleName: @m.SessionCount sessions (@(m.PercentageOfPlatform.ToString("0.#", CultureInfo.InvariantCulture))%)"></div>
+                        </div>
+                        <div class="module-bar-stats">
+                            <strong>@m.SessionCount</strong>
+                            <span class="text-muted">(@(m.PercentageOfPlatform.ToString("0.#", CultureInfo.InvariantCulture))%)</span>
+                            <small class="text-muted">@Duration(m.TotalDurationMinutes)</small>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <details class="platform-comparison-data mt-3">
+                <summary>XR module details (accessible table)</summary>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th scope="col">Module</th><th scope="col">Program</th><th scope="col">Sessions</th><th scope="col">Share</th><th scope="col">Total Duration</th></tr></thead>
+                        <tbody>
+                            @foreach (var m in Model.XRModules.OrderByDescending(x => x.SessionCount))
+                            {
+                                <tr>
+                                    <th scope="row">@m.ModuleName</th>
+                                    <td>@m.ProgramOrGroup</td>
+                                    <td>@m.SessionCount</td>
+                                    <td>@(m.PercentageOfPlatform.ToString("0.#", CultureInfo.InvariantCulture))%</td>
+                                    <td>@Duration(m.TotalDurationMinutes)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
+
+        <!-- Reflect Mobile Modules (14 Modules) -->
+        <section class="platform-comparison-card" aria-labelledby="mobile-modules-title">
+            <div class="platform-comparison-card-header-flex">
+                <div>
+                    <h2 id="mobile-modules-title"><i class="ri-smartphone-line me-1" aria-hidden="true"></i>Reflect Mobile — Module activity</h2>
+                    <p class="platform-comparison-hint">Comparison among all 14 Mobile modules.</p>
+                </div>
+                <span class="badge bg-primary-transparent text-primary">@Model.ReflectMobileSessions total Mobile sessions</span>
+            </div>
+
+            <div class="module-bars-list" role="img" aria-label="Reflect Mobile module session breakdown bar chart">
+                @foreach (var m in Model.MobileModules.OrderByDescending(x => x.SessionCount))
+                {
+                    var barWidth = (100.0 * m.SessionCount / Model.MobileMaxModuleSessions).ToString("0.###", CultureInfo.InvariantCulture);
+                    <div class="module-bar-item">
+                        <div class="module-bar-meta">
+                            <span class="module-bar-name">@m.ModuleName</span>
+                            <span class="module-bar-category">@m.ProgramOrGroup</span>
+                        </div>
+                        <div class="module-bar-track">
+                            <div class="module-bar-fill mobile" style="width: @(barWidth)%" title="@m.ModuleName: @m.SessionCount sessions (@(m.PercentageOfPlatform.ToString("0.#", CultureInfo.InvariantCulture))%)"></div>
+                        </div>
+                        <div class="module-bar-stats">
+                            <strong>@m.SessionCount</strong>
+                            <span class="text-muted">(@(m.PercentageOfPlatform.ToString("0.#", CultureInfo.InvariantCulture))%)</span>
+                            <small class="text-muted">@Duration(m.TotalDurationMinutes)</small>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <details class="platform-comparison-data mt-3">
+                <summary>Mobile module details (accessible table)</summary>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead><tr><th scope="col">Module</th><th scope="col">Group</th><th scope="col">Sessions</th><th scope="col">Share</th><th scope="col">Total Duration</th></tr></thead>
+                        <tbody>
+                            @foreach (var m in Model.MobileModules.OrderByDescending(x => x.SessionCount))
+                            {
+                                <tr>
+                                    <th scope="row">@m.ModuleName</th>
+                                    <td>@m.ProgramOrGroup</td>
+                                    <td>@m.SessionCount</td>
+                                    <td>@(m.PercentageOfPlatform.ToString("0.#", CultureInfo.InvariantCulture))%</td>
+                                    <td>@Duration(m.TotalDurationMinutes)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
+    </div>
+
+    <!-- SECTION 2: Hourly Breakdown (Time of Day Breakdown) -->
+    <div class="platform-comparison-section-header">
+        <h2>Time of day breakdown (hourly activity)</h2>
+        <p>Session counts for each hour of the day (US Eastern) over the reporting period, categorized by group and program.</p>
+    </div>
+
+    <div class="platform-comparison-hourly-grid">
+        <!-- Reflect Mobile Hourly by 4 Groups -->
+        <section class="platform-comparison-card" aria-labelledby="mobile-hourly-title">
+            <h2 id="mobile-hourly-title"><i class="ri-time-line me-1" aria-hidden="true"></i>Reflect Mobile — Sessions by hour (4 groups)</h2>
+            <p class="platform-comparison-hint">Hourly sessions distributed across Creative Calm, Create, Learn, and Reflect.</p>
+
+            <div class="hourly-chart-container" role="img" aria-label="Hourly session breakdown for Reflect Mobile by group">
+                <div class="hourly-chart">
+                    @foreach (var h in Model.MobileHourlyDistribution)
+                    {
+                        var colHeight = (100.0 * h.TotalCount / Model.MobileMaxHourlyTotal).ToString("0.###", CultureInfo.InvariantCulture);
+                        <div class="hourly-col" title="@h.DisplayLabel: @h.TotalCount total sessions">
+                            <div class="hourly-col-stack" style="height: @(colHeight)%">
+                                @if (h.TotalCount > 0)
+                                {
+                                    @foreach (var group in Model.MobileGroups)
+                                    {
+                                        var count = h.GetCount(group);
+                                        if (count > 0)
+                                        {
+                                            var segHeight = (100.0 * count / h.TotalCount).ToString("0.###", CultureInfo.InvariantCulture);
+                                            <div class="hourly-seg mobile-grp-@(group.ToLowerInvariant().Replace(" ", "-"))" 
+                                                 style="height: @(segHeight)%" 
+                                                 title="@group: @count"></div>
+                                        }
+                                    }
+                                }
+                            </div>
+                            <span class="hourly-label">@h.DisplayLabel</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Mobile Groups Legend -->
+            <div class="category-legend">
+                @foreach (var group in Model.MobileGroups)
+                {
+                    <span class="legend-chip mobile-grp-@(group.ToLowerInvariant().Replace(" ", "-"))">
+                        <i class="legend-color-dot" aria-hidden="true"></i>@group
+                    </span>
+                }
+            </div>
+
+            <details class="platform-comparison-data mt-3">
+                <summary>Mobile hourly details (accessible table)</summary>
+                <div class="table-responsive">
+                    <table class="table table-sm text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-start">Hour</th>
+                                @foreach (var group in Model.MobileGroups)
+                                {
+                                    <th scope="col">@group</th>
+                                }
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in Model.MobileHourlyDistribution)
+                            {
+                                <tr>
+                                    <th scope="row" class="text-start">@h.DisplayLabel</th>
+                                    @foreach (var group in Model.MobileGroups)
+                                    {
+                                        <td>@h.GetCount(group)</td>
+                                    }
+                                    <td><strong>@h.TotalCount</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
+
+        <!-- Reflect XR Hourly by 5 Programs -->
+        <section class="platform-comparison-card" aria-labelledby="xr-hourly-title">
+            <h2 id="xr-hourly-title"><i class="ri-time-line me-1" aria-hidden="true"></i>Reflect XR — Sessions by hour (5 programs)</h2>
+            <p class="platform-comparison-hint">Hourly sessions distributed across Creative Calm, Explore Emotions, Explore Self, Explore Journey, and Getting Started.</p>
+
+            <div class="hourly-chart-container" role="img" aria-label="Hourly session breakdown for Reflect XR by program">
+                <div class="hourly-chart">
+                    @foreach (var h in Model.XRHourlyDistribution)
+                    {
+                        var colHeight = (100.0 * h.TotalCount / Model.XRMaxHourlyTotal).ToString("0.###", CultureInfo.InvariantCulture);
+                        <div class="hourly-col" title="@h.DisplayLabel: @h.TotalCount total sessions">
+                            <div class="hourly-col-stack" style="height: @(colHeight)%">
+                                @if (h.TotalCount > 0)
+                                {
+                                    @foreach (var prog in Model.XRPrograms)
+                                    {
+                                        var count = h.GetCount(prog);
+                                        if (count > 0)
+                                        {
+                                            var segHeight = (100.0 * count / h.TotalCount).ToString("0.###", CultureInfo.InvariantCulture);
+                                            <div class="hourly-seg xr-prog-@(prog.ToLowerInvariant().Replace(" ", "-"))" 
+                                                 style="height: @(segHeight)%" 
+                                                 title="@prog: @count"></div>
+                                        }
+                                    }
+                                }
+                            </div>
+                            <span class="hourly-label">@h.DisplayLabel</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- XR Programs Legend -->
+            <div class="category-legend">
+                @foreach (var prog in Model.XRPrograms)
+                {
+                    <span class="legend-chip xr-prog-@(prog.ToLowerInvariant().Replace(" ", "-"))">
+                        <i class="legend-color-dot" aria-hidden="true"></i>@prog
+                    </span>
+                }
+            </div>
+
+            <details class="platform-comparison-data mt-3">
+                <summary>XR hourly details (accessible table)</summary>
+                <div class="table-responsive">
+                    <table class="table table-sm text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-start">Hour</th>
+                                @foreach (var prog in Model.XRPrograms)
+                                {
+                                    <th scope="col">@prog</th>
+                                }
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var h in Model.XRHourlyDistribution)
+                            {
+                                <tr>
+                                    <th scope="row" class="text-start">@h.DisplayLabel</th>
+                                    @foreach (var prog in Model.XRPrograms)
+                                    {
+                                        <td>@h.GetCount(prog)</td>
+                                    }
+                                    <td><strong>@h.TotalCount</strong></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
+    </div>
+
+    <!-- Preserved Context Card -->
     <section class="platform-comparison-card platform-comparison-context">
         <h2>Interpret with context</h2>
         <p><strong>Different experiences may support different activities. Compare patterns, not value judgments.</strong></p>
@@ -105,6 +382,7 @@
         </ul>
     </section>
 </div>
+
 @section Styles {
     <link rel="stylesheet" href="~/css/provider.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/progress-platform-comparison.css" asp-append-version="true" />

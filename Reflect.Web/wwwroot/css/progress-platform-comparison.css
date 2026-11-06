@@ -112,39 +112,52 @@
 }
 
 .platform-comparison-chart {
-  display: flex;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .5rem;
-  height: 15rem;
-  padding: .5rem 0;
+  height: auto;
+  min-height: 15rem;
+  padding: .5rem 0 0;
+  align-items: end;
   border-bottom: 1px solid var(--default-border)
 }
 
 .platform-comparison-week {
-  flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
+  gap: .3rem
+}
+
+.platform-comparison-week>span {
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: .75rem;
+  line-height: 1.3;
   color: var(--text-muted)
 }
 
 .platform-comparison-bars {
   height: 12.5rem;
+  flex: none;
   width: 100%;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: center;
-  gap: .18rem;
-  min-width: 0
+  gap: .18rem
 }
 
 .platform-comparison-bar {
+  flex: 0 1 2rem;
+  min-width: 0;
   width: 40%;
   max-width: 2rem;
-  min-height: 0;
   border-radius: .2rem .2rem 0 0;
   background: rgb(var(--success-rgb))
 }
@@ -195,12 +208,278 @@
 
 .platform-comparison-context p {
   font-size: 1.05rem;
-  color: rgb(var(--success-rgb))
+  color: var(--default-text-color)
 }
 
 .platform-comparison-context li {
   margin: .5rem 0;
   color: var(--text-muted)
+}
+
+/* Section Headers */
+.platform-comparison-section-header {
+  margin-top: 1rem;
+}
+
+.platform-comparison-section-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--default-text-color);
+  margin: 0
+}
+
+.platform-comparison-section-header p {
+  font-size: .85rem;
+  color: var(--text-muted);
+  margin: .2rem 0 0
+}
+
+/* Card Header Flex Layout */
+.platform-comparison-card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: .5rem;
+  margin-bottom: 1rem
+}
+
+.platform-comparison-card-header-flex h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--default-text-color);
+  margin: 0
+}
+
+/* Module Comparison Grid & Bars */
+.platform-comparison-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem
+}
+
+.module-bars-list {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem
+}
+
+.module-bar-item {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 10.5rem) 1fr minmax(6.5rem, auto);
+  align-items: center;
+  gap: .75rem;
+  font-size: .82rem
+}
+
+.module-bar-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0
+}
+
+.module-bar-name {
+  font-weight: 600;
+  color: var(--default-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.module-bar-category {
+  font-size: .7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.module-bar-track {
+  height: .75rem;
+  background: rgba(var(--info-rgb), .15);
+  border-radius: .375rem;
+  overflow: hidden;
+  position: relative
+}
+
+.module-bar-fill {
+  height: 100%;
+  border-radius: .375rem;
+  transition: width .25s ease
+}
+
+.module-bar-fill.xr {
+  background: rgb(var(--success-rgb))
+}
+
+.module-bar-fill.mobile {
+  background: rgb(var(--primary-rgb))
+}
+
+.module-bar-stats {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .78rem;
+  white-space: nowrap;
+  justify-content: flex-end
+}
+
+.module-bar-stats strong {
+  color: var(--default-text-color)
+}
+
+/* Hourly Breakdown Grid & Stacked Bars */
+.platform-comparison-hourly-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem
+}
+
+.hourly-chart-container {
+  overflow-x: auto;
+  padding-bottom: .4rem
+}
+
+.hourly-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: .2rem;
+  min-width: 32rem;
+  height: 12.5rem;
+  padding: .5rem 0 0;
+  border-bottom: 1px solid var(--default-border)
+}
+
+.hourly-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 0
+}
+
+.hourly-col-stack {
+  width: 100%;
+  max-width: 1.05rem;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  border-radius: .2rem .2rem 0 0;
+  overflow: hidden;
+  min-height: 0
+}
+
+.hourly-seg {
+  width: 100%;
+  min-height: 0
+}
+
+.hourly-label {
+  font-size: .65rem;
+  color: var(--text-muted);
+  margin-top: .35rem;
+  white-space: nowrap;
+  transform: rotate(-45deg);
+  transform-origin: top center;
+  margin-bottom: .85rem;
+  display: inline-block
+}
+
+/* Category Legends & Category Color Tokens */
+.category-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem 1.25rem;
+  margin-top: 1rem;
+  font-size: .78rem
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  color: var(--default-text-color)
+}
+
+.legend-color-dot {
+  display: inline-block;
+  width: .65rem;
+  height: .65rem;
+  border-radius: 50%
+}
+
+/* Mobile Groups Colors */
+.mobile-grp-creative-calm,
+.legend-chip.mobile-grp-creative-calm .legend-color-dot {
+  background: rgb(var(--primary-rgb))
+}
+
+.mobile-grp-create,
+.legend-chip.mobile-grp-create .legend-color-dot {
+  background: rgb(var(--warning-rgb))
+}
+
+.mobile-grp-learn,
+.legend-chip.mobile-grp-learn .legend-color-dot {
+  background: rgb(var(--info-rgb))
+}
+
+.mobile-grp-reflect,
+.legend-chip.mobile-grp-reflect .legend-color-dot {
+  background: rgb(var(--success-rgb))
+}
+
+/* XR Programs Colors */
+.xr-prog-creative-calm,
+.legend-chip.xr-prog-creative-calm .legend-color-dot {
+  background: rgb(var(--success-rgb))
+}
+
+.xr-prog-explore-emotions,
+.legend-chip.xr-prog-explore-emotions .legend-color-dot {
+  background: rgb(var(--primary-rgb))
+}
+
+.xr-prog-explore-self,
+.legend-chip.xr-prog-explore-self .legend-color-dot {
+  background: rgb(var(--info-rgb))
+}
+
+.xr-prog-explore-journey,
+.legend-chip.xr-prog-explore-journey .legend-color-dot {
+  background: rgb(var(--warning-rgb))
+}
+
+.xr-prog-getting-started,
+.legend-chip.xr-prog-getting-started .legend-color-dot {
+  background: rgba(var(--info-rgb), .65)
+}
+
+/* Badge helpers matching tech spec */
+.bg-success-transparent {
+  background-color: rgba(var(--success-rgb), .12);
+}
+
+.bg-primary-transparent {
+  background-color: rgba(var(--primary-rgb), .15);
+}
+
+.text-success {
+  color: rgb(var(--success-rgb)) !important;
+}
+
+.text-primary {
+  color: rgb(var(--primary-rgb)) !important;
+}
+
+/* Media Queries & Responsive Layouts */
+@media(min-width:48rem) {
+  .platform-comparison-chart {
+    grid-template-columns: repeat(8, minmax(0, 1fr))
+  }
 }
 
 @media(max-width:70rem) {
@@ -209,6 +488,11 @@
   }
 
   .platform-comparison-main {
+    grid-template-columns: 1fr
+  }
+
+  .platform-comparison-modules-grid,
+  .platform-comparison-hourly-grid {
     grid-template-columns: 1fr
   }
 }
@@ -233,86 +517,31 @@
   .platform-comparison-actions {
     width: 100%
   }
-}
 
-/* Keep each pair of bars and its week label in the same grid column. */
-.platform-comparison-chart {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: .5rem;
-  height: auto;
-  min-height: 15rem;
-  padding: .5rem 0 0;
-  align-items: end
-}
-
-.platform-comparison-week {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  gap: .3rem
-}
-
-.platform-comparison-week>span {
-  display: block;
-  width: 100%;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: .75rem;
-  line-height: 1.3
-}
-
-.platform-comparison-bars {
-  height: 12.5rem;
-  flex: none;
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: .18rem
-}
-
-.platform-comparison-bar {
-  flex: 0 1 2rem;
-  min-width: 0;
-  width: 40%;
-  max-width: 2rem
-}
-
-@media(min-width:48rem) {
-  .platform-comparison-chart {
-    grid-template-columns: repeat(8, minmax(0, 1fr))
-  }
-}
-
-@media(max-width:35rem) {
-  .platform-comparison-chart {
+  .module-bar-item {
+    grid-template-columns: 1fr;
     gap: .25rem
   }
 
-  .platform-comparison-bars {
-    gap: .1rem
+  .module-bar-stats {
+    justify-content: flex-start
   }
 }
 
-/* Theme tokens from the integration specification; keep the comparison self-contained. */
+/* Theme tokens integration */
 .platform-comparison {
-  color: var(--default-text-color);
+  color: var(--default-text-color)
 }
 
 .platform-comparison-card {
-  color: var(--default-text-color);
+  color: var(--default-text-color)
 }
 
 .platform-comparison-card>h2,
 .platform-comparison-heading h1,
 .platform-comparison-kpi p,
 .platform-comparison-context p {
-  color: var(--default-text-color);
+  color: var(--default-text-color)
 }
 
 .platform-comparison .platform-comparison-table,
@@ -320,11 +549,11 @@
   --bs-table-color: var(--default-text-color);
   --bs-table-bg: var(--custom-white);
   --bs-table-border-color: var(--default-border);
-  color: var(--default-text-color);
+  color: var(--default-text-color)
 }
 
 .platform-comparison .platform-comparison-actions label,
 .platform-comparison .platform-comparison-legend,
 .platform-comparison .platform-comparison-data summary {
-  color: var(--default-text-color);
+  color: var(--default-text-color)
 }
