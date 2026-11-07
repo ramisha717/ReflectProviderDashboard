@@ -16,7 +16,9 @@ public class InMemoryPatientAccessRepository : IPatientAccessRepository
         {
             Guid.Parse("10000000-0000-0000-0000-000000000001"),
             Guid.Parse("10000000-0000-0000-0000-000000000002"),
-            Guid.Parse("10000000-0000-0000-0000-000000000003")
+            Guid.Parse("10000000-0000-0000-0000-000000000003"),
+            Guid.Parse("10000000-0000-0000-0000-000000000005"),
+            Guid.Parse("10000000-0000-0000-0000-000000000006")
         }
     };
 

@@ -35,6 +35,20 @@ public class InMemoryPatientRepository : IPatientRepository
       PatientCode = "RX-4D92B105",
       IsActive = true,
       ReviewStatus = "Reviewed"
+    },
+    new Patient
+    {
+      Id = Guid.Parse("10000000-0000-0000-0000-000000000005"),
+      PatientCode = "RX-5B73E201",
+      IsActive = true,
+      ReviewStatus = "Needs Review"
+    },
+    new Patient
+    {
+      Id = Guid.Parse("10000000-0000-0000-0000-000000000006"),
+      PatientCode = "RX-6C84F302",
+      IsActive = true,
+      ReviewStatus = "Needs Review"
     }
   };
 

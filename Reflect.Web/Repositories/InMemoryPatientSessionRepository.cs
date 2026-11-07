@@ -1,3 +1,4 @@
+
 using Reflect.Domain;
 using Reflect.Domain.Entities;
 using Reflect.Domain.Repositories;
@@ -200,6 +201,66 @@ public class InMemoryPatientSessionRepository : IPatientSessionRepository
                 DurationMinutes = s.duration,
                 RecordingStatus = "Succeeded"
             });
+        }
+
+        // Patients 5 and 6: declining engagement, with 7-8 days of inactivity.
+        // Module names match the official Reflect Mobile and XR catalogs.
+        var decliningSchedules = new[]
+        {
+            new
+            {
+                PatientId = Guid.Parse("10000000-0000-0000-0000-000000000005"),
+                Sessions = new (int daysAgo, int hour, string platform, string module, int duration)[]
+                {
+                    (54, 9, ReflectProductCatalog.PlatformXR, "Containment", 25),
+                    (51, 14, ReflectProductCatalog.PlatformMobile, "Floating Bubbles", 18),
+                    (48, 10, ReflectProductCatalog.PlatformXR, "Rhythmic Relaxation", 24),
+                    (45, 16, ReflectProductCatalog.PlatformMobile, "Breathing Mandala", 15),
+                    (42, 11, ReflectProductCatalog.PlatformXR, "Flow", 27),
+                    (39, 15, ReflectProductCatalog.PlatformMobile, "Finger Painting", 20),
+                    (35, 10, ReflectProductCatalog.PlatformXR, "Self Compassion", 22),
+                    (31, 14, ReflectProductCatalog.PlatformMobile, "Reflection Journals (AI)", 18),
+                    (26, 11, ReflectProductCatalog.PlatformXR, "Hope Tree", 25),
+                    (20, 16, ReflectProductCatalog.PlatformMobile, "Photo Coloring (AI)", 20),
+                    (13, 10, ReflectProductCatalog.PlatformXR, "Finding Balance", 23),
+                    (7, 14, ReflectProductCatalog.PlatformMobile, "Pour Paint", 16)
+                }
+            },
+            new
+            {
+                PatientId = Guid.Parse("10000000-0000-0000-0000-000000000006"),
+                Sessions = new (int daysAgo, int hour, string platform, string module, int duration)[]
+                {
+                    (55, 10, ReflectProductCatalog.PlatformMobile, "Floating Bubbles", 17),
+                    (52, 15, ReflectProductCatalog.PlatformXR, "Color Psychology", 24),
+                    (49, 11, ReflectProductCatalog.PlatformMobile, "Creativity (AI)", 22),
+                    (46, 14, ReflectProductCatalog.PlatformXR, "Emotional Expression", 26),
+                    (43, 9, ReflectProductCatalog.PlatformMobile, "AI Created Mandala (AI)", 20),
+                    (40, 16, ReflectProductCatalog.PlatformXR, "Present Self Inside", 25),
+                    (36, 10, ReflectProductCatalog.PlatformMobile, "Emotions (AI)", 21),
+                    (32, 15, ReflectProductCatalog.PlatformXR, "Personal Strengths", 24),
+                    (27, 11, ReflectProductCatalog.PlatformMobile, "Select from Images Pathway (AI)", 19),
+                    (21, 14, ReflectProductCatalog.PlatformXR, "Future Self", 26),
+                    (15, 10, ReflectProductCatalog.PlatformMobile, "Reflection Journals (AI)", 18),
+                    (8, 16, ReflectProductCatalog.PlatformXR, "New Pathways", 23)
+                }
+            }
+        };
+
+        foreach (var patient in decliningSchedules)
+        {
+            foreach (var session in patient.Sessions)
+            {
+                _sessions.Add(new PatientSession
+                {
+                    PatientId = patient.PatientId,
+                    StartedAt = baseUtc.AddDays(-session.daysAgo).AddHours(session.hour),
+                    Platform = session.platform,
+                    ModuleName = session.module,
+                    DurationMinutes = session.duration,
+                    RecordingStatus = "Succeeded"
+                });
+            }
         }
 
         // Patient 3: Historical sessions for a former patient (> 60 days ago)

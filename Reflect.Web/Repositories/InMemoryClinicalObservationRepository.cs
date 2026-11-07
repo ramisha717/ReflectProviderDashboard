@@ -18,6 +18,12 @@ public class InMemoryClinicalObservationRepository : IClinicalObservationReposit
         Guid patient4Id =
             Guid.Parse("10000000-0000-0000-0000-000000000004");
 
+        Guid patient5Id =
+            Guid.Parse("10000000-0000-0000-0000-000000000005");
+
+        Guid patient6Id =
+            Guid.Parse("10000000-0000-0000-0000-000000000006");
+
         Guid clinicianId =
             Guid.Parse("20000000-0000-0000-0000-000000000001");
 
@@ -46,6 +52,24 @@ public class InMemoryClinicalObservationRepository : IClinicalObservationReposit
             ObservedAt = DateTimeOffset.UtcNow.AddDays(-8),
             ObservationType = "Clinical Observation",
             Notes = "Clinician recorded a discussion of the patient's self-reported experience. Further assessment may be needed."
+        });
+
+        _observations.Add(new ClinicalObservation
+        {
+            PatientId = patient5Id,
+            ClinicianId = clinicianId,
+            ObservedAt = DateTimeOffset.UtcNow.AddDays(-14),
+            ObservationType = "Inactivity Check",
+            Notes = "Clinician noted a period of inactive usage. Outreached to patient to confirm access."
+        });
+
+        _observations.Add(new ClinicalObservation
+        {
+            PatientId = patient6Id,
+            ClinicianId = clinicianId,
+            ObservedAt = DateTimeOffset.UtcNow.AddDays(-6),
+            ObservationType = "Session Review",
+            Notes = "Clinician noted a decrease in session frequency compared to previous month."
         });
     }
 
